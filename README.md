@@ -1,1 +1,1 @@
-# sandvika-activity-board
+# Sandvika Activity Board
