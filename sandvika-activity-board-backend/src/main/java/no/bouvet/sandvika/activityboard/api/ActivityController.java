@@ -1,6 +1,7 @@
 package no.bouvet.sandvika.activityboard.api;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +41,7 @@ public class ActivityController
 
     @RequestMapping(value = "/leaderboard/week/points", method = RequestMethod.GET)
     public List<LeaderboardEntry> getLeaderboardWeek() {
-        System.out.println(DateUtil.firstDayOfCurrentMonth());
-        System.out.println(DateUtil.firstDayOfCurrentWeek());
-
-        List<Activity> activityList = activityRepository.findByStartDateLocalAfter(DateUtil.firstDayOfCurrentWeek());
-
+        List<Activity> activityList = activityRepository.findByStartDateLocalAfter(DateUtil.addHours(DateUtil.firstDayOfCurrentWeek(), -24));
         Map<String, Integer> result = activityList.stream().collect(Collectors.groupingBy(activity -> activity.getAthleteLastName(),
                 Collectors.summingInt(activity -> activity.getPoints())));
         ;
@@ -55,4 +52,6 @@ public class ActivityController
         }
         return resultList;
     }
+
+
 }

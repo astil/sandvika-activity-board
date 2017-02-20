@@ -27,4 +27,11 @@ public class DateUtil
         return cal.getTime();
     }
 
+    public static Date addHours(Date date, int hours) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.HOUR, hours);
+        return cal.getTime();
+    }
+
 }
