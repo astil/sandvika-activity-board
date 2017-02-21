@@ -34,7 +34,6 @@ public class ActivityController
 
     @RequestMapping(value = "/populateDb", method = RequestMethod.GET)
     public void populateDb() {
-        System.out.println(CalculatePoints.getPointsForActivity(ActivityType.RUN, 60,12,1));
         activityRepository.deleteAll();
         activityRepository.save(new Activity(1, 98, "Engell", "Sondre", DateUtil.firstDayOfCurrentMonth()));
         activityRepository.save(new Activity(2, 300, "Engell", "Sondre", DateUtil.firstDayOfCurrentWeek()));
