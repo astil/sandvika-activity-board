@@ -4,10 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>no.bouvet.sandvika</groupId>
+    <artifactId>sandvika-activity-board-backend</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
     <parent>
-        <groupId>no.bouvet.sandvika</groupId>
-        <artifactId>sandvika-activity-board</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.1.RELEASE</version>
     </parent>
 
     <artifactId>sandvika-activity-board-backend</artifactId>
@@ -28,9 +32,61 @@
         </dependency>
 
         <dependency>
-            <groupId>com.ganyo</groupId>
-            <artifactId>gcm-server</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.cloudfoundry</groupId>
+                <artifactId>cf-maven-plugin</artifactId>
+                <version>1.1.4.RELEASE</version>
+                <configuration>
+                    <server>cloud-foundry-credentials</server>
+                    <target>http://api.run.pivotal.io</target>
+                    <org>sandvika-strava-board</org>
+                    <space>development</space>
+                    <appname>sandvika-strava-board</appname>
+                    <url>sandvika-strava.cfapps.io</url>
+                    <memory>1024</memory>
+                    <instances>1</instances>
+                    <services>
+                        <service>
+                            <name>mongodb</name>
+                            <label>mongo</label>
+                            <provider>mongolab</provider>
+                            <version>3.2.12</version>
+                            <plan>free</plan>
+                        </service>
+                    </services>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>spring-releases</id>
+            <url>https://repo.spring.io/libs-release</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-releases</id>
+            <url>https://repo.spring.io/libs-release</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>

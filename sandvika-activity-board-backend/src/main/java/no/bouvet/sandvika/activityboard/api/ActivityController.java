@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
+import no.bouvet.sandvika.activityboard.domain.ActivityType;
 import no.bouvet.sandvika.activityboard.domain.LeaderboardEntry;
+import no.bouvet.sandvika.activityboard.points.CalculatePoints;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
 
@@ -26,12 +28,13 @@ public class ActivityController
 
 
     @RequestMapping(value = "/athlete/{lastName}/activities", method = RequestMethod.GET)
-    public List<Activity> getNearbyUsers(@PathVariable("lastName") String lastName) {
+    public List<Activity> getUserActivities(@PathVariable("lastName") String lastName) {
         return activityRepository.findByAthleteLastName(lastName);
     }
 
     @RequestMapping(value = "/populateDb", method = RequestMethod.GET)
     public void populateDb() {
+        System.out.println(CalculatePoints.getPointsForActivity(ActivityType.RUN, 60,12,1));
         activityRepository.deleteAll();
         activityRepository.save(new Activity(1, 98, "Engell", "Sondre", DateUtil.firstDayOfCurrentMonth()));
         activityRepository.save(new Activity(2, 300, "Engell", "Sondre", DateUtil.firstDayOfCurrentWeek()));

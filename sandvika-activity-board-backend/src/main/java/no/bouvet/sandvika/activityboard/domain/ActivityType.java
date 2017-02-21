@@ -1,19 +1,29 @@
 package no.bouvet.sandvika.activityboard.domain;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 /**
  * Enum representing the activity types we support
  */
+
 public enum ActivityType
 {
-    NORDIC_SKIING("Nordic Skiing"),
-    RUN("Run"),
-    RIDE("Ride"),
-    SWIM("Swim");
+    NORDIC_SKIING(Constants.NORDIC_SKIING_NAME),
+    RUN(Constants.RUN_NAME),
+    RIDE(Constants.RIDE_NAME),
+    SWIM(Constants.SWIM_NAME);
 
-    private static final double NORDIC_SKIING_COEFFICIENT = 0.6;
-    private static final double RIDE_COEFFICIENT = 0.4;
-    private static final int RUN_COEFFICIENT = 1;
-    private static final double SWIM_COEFFICIENT = 1.5;
+    @Value("${pointscalculation.coefficients.nordic_skiing}")
+    private double nordicSkiingCoefficient;
+    @Value("${pointscalculation.coefficients.ride}")
+    private double rideCofficient;
+    @Value("${pointscalculation.coefficients.run}")
+    private double runCoefficient;
+    @Value("${pointscalculation.coefficients.swim}")
+    private double swimCoefficient;
+
+
     private String type;
 
     ActivityType(String type) {
@@ -27,16 +37,49 @@ public enum ActivityType
     public double coefficient() {
         switch (this) {
             case NORDIC_SKIING:
-                return NORDIC_SKIING_COEFFICIENT;
+                return nordicSkiingCoefficient;
             case RIDE:
-                return RIDE_COEFFICIENT;
+                return rideCofficient;
             case RUN:
-                return RUN_COEFFICIENT;
+                return runCoefficient;
             case SWIM:
-                return SWIM_COEFFICIENT;
+                return swimCoefficient;
             default:
                 return 1;
         }
     }
 
+    /**
+     * Returns an ActivityType based on the activity name provided. Returns NULL if the name is not a valid
+     * activity name or if the activityName paramater is NULL.
+     *
+     * @param activityName
+     * @return an ActivityType if a valid activityName is provided, else NULL.
+     */
+
+    public static ActivityType toActivityType(String activityName) {
+        if (activityName == null) {
+            return null;
+        }
+        else if (activityName.equalsIgnoreCase(Constants.NORDIC_SKIING_NAME)) {
+            return ActivityType.NORDIC_SKIING;
+        } else if (activityName.equalsIgnoreCase(Constants.RUN_NAME)) {
+            return ActivityType.RUN;
+        } else if (activityName.equalsIgnoreCase(Constants.RIDE_NAME)) {
+            return ActivityType.RIDE;
+        } else if (activityName.equalsIgnoreCase(Constants.SWIM_NAME)) {
+            return ActivityType.SWIM;
+        } else {
+            return null;
+        }
+    }
+
+    private static class Constants
+    {
+        public static final String NORDIC_SKIING_NAME = "Nordic Skiing";
+        public static final String RUN_NAME = "Run";
+        public static final String RIDE_NAME = "Ride";
+        public static final String SWIM_NAME = "Swim";
+
+    }
 }
