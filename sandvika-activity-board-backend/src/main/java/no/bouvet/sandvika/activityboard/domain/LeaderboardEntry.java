@@ -9,10 +9,37 @@ public class LeaderboardEntry
     private int points;
     private Date lastActivityDate;
     private int numberOfActivities;
+    private double kilometers;
+    private int minutes;
+    private double handicap;
 
     public LeaderboardEntry(String lastName, Integer points) {
         this.athleteLastName = lastName;
         this.points = points;
+    }
+
+    public double getKilometers() {
+        return kilometers;
+    }
+
+    public void setKilometers(double kilometers) {
+        this.kilometers = kilometers;
+    }
+
+    public int getMinutes() {
+        return minutes;
+    }
+
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
+    }
+
+    public double getHandicap() {
+        return handicap;
+    }
+
+    public void setHandicap(double handicap) {
+        this.handicap = handicap;
     }
 
     public int getNumberOfActivities() {

@@ -24,6 +24,7 @@ import javastrava.api.v3.service.exception.UnauthorizedException;
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.points.CalculatePoints;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
+import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 
 @Component
 public class StravaSlurper
@@ -38,7 +39,10 @@ public class StravaSlurper
     public static String STRAVA_CLIENT_SECRET = "506d1d0ed30af56b74a458a26419dd6ead8e910d";
     private static Logger log = LoggerFactory.getLogger(StravaSlurper.class);
     @Autowired
-    ActivityRepository repository;
+    ActivityRepository activityRepository;
+
+    @Autowired
+    AthleteRepository athleteRepository;
 
     @Scheduled(fixedRate = 1000 * 60 * 10)
     public void updateActivities() {
@@ -46,7 +50,7 @@ public class StravaSlurper
         ClubAPI api = getApi();
         List<Activity> activities = new ArrayList<>();
         Arrays.asList(api.listRecentClubActivities(STRAVA_CLUB_ID, null, null)).forEach(stravaActivity -> activities.add(createActivity(stravaActivity)));
-        repository.save(activities);
+        activityRepository.save(activities);
     }
 
     private Activity createActivity(StravaActivity stravaActivity) {
@@ -60,7 +64,7 @@ public class StravaSlurper
         activity.setMovingTimeInSeconds(stravaActivity.getMovingTime());
         activity.setDistanceInMeters(stravaActivity.getDistance());
         activity.setStartDateLocal(stravaActivity.getStartDateLocal());
-        activity.setPoints(CalculatePoints.getPointsForActivity(activity));
+        activity.setPoints(CalculatePoints.getPointsForActivity(activity, athleteRepository.findByLastName(activity.getAthleteLastName()).getHandicap()));
         return activity;
     }
 
