@@ -36,6 +36,24 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.danshannon</groupId>
+            <artifactId>javastrava-api</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.8.1</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -73,7 +91,7 @@
                             <label>mongo</label>
                             <provider>mongolab</provider>
                             <version>3.2.12</version>
-                            <plan>free</plan>
+                            <plan>Sandbox</plan>
                         </service>
                     </services>
                 </configuration>

@@ -8,10 +8,19 @@ public class LeaderboardEntry
     private String athleteFirstName;
     private int points;
     private Date lastActivityDate;
+    private int numberOfActivities;
 
     public LeaderboardEntry(String lastName, Integer points) {
         this.athleteLastName = lastName;
         this.points = points;
+    }
+
+    public int getNumberOfActivities() {
+        return numberOfActivities;
+    }
+
+    public void setNumberOfActivities(int numberOfActivities) {
+        this.numberOfActivities = numberOfActivities;
     }
 
     public String getAthleteLastName() {
