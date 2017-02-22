@@ -19,6 +19,7 @@ import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.domain.LeaderboardEntry;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
+import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
 
 @RestController
@@ -30,12 +31,13 @@ public class ActivityController
     @Autowired
     AthleteRepository athleteRepository;
 
+    @Autowired
+    StravaSlurper stravaSlurper;
 
     @RequestMapping(value = "/deleteAllFromDb", method = RequestMethod.GET)
     public void deleteDb() {
         activityRepository.deleteAll();
     }
-
 
     @RequestMapping(value = "/athlete/{lastName}/activities", method = RequestMethod.GET)
     public List<Activity> getUserActivities(@PathVariable("lastName") String lastName) {
@@ -55,7 +57,7 @@ public class ActivityController
 
     @RequestMapping(value = "/leaderboard/month/points", method = RequestMethod.GET)
     public List<LeaderboardEntry> getLeaderboardMonth() {
-        List<Activity> activityList = activityRepository.findByStartDateLocalAfter(DateUtil.addHours(DateUtil.firstDayOfCurrentMonth(), -24));
+        List<Activity> activityList = activityRepository.findByStartDateLocalAfter(DateUtil.firstDayOfCurrentMonth());
         return getLeaderboardEntries(activityList);
     }
 
@@ -72,6 +74,11 @@ public class ActivityController
     @RequestMapping(value = "/athlete/{lastName}", method = RequestMethod.GET)
     public Athlete getAllAthletes(@PathVariable("lastName") String lastName) {
         return athleteRepository.findByLastName(lastName);
+    }
+
+    @RequestMapping(value = "/activities/refresh", method = RequestMethod.GET)
+    public void refreshActivities() {
+        stravaSlurper.updateActivities();
     }
 
     private List<LeaderboardEntry> getLeaderboardEntries(List<Activity> activityList) {

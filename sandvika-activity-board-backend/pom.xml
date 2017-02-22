@@ -22,6 +22,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>logback-classic</artifactId>
+                    <groupId>ch.qos.logback</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -85,15 +91,15 @@
                     <url>sandvika-strava.cfapps.io</url>
                     <memory>1024</memory>
                     <instances>1</instances>
-                    <services>
-                        <service>
-                            <name>mongodb</name>
-                            <label>mongo</label>
-                            <provider>mongolab</provider>
-                            <version>3.2.12</version>
-                            <plan>Sandbox</plan>
-                        </service>
-                    </services>
+                    <!--<services>-->
+                        <!--<service>-->
+                            <!--<name>mongodb</name>-->
+                            <!--<label>mongo</label>-->
+                            <!--<provider>mongolab</provider>-->
+                            <!--<version>3.2.12</version>-->
+                            <!--<plan>Sandbox</plan>-->
+                        <!--</service>-->
+                    <!--</services>-->
                 </configuration>
             </plugin>
         </plugins>

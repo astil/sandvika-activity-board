@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import javastrava.api.v3.auth.TokenManager;
 import javastrava.api.v3.auth.model.Token;
-import javastrava.api.v3.auth.ref.AuthorisationResponseType;
 import javastrava.api.v3.auth.ref.AuthorisationScope;
 import javastrava.api.v3.model.StravaActivity;
 import javastrava.api.v3.rest.API;
@@ -22,6 +19,7 @@ import javastrava.api.v3.rest.ClubAPI;
 import javastrava.api.v3.service.exception.BadRequestException;
 import javastrava.api.v3.service.exception.UnauthorizedException;
 import no.bouvet.sandvika.activityboard.domain.Activity;
+import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.points.CalculatePoints;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
@@ -29,9 +27,6 @@ import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 @Component
 public class StravaSlurper
 {
-    private static final AuthorisationResponseType DEFAULT_RESPONSE_TYPE = AuthorisationResponseType.CODE;
-    private static final String DEFAULT_REDIRECT_URI = "http://localhost/redirects";
-    private static final CloseableHttpClient httpClient = HttpClients.createDefault();
     private static final int STRAVA_CLUB_ID = 259508;
     public static String USERNAME = "sondrewe@gmail.com";
     public static String PASSWORD = "passordForSandvika";
@@ -49,7 +44,7 @@ public class StravaSlurper
         log.info("Updating activities");
         ClubAPI api = getApi();
         List<Activity> activities = new ArrayList<>();
-        Arrays.asList(api.listRecentClubActivities(STRAVA_CLUB_ID, null, null)).forEach(stravaActivity -> activities.add(createActivity(stravaActivity)));
+        Arrays.asList(api.listRecentClubActivities(STRAVA_CLUB_ID, 1, 60)).forEach(stravaActivity -> activities.add(createActivity(stravaActivity)));
         activityRepository.save(activities);
     }
 
@@ -64,7 +59,7 @@ public class StravaSlurper
         activity.setMovingTimeInSeconds(stravaActivity.getMovingTime());
         activity.setDistanceInMeters(stravaActivity.getDistance());
         activity.setStartDateLocal(stravaActivity.getStartDateLocal());
-        activity.setPoints(CalculatePoints.getPointsForActivity(activity, athleteRepository.findByLastName(activity.getAthleteLastName()).getHandicap()));
+        activity.setPoints(CalculatePoints.getPointsForActivity(activity, getHandicap(activity.getAthleteLastName())));
         return activity;
     }
 
@@ -84,6 +79,15 @@ public class StravaSlurper
             }
         }
         return token;
+    }
+
+    private double getHandicap(String athleteLastName) {
+        Athlete athlete = athleteRepository.findByLastName(athleteLastName);
+        if (athlete == null) {
+            return 1;
+        } else {
+            return athlete.getHandicap();
+        }
     }
 }
 
