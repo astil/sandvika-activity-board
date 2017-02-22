@@ -61,6 +61,12 @@ public class ActivityController
         return getLeaderboardEntries(activityList);
     }
 
+    @RequestMapping(value = "/leaderboard/month/points/{activityTypeName}", method = RequestMethod.GET)
+    public List<LeaderboardEntry> getLeaderboardMonth(@PathVariable("activityTypeName") String activityTypeName) {
+        List<Activity> activityList = activityRepository.findByStartDateLocalAfterAndType(DateUtil.firstDayOfCurrentMonth(), activityTypeName);
+        return getLeaderboardEntries(activityList);
+    }
+
     @RequestMapping(value = "/athlete", method = RequestMethod.PUT)
     public Athlete updateAthlete(@RequestBody Athlete request) {
         return athleteRepository.save(request);

@@ -1,11 +1,9 @@
 package no.bouvet.sandvika.activityboard.points;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.ActivityType;
-import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 
 /**
  * This is a static class used for points calculation.
