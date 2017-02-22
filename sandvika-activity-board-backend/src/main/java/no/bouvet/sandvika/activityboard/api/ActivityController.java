@@ -98,7 +98,7 @@ public class ActivityController
                 LeaderboardEntry entry = entries.get(activity.getAthleteLastName());
                 entry.setNumberOfActivities(entry.getNumberOfActivities() + 1);
                 entry.setKilometers(entry.getKilometers() + (activity.getDistanceInMeters() / 1000));
-                entry.setMinutes(Double.valueOf(entry.getKilometers() + (activity.getMovingTimeInSeconds()/60)).intValue());
+                entry.setMinutes(Double.valueOf(entry.getMinutes() + (activity.getMovingTimeInSeconds()/60)).intValue());
                 entry.setPoints(entry.getPoints() + activity.getPoints());
             }
         }
