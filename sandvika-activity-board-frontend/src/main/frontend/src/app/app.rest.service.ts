@@ -11,7 +11,8 @@ import {Activity} from "./activities";
 
 @Injectable()
 export class AppRestService {
-    private restUrl = 'http://localhost:8005/';  // URL to web api
+    // private restUrl = 'http://localhost:8005/';  // URL to web api
+    private restUrl = '';  // URL to web api
 
     constructor(private http: Http) {
     }

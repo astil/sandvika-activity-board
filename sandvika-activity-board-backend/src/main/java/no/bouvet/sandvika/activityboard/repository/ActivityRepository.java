@@ -15,4 +15,5 @@ public interface ActivityRepository extends MongoRepository<Activity, Integer>
     public List<Activity> findByAthleteLastName(String lastname);
     public List<Activity> findByStartDateLocalAfter(Date startDate);
     public List<Activity> findById(int id);
+    public List<Activity> findByStartDateLocalAfterAndType(Date startDate, String type);
 }

@@ -62,7 +62,7 @@ public enum ActivityType
 
     private static class Constants
     {
-        public static final String NORDIC_SKIING_NAME = "Nordic Skiing";
+        public static final String NORDIC_SKIING_NAME = "NordicSki";
         public static final String RUN_NAME = "Run";
         public static final String RIDE_NAME = "Ride";
         public static final String SWIM_NAME = "Swim";
