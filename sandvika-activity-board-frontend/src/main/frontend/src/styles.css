@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    background: url(assets/logo.svg) 95% 5% no-repeat,
+                url(assets/kystlinje.svg) top right no-repeat;
+    background-attachment: fixed;
+    background-size: 10%, 35%;
+}
+
+h1 {
+    color: #ff6400;
+}
+
+.modal-dialog {
+    max-width: 60%;
+}

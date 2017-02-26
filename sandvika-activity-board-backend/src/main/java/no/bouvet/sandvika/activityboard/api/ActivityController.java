@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,27 +35,33 @@ public class ActivityController
     @Autowired
     StravaSlurper stravaSlurper;
 
+    //TODO: This is just for testing, should be more secure.
+//    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/deleteAllFromDb", method = RequestMethod.GET)
     public void deleteDb() {
         activityRepository.deleteAll();
     }
 
+//    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete/{lastName}/activities", method = RequestMethod.GET)
     public List<Activity> getUserActivities(@PathVariable("lastName") String lastName) {
         return activityRepository.findByAthleteLastName(lastName);
     }
 
+//    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/month/", method = RequestMethod.GET)
     public List<Activity> getUserActivities() {
         return activityRepository.findByStartDateLocalAfter(DateUtil.addHours(DateUtil.firstDayOfCurrentWeek(), -24));
     }
 
+//    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/leaderboard/week/points", method = RequestMethod.GET)
     public List<LeaderboardEntry> getLeaderboardWeek() {
         List<Activity> activityList = activityRepository.findByStartDateLocalAfter(DateUtil.addHours(DateUtil.firstDayOfCurrentWeek(), -24));
         return getLeaderboardEntries(activityList);
     }
 
+//    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/leaderboard/month/points", method = RequestMethod.GET)
     public List<LeaderboardEntry> getLeaderboardMonth() {
         List<Activity> activityList = activityRepository.findByStartDateLocalAfter(DateUtil.firstDayOfCurrentMonth());
@@ -67,21 +74,25 @@ public class ActivityController
         return getLeaderboardEntries(activityList);
     }
 
+//    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete", method = RequestMethod.PUT)
     public Athlete updateAthlete(@RequestBody Athlete request) {
         return athleteRepository.save(request);
     }
 
+//    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete", method = RequestMethod.GET)
     public List<Athlete> getAllAthletes() {
         return athleteRepository.findAll();
     }
 
+//    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete/{lastName}", method = RequestMethod.GET)
     public Athlete getAllAthletes(@PathVariable("lastName") String lastName) {
         return athleteRepository.findByLastName(lastName);
     }
 
+//    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/refresh", method = RequestMethod.GET)
     public void refreshActivities() {
         stravaSlurper.updateActivities();
