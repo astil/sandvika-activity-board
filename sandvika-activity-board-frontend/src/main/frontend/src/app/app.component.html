@@ -1,16 +1,30 @@
-<h1>
-  {{title}}
-</h1>
-<div [(ngModel)]="model" ngbRadioGroup name="radioBasic">
-  <label class="btn btn-primary">
-    <input type="radio" [value]="1"> Left (pre-checked)
-  </label>
-  <label class="btn btn-primary">
-    <input type="radio" value="middle"> Middle
-  </label>
-  <label class="btn btn-primary">
-    <input type="radio" [value]="false"> Right
-  </label>
+<div class="container">
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Navn</th>
+            <th>Poeng</th>
+            <th>Siste aktivitet</th>
+            <th>Antall aktiviteter</th>
+            <th>Km</th>
+            <th>Minutter</th>
+            <th>Handicap</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let athlete of athletes">
+            <td><ngbd-modal-component [athlete]="athlete"></ngbd-modal-component></td>
+            <td>{{athlete.points}}</td>
+            <td>{{athlete.lastActivityDate}}</td>
+            <td>{{athlete.numberOfActivities}}</td>
+            <td>{{athlete.kilometers | number:0}}</td>
+            <td>{{athlete.minutes}}</td>
+            <td>{{athlete.handicap}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="strava-brand"><img src="../assets/api_logo_pwrdBy_strava_horiz_light.svg"></div>
+
+    <template ngbModalContainer></template>
 </div>
-<hr>
-<pre>{{model}}</pre>

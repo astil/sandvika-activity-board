@@ -13,6 +13,13 @@
     <packaging>war</packaging>
 
     <dependencies>
+
+        <dependency>
+            <groupId>no.bouvet.sandvika</groupId>
+            <artifactId>sandvika-activity-board-backend</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

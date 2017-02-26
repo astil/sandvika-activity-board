@@ -45,6 +45,12 @@
             <groupId>com.github.danshannon</groupId>
             <artifactId>javastrava-api</artifactId>
             <version>1.0.3</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                    <groupId>org.apache.logging.log4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -74,10 +80,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.cloudfoundry</groupId>
                 <artifactId>cf-maven-plugin</artifactId>
