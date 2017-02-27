@@ -23,6 +23,7 @@ import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.points.PointsCalculator;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
+import no.bouvet.sandvika.activityboard.utils.DateUtil;
 
 @Component
 public class StravaSlurper
@@ -60,7 +61,7 @@ public class StravaSlurper
 //        activity.setCalories(stravaActivity.getCalories());
         activity.setMovingTimeInSeconds(stravaActivity.getMovingTime());
         activity.setDistanceInMeters(stravaActivity.getDistance());
-        activity.setStartDateLocal(stravaActivity.getStartDateLocal());
+        activity.setStartDateLocal(DateUtil.getDateFromLocalDateTime(stravaActivity.getStartDateLocal()));
         activity.setPoints(PointsCalculator.getPointsForActivity(activity, getHandicap(activity.getAthleteLastName())));
         log.info("Created activity: " + activity.toString());
         return activity;

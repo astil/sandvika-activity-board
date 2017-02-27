@@ -1,6 +1,7 @@
 package no.bouvet.sandvika.activityboard.domain;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
@@ -19,7 +20,7 @@ public class Activity
     private int elapsedTimeInSeconds;
     private float totalElevationGaininMeters;
     private String type;
-    private LocalDateTime startDateLocal;
+    private Date startDateLocal;
     private String timezone;
     @GeoSpatialIndexed
     private double[] startLatLng;
@@ -50,7 +51,7 @@ public class Activity
         this.athleteLastName = athleteLastName;
     }
 
-    public Activity(int id, int points, String athleteLastName, String athletefirstName, LocalDateTime startDateLocal) {
+    public Activity(int id, int points, String athleteLastName, String athletefirstName, Date startDateLocal) {
         this.id = id;
         this.points = points;
         this.athletefirstName = athletefirstName;
@@ -138,11 +139,11 @@ public class Activity
         this.type = type;
     }
 
-    public LocalDateTime getStartDateLocal() {
+    public Date getStartDateLocal() {
         return startDateLocal;
     }
 
-    public void setStartDateLocal(LocalDateTime startDateLocal) {
+    public void setStartDateLocal(Date startDateLocal) {
         this.startDateLocal = startDateLocal;
     }
 

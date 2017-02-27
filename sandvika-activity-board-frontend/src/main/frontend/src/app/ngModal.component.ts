@@ -32,7 +32,7 @@ import {Athlete} from "./athlete";
                 </thead>
                 <tbody>
                     <tr *ngFor="let activity of activitys">
-                        <td>{{activity.startDateLocal.dayOfMonth}}/{{activity.startDateLocal.monthValue}}/{{activity.startDateLocal.year}}</td>
+                        <td>{{activity.startDateLocal | date: 'dd/MM/yyyy'}}</td>
                         <td>{{activity.name}}</td>
                         <td>{{activity.type}}</td>
                         <td>{{activity.points}}</td>

@@ -1,5 +1,8 @@
 package no.bouvet.sandvika.activityboard.utils;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -32,6 +35,11 @@ public class DateUtil
         cal.setTime(date);
         cal.add(Calendar.HOUR, hours);
         return cal.getTime();
+    }
+
+    public static Date getDateFromLocalDateTime(LocalDateTime input) {
+        Instant instant = input.toInstant(ZoneOffset.ofHours(0));
+        return Date.from(instant);
     }
 
 }
