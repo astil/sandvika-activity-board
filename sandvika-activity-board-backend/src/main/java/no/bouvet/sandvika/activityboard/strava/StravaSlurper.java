@@ -79,7 +79,8 @@ public class StravaSlurper
         activity.setMovingTimeInSeconds(stravaActivity.getMovingTime());
         activity.setDistanceInMeters(stravaActivity.getDistance());
         activity.setStartDateLocal(DateUtil.getDateFromLocalDateTime(stravaActivity.getStartDateLocal()));
-        activity.setPoints(PointsCalculator.getPointsForActivity(activity, getHandicap(activity.getAthleteLastName())));
+        activity.setPoints(PointsCalculator.getPointsForActivity(activity, getHandicapForActivity(activity)));
+        activity.setHandicap(getHandicapForActivity(activity));
         log.info("Created activity: " + activity.toString());
         return activity;
     }
@@ -106,15 +107,15 @@ public class StravaSlurper
         return token;
     }
 
-    private double getHandicap(String athleteLastName)
+    private double getHandicapForActivity(Activity activity)
     {
-        Athlete athlete = athleteRepository.findByLastName(athleteLastName);
-        if (athlete == null)
+        Athlete athlete = athleteRepository.findByLastName(activity.getAthleteLastName());
+        if (athlete == null || athlete.getHandicapList().isEmpty())
         {
             return 1;
         } else
         {
-            return athlete.getHandicap();
+            return athlete.getHandicapForDate(activity.getStartDateLocal());
         }
     }
 

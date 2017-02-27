@@ -28,6 +28,7 @@ import {Athlete} from "./athlete";
                         <th>Totaltid</th>
                         <th>Høydemeter</th>
                         <th>SufferScore</th>
+                        <th>Handicap</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,6 +42,7 @@ import {Athlete} from "./athlete";
                         <td>{{activity.elapsedTimeInSeconds}}</td>
                         <td>{{activity.totalElevationGaininMeters}}</td>
                         <td>{{activity.sufferScore}}</td>  
+                        <td>{{activity.handicap}}</td>  
                     </tr>
                 </tbody>
             </table>

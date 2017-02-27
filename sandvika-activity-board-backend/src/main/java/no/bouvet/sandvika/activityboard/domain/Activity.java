@@ -40,6 +40,7 @@ public class Activity
     private int maxHeartrate;
     private float calories;
     private int sufferScore;
+    private double handicap;
 
 
     public Activity() {}
@@ -321,5 +322,15 @@ public class Activity
         sb.append(", kudosCount=").append(kudosCount);
         sb.append('}');
         return sb.toString();
+    }
+
+    public void setHandicap(double handicap)
+    {
+        this.handicap = handicap;
+    }
+
+    public double getHandicap()
+    {
+        return handicap;
     }
 }
