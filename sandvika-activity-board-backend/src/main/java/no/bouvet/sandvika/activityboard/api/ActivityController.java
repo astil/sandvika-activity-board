@@ -122,7 +122,7 @@ public class ActivityController
 
         return new ArrayList<>(entries.values())
                 .stream()
-                .sorted(Comparator.comparingInt(LeaderboardEntry::getPoints).reversed())
+                .sorted(Comparator.comparingDouble(LeaderboardEntry::getPoints).reversed())
                 .collect(Collectors.toList());
     }
 

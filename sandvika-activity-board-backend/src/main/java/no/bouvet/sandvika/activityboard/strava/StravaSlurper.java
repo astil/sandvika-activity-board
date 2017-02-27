@@ -20,7 +20,7 @@ import javastrava.api.v3.service.exception.BadRequestException;
 import javastrava.api.v3.service.exception.UnauthorizedException;
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
-import no.bouvet.sandvika.activityboard.points.CalculatePoints;
+import no.bouvet.sandvika.activityboard.points.PointsCalculator;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 
@@ -40,15 +40,17 @@ public class StravaSlurper
     AthleteRepository athleteRepository;
 
     @Scheduled(fixedRate = 1000 * 60 * 10)
-    public void updateActivities() {
+    public void updateActivities()
+    {
         log.info("Updating activities");
         ClubAPI api = getApi();
         List<Activity> activities = new ArrayList<>();
-        Arrays.asList(api.listRecentClubActivities(STRAVA_CLUB_ID, 1, 60)).forEach(stravaActivity -> activities.add(createActivity(stravaActivity)));
+        Arrays.asList(api.listRecentClubActivities(STRAVA_CLUB_ID, 1, 200)).forEach(stravaActivity -> activities.add(createActivity(stravaActivity)));
         activityRepository.save(activities);
     }
 
-    private Activity createActivity(StravaActivity stravaActivity) {
+    private Activity createActivity(StravaActivity stravaActivity)
+    {
         Activity activity = new Activity();
         activity.setAthletefirstName(stravaActivity.getAthlete().getFirstname());
         activity.setAthleteLastName(stravaActivity.getAthlete().getLastname());
@@ -59,36 +61,46 @@ public class StravaSlurper
         activity.setMovingTimeInSeconds(stravaActivity.getMovingTime());
         activity.setDistanceInMeters(stravaActivity.getDistance());
         activity.setStartDateLocal(stravaActivity.getStartDateLocal());
-        activity.setPoints(CalculatePoints.getPointsForActivity(activity, getHandicap(activity.getAthleteLastName())));
+        activity.setPoints(PointsCalculator.getPointsForActivity(activity, getHandicap(activity.getAthleteLastName())));
+        log.info("Created activity: " + activity.toString());
         return activity;
     }
 
-    private ClubAPI getApi() {
+    private ClubAPI getApi()
+    {
         return API.instance(ClubAPI.class, getValidToken());
     }
 
-
-    private Token getValidToken(final AuthorisationScope... scopes) {
+    private Token getValidToken(final AuthorisationScope... scopes)
+    {
         Token token = TokenManager.instance().retrieveTokenWithExactScope(USERNAME, scopes);
-        if (token == null) {
-            try {
+        if (token == null)
+        {
+            try
+            {
                 token = StravaUtils.getStravaAccessToken(USERNAME, PASSWORD, scopes);
                 TokenManager.instance().storeToken(token);
-            } catch (BadRequestException | UnauthorizedException e) {
+            } catch (BadRequestException | UnauthorizedException e)
+            {
                 return null;
             }
         }
         return token;
     }
 
-    private double getHandicap(String athleteLastName) {
+    private double getHandicap(String athleteLastName)
+    {
         Athlete athlete = athleteRepository.findByLastName(athleteLastName);
-        if (athlete == null) {
+        if (athlete == null)
+        {
             return 1;
-        } else {
+        } else
+        {
             return athlete.getHandicap();
         }
     }
+
+
 }
 
 

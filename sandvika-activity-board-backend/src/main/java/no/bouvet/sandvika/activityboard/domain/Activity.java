@@ -9,7 +9,7 @@ public class Activity
 {
     @Id
     private int id;
-    private int points;
+    private double points;
     private String name;
     private String athleteLastName;
     private String athletefirstName;
@@ -282,11 +282,11 @@ public class Activity
         this.sufferScore = sufferScore;
     }
 
-    public int getPoints() {
+    public double getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(double points) {
         this.points = points;
     }
 
@@ -303,5 +303,22 @@ public class Activity
     @Override
     public int hashCode() {
         return id;
+    }
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder sb = new StringBuilder("Activity{");
+        sb.append("points=").append(points);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", athleteLastName='").append(athleteLastName).append('\'');
+        sb.append(", athletefirstName='").append(athletefirstName).append('\'');
+        sb.append(", distanceInMeters=").append(distanceInMeters);
+        sb.append(", movingTimeInSeconds=").append(movingTimeInSeconds);
+        sb.append(", type='").append(type).append('\'');
+        sb.append(", achievementCount=").append(achievementCount);
+        sb.append(", kudosCount=").append(kudosCount);
+        sb.append('}');
+        return sb.toString();
     }
 }

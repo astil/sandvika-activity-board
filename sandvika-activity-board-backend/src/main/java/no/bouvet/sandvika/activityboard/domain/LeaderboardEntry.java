@@ -2,24 +2,26 @@ package no.bouvet.sandvika.activityboard.domain;
 
 import java.util.Date;
 
+import no.bouvet.sandvika.activityboard.utils.Utils;
+
 public class LeaderboardEntry
 {
     private String athleteLastName;
     private String athleteFirstName;
-    private int points;
+    private double points;
     private Date lastActivityDate;
     private int numberOfActivities;
     private double kilometers;
     private int minutes;
     private double handicap;
 
-    public LeaderboardEntry(String lastName, Integer points) {
+    public LeaderboardEntry(String lastName, Double points) {
         this.athleteLastName = lastName;
         this.points = points;
     }
 
     public double getKilometers() {
-        return kilometers;
+        return Utils.scaledDouble(kilometers);
     }
 
     public void setKilometers(double kilometers) {
@@ -35,7 +37,7 @@ public class LeaderboardEntry
     }
 
     public double getHandicap() {
-        return handicap;
+        return Utils.scaledDouble(handicap);
     }
 
     public void setHandicap(double handicap) {
@@ -66,11 +68,11 @@ public class LeaderboardEntry
         this.athleteFirstName = athleteFirstName;
     }
 
-    public int getPoints() {
-        return points;
+    public double getPoints() {
+        return Utils.scaledDouble(points);
     }
 
-    public void setPoints(int points) {
+    public void setPoints(double points) {
         this.points = points;
     }
 
