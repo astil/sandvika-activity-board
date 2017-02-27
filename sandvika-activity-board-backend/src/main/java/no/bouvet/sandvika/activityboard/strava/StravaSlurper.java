@@ -56,9 +56,26 @@ public class StravaSlurper
         activity.setAthletefirstName(stravaActivity.getAthlete().getFirstname());
         activity.setAthleteLastName(stravaActivity.getAthlete().getLastname());
         activity.setType(stravaActivity.getType().getValue());
-        activity.setId(stravaActivity.getId());
+        activity.setId(stravaActivity.getId().intValue());
         activity.setName(stravaActivity.getName());
-//        activity.setCalories(stravaActivity.getCalories());
+        if (stravaActivity.getCalories() != null)
+        {
+            activity.setCalories(stravaActivity.getCalories());
+        }
+        // Må vente på ny versjon som tar med SufferScore
+        //if (stravaActivity.getSufferScore() != null)
+        //{
+        //    activity.setSufferScore(stravaActivity.getSufferScore());
+        //}
+        activity.setElapsedTimeInSeconds(stravaActivity.getElapsedTime());
+        if (stravaActivity.getAchievementCount() != null)
+        {
+            activity.setAchievementCount(stravaActivity.getAchievementCount());
+        }
+        if (stravaActivity.getTotalElevationGain() != null)
+        {
+            activity.setTotalElevationGaininMeters(stravaActivity.getTotalElevationGain());
+        }
         activity.setMovingTimeInSeconds(stravaActivity.getMovingTime());
         activity.setDistanceInMeters(stravaActivity.getDistance());
         activity.setStartDateLocal(DateUtil.getDateFromLocalDateTime(stravaActivity.getStartDateLocal()));
