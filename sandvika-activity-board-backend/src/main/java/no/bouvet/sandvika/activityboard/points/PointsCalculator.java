@@ -22,21 +22,21 @@ public final class PointsCalculator
 
     public static double getPointsForActivity(Activity activity, double handicap)
     {
-        int durationPoints = getPointsForDuration(activity.getMovingTimeInSeconds() / SECONDS_IN_MINUTE);
-        int distancePoints = getPointsForDistance(activity.getDistanceInMeters() / 1000);
         ActivityType activityType = ActivityType.toActivityType(activity.getType());
         if (activityType == null)
         {
             return 0;
         } else
         {
-            return Utils.scaledDouble((durationPoints + distancePoints) * activityType.coefficient() * handicap);
+            int durationPoints = getPointsForDuration(activity.getMovingTimeInSeconds() / SECONDS_IN_MINUTE);
+            int distancePoints = getPointsForDistance(activity.getDistanceInMeters() / 1000, activityType);
+            return Utils.scaledDouble((durationPoints + distancePoints) * handicap);
         }
     }
 
-    private static int getPointsForDistance(double distanceInKilometers)
+    private static int getPointsForDistance(double distanceInKilometers, ActivityType activityType)
     {
-        return Double.valueOf(distanceInKilometers * KILOMETER_VALUE).intValue();
+        return Double.valueOf(distanceInKilometers * KILOMETER_VALUE * activityType.coefficient()).intValue();
     }
 
     private static int getPointsForDuration(int durationInMinutes)
