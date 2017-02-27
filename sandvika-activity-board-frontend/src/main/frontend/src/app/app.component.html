@@ -8,7 +8,7 @@
             <th>Siste aktivitet</th>
             <th>Antall aktiviteter</th>
             <th>Km</th>
-            <th>Minutter</th>
+            <th>Totalt</th>
             <th>Handicap</th>
         </tr>
         </thead>
@@ -18,8 +18,8 @@
             <td>{{athlete.points}}</td>
             <td>{{athlete.lastActivityDate}}</td>
             <td>{{athlete.numberOfActivities}}</td>
-            <td>{{athlete.kilometers | number:0}}</td>
-            <td>{{athlete.minutes}}</td>
+            <td>{{athlete.kilometers | number : '1.0-1'}} km</td>
+            <td>{{athlete.minutes | minToHms}}</td>
             <td>{{athlete.handicap}}</td>
         </tr>
         </tbody>

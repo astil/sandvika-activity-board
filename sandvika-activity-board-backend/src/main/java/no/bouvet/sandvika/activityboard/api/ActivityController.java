@@ -82,7 +82,7 @@ public class ActivityController
         return getLeaderboardEntries(activityList);
     }
 
-    //    @CrossOrigin(origins = "*")
+//    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete", method = RequestMethod.PUT)
     public Athlete updateAthlete(@RequestBody Athlete request)
     {
@@ -99,20 +99,21 @@ public class ActivityController
     }
 
     //    @CrossOrigin(origins = "*")
+//    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete", method = RequestMethod.GET)
     public List<Athlete> getAllAthletes()
     {
         return athleteRepository.findAll();
     }
 
-    //    @CrossOrigin(origins = "*")
+//    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete/{lastName}", method = RequestMethod.GET)
     public Athlete getAllAthletes(@PathVariable("lastName") String lastName)
     {
         return athleteRepository.findByLastName(lastName);
     }
 
-    //    @CrossOrigin(origins = "*")
+//    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/refresh", method = RequestMethod.GET)
     public void refreshActivities()
     {

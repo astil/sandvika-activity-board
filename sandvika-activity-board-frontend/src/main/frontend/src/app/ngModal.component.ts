@@ -16,7 +16,7 @@ import {Athlete} from "./athlete";
     </div>
     <div class="modal-body">
         <div class="panel panel-default">
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Dato</th>
@@ -32,14 +32,14 @@ import {Athlete} from "./athlete";
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let activity of activitys">
+                    <tr *ngFor="let activity of activitys | orderBy:'-startDateLocal'">
                         <td>{{activity.startDateLocal | date: 'dd/MM/yyyy'}}</td>
                         <td>{{activity.name}}</td>
                         <td>{{activity.type}}</td>
                         <td>{{activity.points}}</td>
-                        <td>{{activity.distanceInMeters}}</td>
-                        <td>{{activity.movingTimeInSeconds}}</td>
-                        <td>{{activity.elapsedTimeInSeconds}}</td>
+                        <td>{{activity.distanceInMeters | meterToKm}} km</td>
+                        <td>{{activity.movingTimeInSeconds | convertToHours}}</td>
+                        <td>{{activity.elapsedTimeInSeconds | convertToHours}}</td>
                         <td>{{activity.totalElevationGaininMeters}}</td>
                         <td>{{activity.sufferScore}}</td>  
                         <td>{{activity.handicap}}</td>  
