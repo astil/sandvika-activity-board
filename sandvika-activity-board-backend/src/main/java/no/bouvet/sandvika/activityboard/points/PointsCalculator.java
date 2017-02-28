@@ -29,20 +29,20 @@ public final class PointsCalculator
         } else
         {
             int achievementPoints = activity.getAchievementCount();
-            int durationPoints = getPointsForDuration(activity.getMovingTimeInSeconds() / SECONDS_IN_MINUTE);
-            int distancePoints = getPointsForDistance(activity.getDistanceInMeters() / 1000, activityType);
+            double durationPoints = getPointsForDuration(activity.getMovingTimeInSeconds() / SECONDS_IN_MINUTE, activityType);
+            double distancePoints = getPointsForDistance(activity.getDistanceInMeters() / 1000, activityType);
             return Utils.scaledDouble((durationPoints + distancePoints + achievementPoints) * handicap);
         }
     }
 
-    private static int getPointsForDistance(double distanceInKilometers, ActivityType activityType)
+    private static double getPointsForDistance(double distanceInKilometers, ActivityType activityType)
     {
-        return Double.valueOf(distanceInKilometers * KILOMETER_VALUE * activityType.coefficient()).intValue();
+        return distanceInKilometers * KILOMETER_VALUE * activityType.distanceCoefficient();
     }
 
-    private static int getPointsForDuration(int durationInMinutes)
+    private static double getPointsForDuration(int durationInMinutes, ActivityType activityType)
     {
-        return durationInMinutes * MINUTE_VALUE;
+        return durationInMinutes * MINUTE_VALUE * activityType.durationCoefficient();
     }
 
 }

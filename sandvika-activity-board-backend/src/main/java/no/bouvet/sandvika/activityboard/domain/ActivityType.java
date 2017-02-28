@@ -70,26 +70,51 @@ public enum ActivityType
         return this.type;
     }
 
-    public double coefficient()
+    public double distanceCoefficient()
     {
         switch (this)
         {
             case NORDIC_SKIING:
-                return Constants.NORDIC_SKIIING_COEFFISIENT;
+                return Constants.NORDIC_SKIIING_COEFFISIENT_KM;
             case RIDE:
-                return Constants.RIDE_COEFFISIENT;
+                return Constants.RIDE_COEFFISIENT_KM;
             case RUN:
-                return Constants.RUN_COEFFISIENT;
+                return Constants.RUN_COEFFISIENT_KM;
             case SWIM:
-                return Constants.SWIM_COEFFISIENT;
+                return Constants.SWIM_COEFFISIENT_KM;
             case ROWING:
-                return Constants.ROWING_COEFFISIENT;
+                return Constants.ROWING_COEFFISIENT_KM;
             case VIRTUAL_RIDE:
-                return Constants.VIRTUAL_RIDE_COEFFISIENT;
+                return Constants.VIRTUAL_RIDE_COEFFISIENT_KM;
             case HIKE:
-                return Constants.HIKE_COEFFISIENT;
+                return Constants.HIKE_COEFFISIENT_KM;
             case WALK:
-                return Constants.WALK_COEFFISIENT;
+                return Constants.WALK_COEFFISIENT_KM;
+            default:
+                return 1;
+        }
+    }
+
+    public double durationCoefficient()
+    {
+        switch (this)
+        {
+            case NORDIC_SKIING:
+                return Constants.NORDIC_SKIIING_COEFFISIENT_MIN;
+            case RIDE:
+                return Constants.RIDE_COEFFISIENT_MIN;
+            case RUN:
+                return Constants.RUN_COEFFISIENT_MIN;
+            case SWIM:
+                return Constants.SWIM_COEFFISIENT_MIN;
+            case ROWING:
+                return Constants.ROWING_COEFFISIENT_MIN;
+            case VIRTUAL_RIDE:
+                return Constants.VIRTUAL_RIDE_COEFFISIENT_MIN;
+            case HIKE:
+                return Constants.HIKE_COEFFISIENT_MIN;
+            case WALK:
+                return Constants.WALK_COEFFISIENT_MIN;
             default:
                 return 1;
         }
@@ -105,14 +130,22 @@ public enum ActivityType
         public static final String WALK_NAME = "Walk";
         public static final String HIKE_NAME = "Hike";
         public static final String VIRTUAL_RIDE_NAME = "VirtualRide";
-        public static final double ROWING_COEFFISIENT = 1;
-        public static final double NORDIC_SKIIING_COEFFISIENT = 0.6;
-        public static final double RIDE_COEFFISIENT = 0.4;
-        public static final double VIRTUAL_RIDE_COEFFISIENT = RIDE_COEFFISIENT;
-        public static final double RUN_COEFFISIENT = 1;
-        public static final double SWIM_COEFFISIENT = 1.5;
-        public static final double HIKE_COEFFISIENT = 0;
-        public static final double WALK_COEFFISIENT = 0;
+        public static final double ROWING_COEFFISIENT_KM = 1;
+        public static final double NORDIC_SKIIING_COEFFISIENT_KM = 0.6;
+        public static final double RIDE_COEFFISIENT_KM = 0.4;
+        public static final double VIRTUAL_RIDE_COEFFISIENT_KM = RIDE_COEFFISIENT_KM;
+        public static final double RUN_COEFFISIENT_KM = 1;
+        public static final double SWIM_COEFFISIENT_KM = 1.5;
+        public static final double HIKE_COEFFISIENT_KM = 2;
+        public static final double WALK_COEFFISIENT_KM = 2;
+        public static final double ROWING_COEFFISIENT_MIN = 1;
+        public static final double NORDIC_SKIIING_COEFFISIENT_MIN = 1;
+        public static final double RIDE_COEFFISIENT_MIN = 1;
+        public static final double VIRTUAL_RIDE_COEFFISIENT_MIN = RIDE_COEFFISIENT_MIN;
+        public static final double RUN_COEFFISIENT_MIN = 1;
+        public static final double SWIM_COEFFISIENT_MIN = 1;
+        public static final double HIKE_COEFFISIENT_MIN = 0.4;
+        public static final double WALK_COEFFISIENT_MIN = 0.4;
 
 
     }
