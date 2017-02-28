@@ -125,6 +125,18 @@ public class ActivityController
         stravaSlurper.updateActivities();
     }
 
+    //    @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/activities/month/top10", method = RequestMethod.GET)
+    public List<Activity> getTopTenThisMonth()
+    {
+        return activityRepository.findByStartDateLocalAfter(DateUtil.firstDayOfCurrentMonth())
+            .stream()
+            .sorted(Comparator.comparingDouble(Activity::getPoints).reversed())
+            .limit(10)
+            .collect(Collectors.toList());
+    }
+
+
     private List<LeaderboardEntry> getLeaderboardEntries(List<Activity> activityList)
     {
         Map<String, LeaderboardEntry> entries = new HashMap<>();
