@@ -13,9 +13,9 @@ public enum ActivityType
     ROWING(Constants.ROWING_NAME),
     VIRTUAL_RIDE(Constants.VIRTUAL_RIDE_NAME),
     HIKE(Constants.HIKE_NAME),
-    WALK(Constants.WALK_NAME);
-
-
+    WALK(Constants.WALK_NAME),
+    WORKOUT(Constants.WORKOUT_NAME),
+    WEIGHT_TRAINING(Constants.WEIGHT_TRAINING_NAME);
     private String type;
 
     ActivityType(String type)
@@ -59,7 +59,14 @@ public enum ActivityType
         } else if (activityName.equalsIgnoreCase(Constants.WALK_NAME))
         {
             return ActivityType.WALK;
-        } else
+        } else if (activityName.equalsIgnoreCase(Constants.WORKOUT_NAME))
+        {
+            return ActivityType.WORKOUT;
+        }  else if (activityName.equalsIgnoreCase(Constants.WEIGHT_TRAINING_NAME))
+        {
+            return ActivityType.WEIGHT_TRAINING;
+        }
+        else
         {
             return null;
         }
@@ -90,6 +97,10 @@ public enum ActivityType
                 return Constants.HIKE_COEFFISIENT_KM;
             case WALK:
                 return Constants.WALK_COEFFISIENT_KM;
+            case WORKOUT:
+                return Constants.WORKOUT_COEFFISIENT_KM;
+            case WEIGHT_TRAINING:
+                return Constants.WEIGHT_TRAINING_COEFFISIENT_KM;
             default:
                 return 1;
         }
@@ -115,6 +126,10 @@ public enum ActivityType
                 return Constants.HIKE_COEFFISIENT_MIN;
             case WALK:
                 return Constants.WALK_COEFFISIENT_MIN;
+            case WORKOUT:
+                return Constants.WORKOUT_COEFFISIENT_MIN;
+            case WEIGHT_TRAINING:
+                return Constants.WEIGHT_TRAINING_COEFFISIENT_MIN;
             default:
                 return 1;
         }
@@ -130,6 +145,9 @@ public enum ActivityType
         public static final String WALK_NAME = "Walk";
         public static final String HIKE_NAME = "Hike";
         public static final String VIRTUAL_RIDE_NAME = "VirtualRide";
+        public static final String WORKOUT_NAME = "Workout";
+        public static final String WEIGHT_TRAINING_NAME = "WeightTraining";
+
         public static final double ROWING_COEFFISIENT_KM = 1;
         public static final double NORDIC_SKIIING_COEFFISIENT_KM = 0.6;
         public static final double RIDE_COEFFISIENT_KM = 0.4;
@@ -138,6 +156,9 @@ public enum ActivityType
         public static final double SWIM_COEFFISIENT_KM = 1.5;
         public static final double HIKE_COEFFISIENT_KM = 2;
         public static final double WALK_COEFFISIENT_KM = 2;
+        public static final double WORKOUT_COEFFISIENT_KM = 0;
+        public static final double WEIGHT_TRAINING_COEFFISIENT_KM = 0;
+
         public static final double ROWING_COEFFISIENT_MIN = 1;
         public static final double NORDIC_SKIIING_COEFFISIENT_MIN = 1;
         public static final double RIDE_COEFFISIENT_MIN = 1;
@@ -146,6 +167,8 @@ public enum ActivityType
         public static final double SWIM_COEFFISIENT_MIN = 1;
         public static final double HIKE_COEFFISIENT_MIN = 0.4;
         public static final double WALK_COEFFISIENT_MIN = 0.4;
+        public static final double WORKOUT_COEFFISIENT_MIN = 1;
+        public static final double WEIGHT_TRAINING_COEFFISIENT_MIN = 1;
 
 
     }
