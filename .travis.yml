@@ -1,0 +1,11 @@
+language: java
+jdk:
+- oraclejdk8
+deploy:
+ provider: cloudfoundry
+ api: https://api.run.pivotal.io
+ username: sondre.engell@bouvet.no
+ password:
+   secure: BaCKUyFFBjMaJ0xaj9ooNyXllXJSNZmhD1J4hXdmAVsxcOFYUg/tb24d+Y4dbBE4pqZkmCPbQ3YWFnEN9dj1uiuoDdI4mCdqyqtmXwxdyqsKv9v1PBBnjgv5U5wbTnxCbexQm5pg6dR2qhBhxH+CoC7WiIpEyHRK0TwhLTYkEz0xQMwQAVitoJUNKoBgPh2Qna9bGk4krnMTi1dVk20cEJNCIItfWcjB6HWWXsHFX8PY7RMZC4PA51fVR6uwHCQrgA3Yb1+M1M01/P3Kfm7ueHLDukOAXF4mb4YBV+dTDifGt4G7fL8DLBSjOkPcaRzTW76i8E7a96YhB4xx0XK4BDqyE0/WAXOgFqyQjNroH4Rj3gi9ETrD+Xat/YJQixskCtEkY22WpfbWYHLUOb/UWfpLKYfdsVlJ5qEkTo9Bp6gPpaclxcYjcXtl9gbe7oDgx7rgD0LaJpe7QPcfMTC0XSna3dNAmMED0Ii3ReFTuJLr2QSVLizH4W/bO+u+DYCZLvis4x5WRu9S32VI62387Ub2d/uuwaBDvtcHcxO0Bm/pNGqmiNqOqeVBtAboVHPQYz6vwj/9bf3x0K31gqFbB0oZs9c3WWCh6eklTxojLuVYhZ+XBqGTq4x6AsQ3v4kku4FzYUCFupUCwwphoY3diFxSlxMvbmEn3fdZM/IIg+0=
+ organization: sandvika-strava-board
+ space: development
