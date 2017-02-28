@@ -34,7 +34,7 @@ import {Athlete} from "./athlete";
                 <tbody>
                     <tr *ngFor="let activity of activitys | orderBy:'-startDateLocal'">
                         <td>{{activity.startDateLocal | date: 'dd/MM/yyyy'}}</td>
-                        <td>{{activity.name}}</td>
+                        <td><a href="https://www.strava.com/activities/{{activity.id}}">{{activity.name}}</a></td>
                         <td>{{activity.type}}</td>
                         <td>{{activity.points}}</td>
                         <td>{{activity.distanceInMeters | meterToKm}} km</td>
