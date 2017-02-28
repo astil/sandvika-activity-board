@@ -7,10 +7,13 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppComponent} from './app.component';
 import {AppRestService} from "./app.rest.service";
 import {NgbdModalComponent, NgbdModalContent} from "./ngModal.component";
+import {MeterToKilometerPipe} from "./pipe/meterToKmPipe";
+import {TimeConverterPipe, ConvertMinToHhMmSs} from "./pipe/timeConverterPipe";
+import {OrderBy} from "./pipe/customOrderBy";
 
 @NgModule({
     declarations: [
-        AppComponent, NgbdModalComponent, NgbdModalContent
+        AppComponent, NgbdModalComponent, NgbdModalContent, MeterToKilometerPipe, TimeConverterPipe, OrderBy, ConvertMinToHhMmSs
     ],
     entryComponents: [NgbdModalContent],
     imports: [
