@@ -139,6 +139,7 @@ public class ActivityController
                 entry.setHandicap(getHandicapForActivity(activity));
                 entry.setKilometers(activity.getDistanceInMeters() / 1000);
                 entry.setMinutes(activity.getMovingTimeInSeconds() / 60);
+                entry.setLastActivityDate(activity.getStartDateLocal());
                 entries.put(entry.getAthleteLastName(), entry);
 
             } else
@@ -148,6 +149,10 @@ public class ActivityController
                 entry.setKilometers(entry.getKilometers() + (activity.getDistanceInMeters() / 1000));
                 entry.setMinutes(Double.valueOf(entry.getMinutes() + (activity.getMovingTimeInSeconds() / 60)).intValue());
                 entry.setPoints(entry.getPoints() + activity.getPoints());
+                if (entry.getLastActivityDate().before(activity.getStartDateLocal()))
+                {
+                    entry.setLastActivityDate(activity.getStartDateLocal());
+                }
             }
         }
 

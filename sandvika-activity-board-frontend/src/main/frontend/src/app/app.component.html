@@ -16,7 +16,7 @@
         <tr *ngFor="let athlete of athletes">
             <td><ngbd-modal-component [athlete]="athlete"></ngbd-modal-component></td>
             <td>{{athlete.points}}</td>
-            <td>{{athlete.lastActivityDate}}</td>
+            <td>{{athlete.lastActivityDate | date: 'dd/MM/yyyy'}}</td>
             <td>{{athlete.numberOfActivities}}</td>
             <td>{{athlete.kilometers | number : '1.0-1'}} km</td>
             <td>{{athlete.minutes | minToHms}}</td>
