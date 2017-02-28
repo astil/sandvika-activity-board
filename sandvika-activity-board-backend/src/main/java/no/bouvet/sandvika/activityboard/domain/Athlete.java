@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.OptionalDouble;
 
 import org.springframework.data.annotation.Id;
 
@@ -68,11 +69,26 @@ public class Athlete
 
     public double getHandicapForDate(Date startDateLocal)
     {
-        return handicapList.stream()
+        OptionalDouble handicap = handicapList.stream()
             .filter(h -> h.getTimestamp().before(startDateLocal))
             .sorted(Comparator.comparing(Handicap::getTimestamp).reversed())
-            .limit(1)
             .mapToDouble(Handicap::getHandicap)
-            .sum();
+            .findFirst();
+
+
+        if (!handicap.isPresent())
+        {
+            handicap = handicapList.stream()
+                .sorted(Comparator.comparing(Handicap::getTimestamp))
+                .mapToDouble(Handicap::getHandicap)
+                .findFirst();
+        }
+
+        if (!handicap.isPresent())
+        {
+            return 1;
+        }
+
+        return handicap.getAsDouble();
     }
 }
