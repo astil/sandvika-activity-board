@@ -8,36 +8,56 @@ import java.util.Date;
 
 public class DateUtil
 {
-    public static Date firstDayOfCurrentWeek() {
+    public static Date firstDayOfCurrentWeek()
+    {
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.clear(Calendar.MINUTE);
-        cal.clear(Calendar.SECOND);
-        cal.clear(Calendar.MILLISECOND);
-        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
-       // cal.add(Calendar.WEEK_OF_YEAR, 1);
+        clearCalendar(cal);
         return cal.getTime();
     }
 
-    public static Date firstDayOfCurrentMonth() {
+    public static Date firstDayOfCurrentMonth()
+    {
         Calendar cal = Calendar.getInstance();
+        clearCalendar(cal);
+        // cal.add(Calendar.MONTH, 1);
+        return cal.getTime();
+    }
+
+    private static void clearCalendar(Calendar cal)
+    {
         cal.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
         cal.clear(Calendar.MINUTE);
         cal.clear(Calendar.SECOND);
         cal.clear(Calendar.MILLISECOND);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-       // cal.add(Calendar.MONTH, 1);
+    }
+
+    public static Date lastDayOfMonth(int month, int year)
+    {
+        Calendar cal = Calendar.getInstance();
+        clearCalendar(cal);
+        cal.set(year, month, 1);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH));
         return cal.getTime();
     }
 
-    public static Date addHours(Date date, int hours) {
+    public static Date firstDayOfMonth(int month, int year)
+    {
+        Calendar cal = Calendar.getInstance();
+        clearCalendar(cal);
+        cal.set(year, month, 1);
+        return cal.getTime();
+    }
+
+    public static Date addHours(Date date, int hours)
+    {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.HOUR, hours);
         return cal.getTime();
     }
 
-    public static Date getDateFromLocalDateTime(LocalDateTime input) {
+    public static Date getDateFromLocalDateTime(LocalDateTime input)
+    {
         Instant instant = input.toInstant(ZoneOffset.ofHours(0));
         return Date.from(instant);
     }

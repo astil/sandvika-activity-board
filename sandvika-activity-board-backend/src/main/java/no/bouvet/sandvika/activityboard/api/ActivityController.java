@@ -136,6 +136,27 @@ public class ActivityController
             .collect(Collectors.toList());
     }
 
+    //    @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/activities/total/meters/{month}/{year}", method = RequestMethod.GET)
+    public double getTotalMetersForMonth(@PathVariable("month") int month, @PathVariable("year") int year)
+    {
+        return activityRepository.findByStartDateLocalBetween(DateUtil.firstDayOfMonth(month-1, year), DateUtil.lastDayOfMonth(month-1, year))
+            .stream()
+            .mapToDouble(Activity::getDistanceInMeters)
+            .sum();
+    }
+
+    //    @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/activities/{activityType}/total/meters/{month}/{year}", method = RequestMethod.GET)
+    public double getTotalMetersForMonthByActivity(@PathVariable("activityType") String activityType, @PathVariable("month") int month, @PathVariable("year") int year)
+    {
+        return activityRepository.findByStartDateLocalBetween(DateUtil.firstDayOfMonth(month-1, year), DateUtil.lastDayOfMonth(month-1, year))
+            .stream()
+            .filter(a -> a.getType().equalsIgnoreCase(activityType))
+            .mapToDouble(Activity::getDistanceInMeters)
+            .sum();
+    }
+
 
     private List<LeaderboardEntry> getLeaderboardEntries(List<Activity> activityList)
     {
