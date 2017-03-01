@@ -11,6 +11,7 @@ public class Statistics
     private double minutes;
     private double activities;
     private double achievements;
+    private String type;
 
     public PeriodType getPeriodType()
     {
@@ -80,5 +81,15 @@ public class Statistics
     public void setAchievements(double achievements)
     {
         this.achievements = achievements;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    public String getType()
+    {
+        return type;
     }
 }

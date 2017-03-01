@@ -140,32 +140,36 @@ public class ActivityController
             .collect(Collectors.toList());
     }
 
-    //    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/activities/total/meters/{month}/{year}", method = RequestMethod.GET)
-    public double getTotalMetersForMonth(@PathVariable("month") int month, @PathVariable("year") int year)
-    {
-        return activityRepository.findByStartDateLocalBetween(DateUtil.firstDayOfMonth(month - 1, year), DateUtil.lastDayOfMonth(month - 1, year))
-            .stream()
-            .mapToDouble(Activity::getDistanceInMeters)
-            .sum();
-    }
-
-    @RequestMapping(value = "/activities/stats/week/{weeks}", method = RequestMethod.GET)
+    @RequestMapping(value = "/activities/all/stats/week/{weeks}", method = RequestMethod.GET)
     public List<Statistics> getStatisticsByWeek(@PathVariable("weeks") int weeks)
     {
         List<Statistics> stats = new ArrayList<>();
         IntStream.range(0, weeks).forEach(i ->
-        {
-            stats.add(createStatsForWeek(i));
-        });
+            stats.add(createStatsForWeek(i)));
         return stats;
     }
 
-
-    private Statistics createStatsForWeek(int weeksAgo)
+    @RequestMapping(value = "/activities/{activityType}/stats/week/{weeks}", method = RequestMethod.GET)
+    public List<Statistics> getStatisticsForActivityTypeByWeek(@PathVariable("activityType") String activityType, @PathVariable("weeks") int weeks)
     {
-        List<Activity> activities = activityRepository.findByStartDateLocalBetween(DateUtil.firstDayOfWeek(weeksAgo), DateUtil.firstDayOfWeek(weeksAgo - 1));
+        List<Statistics> stats = new ArrayList<>();
+        IntStream.range(0, weeks).forEach(i ->
+            stats.add(createStatsForWeekByActivityType(i, activityType)));
+        return stats;
+    }
+
+    private Statistics createStatsForWeekByActivityType(int weeksAgo, String activityType)
+    {
+        List<Activity> activities;
+        if (activityType.equalsIgnoreCase("all"))
+        {
+            activities = activityRepository.findByStartDateLocalBetween(DateUtil.firstDayOfWeek(weeksAgo), DateUtil.firstDayOfWeek(weeksAgo - 1));
+        } else
+        {
+            activities = activityRepository.findByStartDateLocalBetweenAndType(DateUtil.firstDayOfWeek(weeksAgo), DateUtil.firstDayOfWeek(weeksAgo - 1), activityType);
+        }
         Statistics stats = new Statistics();
+        stats.setType(activityType);
         stats.setPeriodType(PeriodType.WEEK);
         stats.setStartDate(DateUtil.firstDayOfWeek(weeksAgo));
         stats.setAchievements(activities.stream().mapToInt(Activity::getAchievementCount).sum());
@@ -174,6 +178,12 @@ public class ActivityController
         stats.setActivities(activities.size());
         stats.setCalories(activities.stream().mapToDouble(Activity::getCalories).sum());
         return stats;
+    }
+
+    private Statistics createStatsForWeek(int weeksAgo)
+    {
+        return createStatsForWeekByActivityType(weeksAgo, "all");
+
     }
 
     //    @CrossOrigin(origins = "*")
