@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,10 +19,13 @@ import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.domain.Handicap;
 import no.bouvet.sandvika.activityboard.domain.LeaderboardEntry;
+import no.bouvet.sandvika.activityboard.domain.PeriodType;
+import no.bouvet.sandvika.activityboard.domain.Statistics;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
+import no.bouvet.sandvika.activityboard.utils.Utils;
 
 //import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -140,17 +144,43 @@ public class ActivityController
     @RequestMapping(value = "/activities/total/meters/{month}/{year}", method = RequestMethod.GET)
     public double getTotalMetersForMonth(@PathVariable("month") int month, @PathVariable("year") int year)
     {
-        return activityRepository.findByStartDateLocalBetween(DateUtil.firstDayOfMonth(month-1, year), DateUtil.lastDayOfMonth(month-1, year))
+        return activityRepository.findByStartDateLocalBetween(DateUtil.firstDayOfMonth(month - 1, year), DateUtil.lastDayOfMonth(month - 1, year))
             .stream()
             .mapToDouble(Activity::getDistanceInMeters)
             .sum();
+    }
+
+    @RequestMapping(value = "/activities/stats/week/{weeks}", method = RequestMethod.GET)
+    public List<Statistics> getStatisticsByWeek(@PathVariable("weeks") int weeks)
+    {
+        List<Statistics> stats = new ArrayList<>();
+        IntStream.range(0, weeks).forEach(i ->
+        {
+            stats.add(createStatsForWeek(i));
+        });
+        return stats;
+    }
+
+
+    private Statistics createStatsForWeek(int weeksAgo)
+    {
+        List<Activity> activities = activityRepository.findByStartDateLocalBetween(DateUtil.firstDayOfWeek(weeksAgo), DateUtil.firstDayOfWeek(weeksAgo - 1));
+        Statistics stats = new Statistics();
+        stats.setPeriodType(PeriodType.WEEK);
+        stats.setStartDate(DateUtil.firstDayOfWeek(weeksAgo));
+        stats.setAchievements(activities.stream().mapToInt(Activity::getAchievementCount).sum());
+        stats.setMeters(Utils.scaledDouble(activities.stream().mapToDouble(Activity::getDistanceInMeters).sum()));
+        stats.setMinutes(Utils.scaledDouble(activities.stream().mapToDouble(Activity::getMovingTimeInSeconds).sum() / 60));
+        stats.setActivities(activities.size());
+        stats.setCalories(activities.stream().mapToDouble(Activity::getCalories).sum());
+        return stats;
     }
 
     //    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/{activityType}/total/meters/{month}/{year}", method = RequestMethod.GET)
     public double getTotalMetersForMonthByActivity(@PathVariable("activityType") String activityType, @PathVariable("month") int month, @PathVariable("year") int year)
     {
-        return activityRepository.findByStartDateLocalBetween(DateUtil.firstDayOfMonth(month-1, year), DateUtil.lastDayOfMonth(month-1, year))
+        return activityRepository.findByStartDateLocalBetween(DateUtil.firstDayOfMonth(month - 1, year), DateUtil.lastDayOfMonth(month - 1, year))
             .stream()
             .filter(a -> a.getType().equalsIgnoreCase(activityType))
             .mapToDouble(Activity::getDistanceInMeters)

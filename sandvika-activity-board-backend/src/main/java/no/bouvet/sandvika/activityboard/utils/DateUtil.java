@@ -48,6 +48,15 @@ public class DateUtil
         return cal.getTime();
     }
 
+    public static Date firstDayOfWeek(int weeksAgo)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.WEEK_OF_YEAR, -weeksAgo);
+        clearCalendar(cal);
+        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+        return cal.getTime();
+    }
+
     public static Date addHours(Date date, int hours)
     {
         Calendar cal = Calendar.getInstance();
@@ -62,4 +71,11 @@ public class DateUtil
         return Date.from(instant);
     }
 
+    public static Date lastDayOfWeek(int weeksAgo)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(firstDayOfWeek(weeksAgo));
+        cal.add(Calendar.DAY_OF_YEAR, 6);
+        return cal.getTime();
+    }
 }
