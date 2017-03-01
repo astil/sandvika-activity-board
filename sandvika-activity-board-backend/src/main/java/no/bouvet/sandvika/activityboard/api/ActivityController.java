@@ -126,13 +126,13 @@ public class ActivityController
     }
 
     //    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/activities/month/top10", method = RequestMethod.GET)
-    public List<Activity> getTopTenThisMonth()
+    @RequestMapping(value = "/activities/month/top/{limit}/points", method = RequestMethod.GET)
+    public List<Activity> getTopTenThisMonthByPoints(@PathVariable("limit") int limit)
     {
         return activityRepository.findByStartDateLocalAfter(DateUtil.firstDayOfCurrentMonth())
             .stream()
             .sorted(Comparator.comparingDouble(Activity::getPoints).reversed())
-            .limit(10)
+            .limit(limit)
             .collect(Collectors.toList());
     }
 
