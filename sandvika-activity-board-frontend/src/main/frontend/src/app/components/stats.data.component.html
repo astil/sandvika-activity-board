@@ -1,0 +1,54 @@
+<div class="panel panel-default" *ngIf="thisWeekStats">
+
+    <div class="card">
+        <div class="card-block">
+            <h2 class="card-text" style="font-family: 'Roboto', sans-serif;">Totalt denne uka</h2>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-block" style="border-bottom: 1px solid #dddddd">
+            <h1 class="card-text" style="font-family: 'Roboto', sans-serif;">{{thisWeekStats.activities}}</h1>
+        </div>
+        <div class="card-block">
+            <p class="card-text">Aktiviteter gjennomført</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-block" style="border-bottom: 1px solid #dddddd">
+            <h1 class="card-text" style="font-family: 'Roboto', sans-serif;">{{thisWeekStats.meters | meterToKm}}</h1>
+        </div>
+        <div class="card-block">
+            <p class="card-text">Kilometer tilbakelagt</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-block" style="border-bottom: 1px solid #dddddd">
+            <h1 class="card-text" style="font-family: 'Roboto', sans-serif;">{{thisWeekStats.minutes | convertToHours}}</h1>
+        </div>
+        <div class="card-block">
+            <p class="card-text">Timer med aktivitet</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-block" style="border-bottom: 1px solid #dddddd">
+            <h1 class="card-text" style="font-family: 'Roboto', sans-serif;">{{thisWeekStats.achievements}}</h1>
+        </div>
+        <div class="card-block">
+            <p class="card-text">Prestasjoner oppnådd</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-block" style="border-bottom: 1px solid #dddddd">
+            <h1 class="card-text" style="font-family: 'Roboto', sans-serif;">{{thisWeekStats.calories}}</h1>
+        </div>
+        <div class="card-block">
+            <p class="card-text">Kalorier forbrent</p>
+        </div>
+    </div>
+
+</div>

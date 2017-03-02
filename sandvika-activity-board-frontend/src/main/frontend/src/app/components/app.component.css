@@ -1,0 +1,67 @@
+.container {
+    margin: 0 auto;
+    top: 120px;
+    width: 65%;
+    border: none;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background: rgb(255, 255, 255);
+    background: rgba(255, 255, 255, 0.8);
+    padding: 0;
+}
+
+.table thead th {
+    border: none;
+}
+
+th {
+    border: none;
+}
+
+.flex-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    /*align-items: flex-start;*/
+}
+
+.strava-brand {
+    width: 100%;
+}
+
+.strava-brand img {
+    width: 10%;
+    float: right;
+    margin-top: 1.25rem;
+}
+
+stats-data-component {
+    width: 30%;
+}
+
+ngbd-tabset-pills {
+    width: 69%;
+}
+
+.panel.panel-default {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.panel.panel-default > div {
+    width:  33%;
+    margin-bottom: 2px;
+}
+
+h1.card-text {
+    text-align: center;
+}
+
+ngbd-tabset-pills {
+    border: 1px solid #ddd;
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    border-radius:5px;
+}

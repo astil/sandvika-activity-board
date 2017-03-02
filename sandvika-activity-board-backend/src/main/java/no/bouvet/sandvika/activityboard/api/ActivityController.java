@@ -27,7 +27,7 @@ import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
 import no.bouvet.sandvika.activityboard.utils.Utils;
 
-//import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 public class ActivityController
@@ -42,28 +42,28 @@ public class ActivityController
     StravaSlurper stravaSlurper;
 
     //TODO: This is just for testing, should be more secure.
-//    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/deleteAllFromDb", method = RequestMethod.GET)
     public void deleteDb()
     {
         activityRepository.deleteAll();
     }
 
-    //    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete/{lastName}/activities", method = RequestMethod.GET)
     public List<Activity> getUserActivities(@PathVariable("lastName") String lastName)
     {
         return activityRepository.findByAthleteLastName(lastName);
     }
 
-    //    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/month/", method = RequestMethod.GET)
     public List<Activity> getUserActivities()
     {
         return activityRepository.findByStartDateLocalAfter(DateUtil.addHours(DateUtil.firstDayOfCurrentWeek(), -24));
     }
 
-    //    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/leaderboard/week/points", method = RequestMethod.GET)
     public List<LeaderboardEntry> getLeaderboardWeek()
     {
@@ -71,7 +71,7 @@ public class ActivityController
         return getLeaderboardEntries(activityList);
     }
 
-    //    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/leaderboard/month/points", method = RequestMethod.GET)
     public List<LeaderboardEntry> getLeaderboardMonth()
     {
@@ -86,14 +86,14 @@ public class ActivityController
         return getLeaderboardEntries(activityList);
     }
 
-    //    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete", method = RequestMethod.PUT)
     public Athlete updateAthlete(@RequestBody Athlete request)
     {
         return athleteRepository.save(request);
     }
 
-    //    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete/{lastName}/handicap", method = RequestMethod.PUT)
     public Athlete updateAthlete(@PathVariable("lastName") String lastName, @RequestBody Handicap handicap)
     {
@@ -107,39 +107,39 @@ public class ActivityController
         return athleteRepository.save(athlete);
     }
 
-    //    @CrossOrigin(origins = "*")
-//    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete", method = RequestMethod.GET)
     public List<Athlete> getAllAthletes()
     {
         return athleteRepository.findAll();
     }
 
-    //    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete/{lastName}", method = RequestMethod.GET)
     public Athlete getAllAthletes(@PathVariable("lastName") String lastName)
     {
         return athleteRepository.findByLastName(lastName);
     }
 
-    //    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/refresh", method = RequestMethod.GET)
     public void refreshActivities()
     {
         stravaSlurper.updateActivities();
     }
 
-    //    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/month/top/{limit}/points", method = RequestMethod.GET)
     public List<Activity> getTopTenThisMonthByPoints(@PathVariable("limit") int limit)
     {
         return activityRepository.findByStartDateLocalAfter(DateUtil.firstDayOfCurrentMonth())
-            .stream()
-            .sorted(Comparator.comparingDouble(Activity::getPoints).reversed())
-            .limit(limit)
-            .collect(Collectors.toList());
+                .stream()
+                .sorted(Comparator.comparingDouble(Activity::getPoints).reversed())
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/all/stats/week/{weeks}", method = RequestMethod.GET)
     public List<Statistics> getStatisticsByWeek(@PathVariable("weeks") int weeks)
     {
@@ -149,6 +149,7 @@ public class ActivityController
         return stats;
     }
 
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/{activityType}/stats/week/{weeks}", method = RequestMethod.GET)
     public List<Statistics> getStatisticsForActivityTypeByWeek(@PathVariable("activityType") String activityType, @PathVariable("weeks") int weeks)
     {
@@ -186,7 +187,7 @@ public class ActivityController
 
     }
 
-    //    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/{activityType}/total/meters/{month}/{year}", method = RequestMethod.GET)
     public double getTotalMetersForMonthByActivity(@PathVariable("activityType") String activityType, @PathVariable("month") int month, @PathVariable("year") int year)
     {
@@ -230,9 +231,9 @@ public class ActivityController
         }
 
         return new ArrayList<>(entries.values())
-            .stream()
-            .sorted(Comparator.comparingDouble(LeaderboardEntry::getPoints).reversed())
-            .collect(Collectors.toList());
+                .stream()
+                .sorted(Comparator.comparingDouble(LeaderboardEntry::getPoints).reversed())
+                .collect(Collectors.toList());
     }
 
     private double getHandicapForActivity(Activity activity)
