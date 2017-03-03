@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 import {NgbModal, NgbActiveModal, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
-import {AppRestService} from "./app.rest.service";
-import {Activity} from "./activities";
-import {Athlete} from "./athlete";
+import {AppRestService} from "../service/app.rest.service";
+import {Activity} from "../domain/activities";
+import {Athlete} from "../domain/athlete";
 
 @Component({
     selector: 'ngbd-modal-content',

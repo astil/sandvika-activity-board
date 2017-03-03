@@ -1,0 +1,32 @@
+export class Activity {
+    id: Number ;
+    points: Number ;
+    name: String ;
+    athleteLastName: String ;
+    athletefirstName: String ;
+    description: String ;
+    distanceInMeters: Number ;
+    movingTimeInSeconds: Number ;
+    elapsedTimeInSeconds: Number ;
+    totalElevationGaininMeters: Number ;
+    type: String ;
+    startDateLocal: Date ;
+    timezone: String ;
+    startLatLng: Number[];
+    endLatLng: Number[];
+    achievementCount: Number ;
+    kudosCount: Number ;
+    commentCount: Number ;
+    athleteCount: Number ;
+    trainer: boolean ;
+    commute: boolean ;
+    manual: boolean ;
+    averageSpeedInMetersPerSecond: Number ;
+    maxSpeedInMetersPerSecond: Number ;
+    hasHeartrate: boolean ;
+    averageHeartrate: Number ;
+    maxHeartrate: Number ;
+    calories: Number ;
+    sufferScore: Number ;
+    handicap: Number ;
+}

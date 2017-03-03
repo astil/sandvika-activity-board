@@ -6,10 +6,27 @@ body {
     background-size: 10%, 35%;
 }
 
-h1 {
-    color: #ff6400;
-}
-
 .modal-dialog {
     max-width: 60%;
+}
+
+.nav {
+    padding: 5px;
+}
+
+.nav-pills .nav-item.show .nav-link, .nav-pills .nav-link.active {
+    color: #000;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #dddddd;
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+a:focus, a:hover {
+    color: #5c5c5c;
+    text-decoration: underline;
 }

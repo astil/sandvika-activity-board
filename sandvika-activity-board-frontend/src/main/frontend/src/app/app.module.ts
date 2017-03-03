@@ -4,16 +4,26 @@ import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
-import {AppComponent} from './app.component';
-import {AppRestService} from "./app.rest.service";
-import {NgbdModalComponent, NgbdModalContent} from "./ngModal.component";
-import {MeterToKilometerPipe} from "./pipe/meterToKmPipe";
-import {TimeConverterPipe, ConvertMinToHhMmSs} from "./pipe/timeConverterPipe";
-import {OrderBy} from "./pipe/customOrderBy";
+import {AppComponent} from './components/app.component';
+import {AppRestService} from "./service/app.rest.service";
+import {NgbdModalComponent, NgbdModalContent} from "./components/ngModal.component";
+import {MeterToKilometerPipe} from "./pipes/meterToKmPipe";
+import {TimeConverterPipe, ConvertMinToHhMmSs} from "./pipes/timeConverterPipe";
+import {OrderBy} from "./pipes/customOrderBy";
+import {NgbdTabsetPills} from "./components/nav.tabset.pills";
+import {StatsDataComponent} from "./components/stats.data.component";
 
 @NgModule({
     declarations: [
-        AppComponent, NgbdModalComponent, NgbdModalContent, MeterToKilometerPipe, TimeConverterPipe, OrderBy, ConvertMinToHhMmSs
+        AppComponent,
+        NgbdModalComponent,
+        NgbdModalContent,
+        NgbdTabsetPills,
+        StatsDataComponent,
+        MeterToKilometerPipe,
+        TimeConverterPipe,
+        OrderBy,
+        ConvertMinToHhMmSs
     ],
     entryComponents: [NgbdModalContent],
     imports: [
