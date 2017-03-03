@@ -40,24 +40,6 @@ public class ActivityController
     @Autowired
     AthleteRepository athleteRepository;
 
-    @Autowired
-    StravaSlurper stravaSlurper;
-
-    //TODO: This is just for testing, should be more secure.
-//    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/deleteAllFromDb", method = RequestMethod.GET)
-    public void deleteDb()
-    {
-        activityRepository.deleteAll();
-    }
-
-//    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/athlete/{lastName}/activities", method = RequestMethod.GET)
-    public List<Activity> getUserActivities(@PathVariable("lastName") String lastName)
-    {
-        return activityRepository.findByAthleteLastName(lastName);
-    }
-
 //    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/month/", method = RequestMethod.GET)
     public List<Activity> getUserActivities()
@@ -109,47 +91,7 @@ public class ActivityController
         return getLeaderboardEntries(activityList);
     }
 
-//    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/athlete", method = RequestMethod.PUT)
-    public Athlete updateAthlete(@RequestBody Athlete request)
-    {
-        return athleteRepository.save(request);
-    }
 
-//    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/athlete/{lastName}/handicap", method = RequestMethod.PUT)
-    public Athlete updateAthlete(@PathVariable("lastName") String lastName, @RequestBody Handicap handicap)
-    {
-        Athlete athlete = athleteRepository.findByLastName(lastName);
-        if (athlete == null)
-        {
-            athlete = new Athlete();
-            athlete.setLastName(lastName);
-        }
-        athlete.getHandicapList().add(handicap);
-        return athleteRepository.save(athlete);
-    }
-
-//    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/athlete", method = RequestMethod.GET)
-    public List<Athlete> getAllAthletes()
-    {
-        return athleteRepository.findAll();
-    }
-
-//    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/athlete/{lastName}", method = RequestMethod.GET)
-    public Athlete getAllAthletes(@PathVariable("lastName") String lastName)
-    {
-        return athleteRepository.findByLastName(lastName);
-    }
-
-//    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/activities/refresh", method = RequestMethod.GET)
-    public void refreshActivities()
-    {
-        stravaSlurper.updateActivities();
-    }
 
 //    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/month/top/{limit}/points", method = RequestMethod.GET)
