@@ -6,25 +6,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
-import no.bouvet.sandvika.activityboard.domain.ActivityType;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
-import no.bouvet.sandvika.activityboard.domain.Handicap;
 import no.bouvet.sandvika.activityboard.domain.LeaderboardEntry;
 import no.bouvet.sandvika.activityboard.domain.PeriodType;
 import no.bouvet.sandvika.activityboard.domain.Statistics;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
-import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
 import no.bouvet.sandvika.activityboard.utils.Period;
 import no.bouvet.sandvika.activityboard.utils.Utils;
@@ -40,19 +35,23 @@ public class ActivityController
     @Autowired
     AthleteRepository athleteRepository;
 
-//    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/activities/month/", method = RequestMethod.GET)
-    public List<Activity> getUserActivities()
+    //    @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/activities/{activityType}/{periodType}/", method = RequestMethod.GET)
+    public List<Activity> getActivitiesForCurrentPeriod(@PathVariable("activityType") String activityType,
+                                                        @PathVariable("periodType") String periodType)
     {
-        return activityRepository.findByStartDateLocalAfter(DateUtil.addHours(DateUtil.firstDayOfCurrentWeek(), -24));
+        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
+        return getActivitiesForPeriodByActivityType(activityType, period);
     }
 
-//    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/leaderboard/all/week", method = RequestMethod.GET)
-    public List<LeaderboardEntry> getLeaderboardWeek()
+    @RequestMapping(value = "/activities/{activityType}/{periodType}/{periodNumber}/{year}", method = RequestMethod.GET)
+    public List<Activity> getActivitiesForPeriod(@PathVariable("activityType") String activityType,
+                                                 @PathVariable("periodType") String periodType,
+                                                 @PathVariable("periodNumber") int periodNumber,
+                                                 @PathVariable("year") int year)
     {
-        List<Activity> activityList = activityRepository.findByStartDateLocalAfter(DateUtil.addHours(DateUtil.firstDayOfCurrentWeek(), -24));
-        return getLeaderboardEntries(activityList);
+        Period period = DateUtil.getPeriod(PeriodType.valueOf(periodType.toUpperCase()), periodNumber, year);
+        return getActivitiesForPeriodByActivityType(activityType, period);
     }
 
     //    @CrossOrigin(origins = "*")
@@ -62,24 +61,12 @@ public class ActivityController
     {
         Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
         List<Activity> activityList;
-        if (activityType.equalsIgnoreCase("all"))
-        {
-            activityList = activityRepository.findByStartDateLocalBetween(period.getStart(), period.getEnd());
-        } else
-        {
-            activityList = activityRepository.findByStartDateLocalBetweenAndType(period.getStart(), period.getEnd(), activityType);
-        }
+        activityList = getActivitiesForPeriodByActivityType(activityType, period);
         return getLeaderboardEntries(activityList);
     }
 
-    //    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/leaderboard/{activityType}/{periodType}/{periodNumber}/{year}", method = RequestMethod.GET)
-    public List<LeaderboardEntry> getLeaderboardMonth(@PathVariable("activityType") String activityType,
-                                                      @PathVariable("periodType") String periodType,
-                                                      @PathVariable("periodNumber") int periodNumber,
-                                                      @PathVariable("year") int year)
+    private List<Activity> getActivitiesForPeriodByActivityType(String activityType, Period period)
     {
-        Period period = DateUtil.getPeriod(PeriodType.valueOf(periodType.toUpperCase()), periodNumber, year);
         List<Activity> activityList;
         if (activityType.equalsIgnoreCase("all"))
         {
@@ -88,35 +75,68 @@ public class ActivityController
         {
             activityList = activityRepository.findByStartDateLocalBetweenAndType(period.getStart(), period.getEnd(), activityType);
         }
+        return activityList;
+    }
+
+    //    @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/leaderboard/{activityType}/{periodType}/{periodNumber}/{year}", method = RequestMethod.GET)
+    public List<LeaderboardEntry> getLeaderboardForPeriod(@PathVariable("activityType") String activityType,
+                                                          @PathVariable("periodType") String periodType,
+                                                          @PathVariable("periodNumber") int periodNumber,
+                                                          @PathVariable("year") int year)
+    {
+        Period period = DateUtil.getPeriod(PeriodType.valueOf(periodType.toUpperCase()), periodNumber, year);
+        List<Activity> activityList;
+        activityList = getActivitiesForPeriodByActivityType(activityType, period);
         return getLeaderboardEntries(activityList);
     }
 
 
-
-//    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/activities/month/top/{limit}/points", method = RequestMethod.GET)
-    public List<Activity> getTopTenThisMonthByPoints(@PathVariable("limit") int limit)
+    //    @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/activities/{activityType}/top/{limit}/{periodType}/{periodNumber}/{year}", method = RequestMethod.GET)
+    public List<Activity> getTopActivitiesForPeriod(@PathVariable("limit") int limit,
+                                                    @PathVariable("activityType") String activityType,
+                                                    @PathVariable("periodType") String periodType,
+                                                    @PathVariable("periodNumber") int periodNumber,
+                                                    @PathVariable("year") int year)
     {
-        return activityRepository.findByStartDateLocalAfter(DateUtil.firstDayOfCurrentMonth())
-                .stream()
-                .sorted(Comparator.comparingDouble(Activity::getPoints).reversed())
-                .limit(limit)
-                .collect(Collectors.toList());
+
+        Period period = DateUtil.getPeriod(PeriodType.valueOf(periodType.toUpperCase()), periodNumber, year);
+        return getActivitiesForPeriodByActivityType(activityType, period)
+            .stream()
+            .sorted(Comparator.comparingDouble(Activity::getPoints).reversed())
+            .limit(limit)
+            .collect(Collectors.toList());
+    }
+
+    //    @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/activities/{activityType}/top/{limit}/{periodType}", method = RequestMethod.GET)
+    public List<Activity> getTopActivitiesForCurrentPeriod(@PathVariable("limit") int limit,
+                                                           @PathVariable("activityType") String activityType,
+                                                           @PathVariable("periodType") String periodType)
+    {
+
+        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
+        return getActivitiesForPeriodByActivityType(activityType, period)
+            .stream()
+            .sorted(Comparator.comparingDouble(Activity::getPoints).reversed())
+            .limit(limit)
+            .collect(Collectors.toList());
     }
 
     @RequestMapping(value = "/activities/{activityType}/stats/{periodType}", method = RequestMethod.GET)
-    public Statistics getStatisticsForActivityTypeByWeek(@PathVariable("activityType") String activityType,
-                                                         @PathVariable("periodType") String periodType)
+    public Statistics getStatisticsForCurrentPeriodByActivityType(@PathVariable("activityType") String activityType,
+                                                                  @PathVariable("periodType") String periodType)
     {
         return createStatsForCurrentPeriod(activityType, periodType);
     }
 
-//    @CrossOrigin(origins = "*")
+    //    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/{activityType}/stats/{periodType}/{periodNumber}/{year}", method = RequestMethod.GET)
-    public Statistics getStatisticsForActivityTypeByWeek(@PathVariable("activityType") String activityType,
-                                                               @PathVariable("periodType") String periodType,
-                                                               @PathVariable("periodNumber") int periodNumber,
-                                                               @PathVariable("year") int year)
+    public Statistics getStatisticsForPeriodByActivityType(@PathVariable("activityType") String activityType,
+                                                           @PathVariable("periodType") String periodType,
+                                                           @PathVariable("periodNumber") int periodNumber,
+                                                           @PathVariable("year") int year)
     {
         return createStatsForHistoricPeriod(activityType, periodType, periodNumber, year);
     }
@@ -139,13 +159,7 @@ public class ActivityController
     private Statistics getStatistics(String activityType, String periodType, Period period)
     {
         List<Activity> activities;
-        if (activityType.equalsIgnoreCase("all"))
-        {
-            activities = activityRepository.findByStartDateLocalBetween(period.getStart(), period.getEnd());
-        } else
-        {
-            activities = activityRepository.findByStartDateLocalBetweenAndType(period.getStart(), period.getEnd(), activityType);
-        }
+        activities = getActivitiesForPeriodByActivityType(activityType, period);
         Statistics stats = new Statistics();
         stats.setType(activityType);
         stats.setPeriodType(PeriodType.valueOf(periodType.toUpperCase()));
@@ -158,7 +172,7 @@ public class ActivityController
         return stats;
     }
 
-//    @CrossOrigin(origins = "*")
+    //    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/{activityType}/total/meters/{month}/{year}", method = RequestMethod.GET)
     public double getTotalMetersForMonthByActivity(@PathVariable("activityType") String activityType, @PathVariable("month") int month, @PathVariable("year") int year)
     {
@@ -202,9 +216,9 @@ public class ActivityController
         }
 
         return new ArrayList<>(entries.values())
-                .stream()
-                .sorted(Comparator.comparingDouble(LeaderboardEntry::getPoints).reversed())
-                .collect(Collectors.toList());
+            .stream()
+            .sorted(Comparator.comparingDouble(LeaderboardEntry::getPoints).reversed())
+            .collect(Collectors.toList());
     }
 
     private double getHandicapForActivity(Activity activity)
