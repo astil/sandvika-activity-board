@@ -18,7 +18,7 @@ export class AppRestService {
     }
 
     getLeaderBoardMonthPoints(): Observable<Athlete[]> {
-    return this.http.get(this.restUrl + "leaderboard/month/points")
+    return this.http.get(this.restUrl + "leaderboard/all/month")
         .map(this.extractData)
         .catch(this.handleError);
     }

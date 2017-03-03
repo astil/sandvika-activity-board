@@ -6,12 +6,15 @@ import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
 
+import no.bouvet.sandvika.activityboard.domain.PeriodType;
+
 public class DateUtil
 {
     public static Date firstDayOfCurrentWeek()
     {
         Calendar cal = Calendar.getInstance();
         clearCalendar(cal);
+        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
         return cal.getTime();
     }
 
@@ -19,7 +22,7 @@ public class DateUtil
     {
         Calendar cal = Calendar.getInstance();
         clearCalendar(cal);
-        // cal.add(Calendar.MONTH, 1);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
         return cal.getTime();
     }
 
@@ -75,6 +78,109 @@ public class DateUtil
     {
         Calendar cal = Calendar.getInstance();
         cal.setTime(firstDayOfWeek(weeksAgo));
+        cal.add(Calendar.DAY_OF_YEAR, 6);
+        return cal.getTime();
+    }
+
+    public static Period getPeriod(PeriodType periodType, int periodNumber, int year)
+    {
+        switch (periodType)
+        {
+            case MONTH:
+                return getPeriodForMonth(periodNumber, year);
+            case WEEK:
+                return getPeriodForWeek(periodNumber, year);
+            default:
+                return null;
+        }
+    }
+
+    private static Period getPeriodForWeek(int week, int year)
+    {
+        Period period = new Period();
+        period.setStart(firstDayOfWeek(week, year));
+        period.setEnd(setEndOfDay(lastDayOfWeek(week, year)));
+        return period;
+    }
+
+    private static Date lastDayOfWeek(int week, int year)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(firstDayOfWeek(week, year));
+        cal.add(Calendar.DAY_OF_YEAR, 6);
+        return cal.getTime();
+    }
+
+    private static Date firstDayOfWeek(int week, int year)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.WEEK_OF_YEAR, week);
+        clearCalendar(cal);
+        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+        return cal.getTime();
+    }
+
+    private static Period getPeriodForMonth(int month, int year)
+    {
+        Period period = new Period();
+        period.setStart(firstDayOfMonth(month - 1, year));
+        period.setEnd(setEndOfDay(lastDayOfMonth(month - 1, year)));
+        return period;
+    }
+
+    private static Date setEndOfDay(Date date)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        return cal.getTime();
+    }
+
+    public static Period getCurrentPeriod(PeriodType periodType)
+    {
+        switch (periodType)
+        {
+            case MONTH:
+                return getPeriodForCurrentMonth();
+            case WEEK:
+                return getPeriodForCurrentWeek();
+            default:
+                return null;
+        }
+    }
+
+    private static Period getPeriodForCurrentWeek()
+    {
+        Period period = new Period();
+        period.setStart(firstDayOfCurrentWeek());
+        period.setEnd(setEndOfDay(lastDayOfCurrentWeek()));
+        return period;
+    }
+
+    private static Period getPeriodForCurrentMonth()
+    {
+        Period period = new Period();
+        period.setStart(firstDayOfCurrentMonth());
+        period.setEnd(setEndOfDay(lastDayOfCurrentMonth()));
+        return period;
+    }
+
+    private static Date lastDayOfCurrentMonth()
+    {
+        Calendar cal = Calendar.getInstance();
+        clearCalendar(cal);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH));
+        return cal.getTime();
+    }
+
+    private static Date lastDayOfCurrentWeek()
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(firstDayOfCurrentWeek());
         cal.add(Calendar.DAY_OF_YEAR, 6);
         return cal.getTime();
     }

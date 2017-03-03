@@ -25,6 +25,7 @@ import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
+import no.bouvet.sandvika.activityboard.utils.Period;
 import no.bouvet.sandvika.activityboard.utils.Utils;
 
 //import org.springframework.web.bind.annotation.CrossOrigin;
@@ -64,7 +65,7 @@ public class ActivityController
     }
 
     //    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/leaderboard/week/points", method = RequestMethod.GET)
+    @RequestMapping(value = "/leaderboard/all/week", method = RequestMethod.GET)
     public List<LeaderboardEntry> getLeaderboardWeek()
     {
         List<Activity> activityList = activityRepository.findByStartDateLocalAfter(DateUtil.addHours(DateUtil.firstDayOfCurrentWeek(), -24));
@@ -72,17 +73,38 @@ public class ActivityController
     }
 
     //    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/leaderboard/month/points", method = RequestMethod.GET)
-    public List<LeaderboardEntry> getLeaderboardMonth()
+    @RequestMapping(value = "/leaderboard/{activityType}/{periodType}", method = RequestMethod.GET)
+    public List<LeaderboardEntry> getLeaderboardForCurrentPeriod(@PathVariable("activityType") String activityType,
+                                                                 @PathVariable("periodType") String periodType)
     {
-        List<Activity> activityList = activityRepository.findByStartDateLocalAfter(DateUtil.firstDayOfCurrentMonth());
+        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
+        List<Activity> activityList;
+        if (activityType.equalsIgnoreCase("all"))
+        {
+            activityList = activityRepository.findByStartDateLocalBetween(period.getStart(), period.getEnd());
+        } else
+        {
+            activityList = activityRepository.findByStartDateLocalBetweenAndType(period.getStart(), period.getEnd(), activityType);
+        }
         return getLeaderboardEntries(activityList);
     }
 
-    @RequestMapping(value = "/leaderboard/month/points/{activityTypeName}", method = RequestMethod.GET)
-    public List<LeaderboardEntry> getLeaderboardMonth(@PathVariable("activityTypeName") String activityTypeName)
+    //    @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/leaderboard/{activityType}/{periodType}/{periodNumber}/{year}", method = RequestMethod.GET)
+    public List<LeaderboardEntry> getLeaderboardMonth(@PathVariable("activityType") String activityType,
+                                                      @PathVariable("periodType") String periodType,
+                                                      @PathVariable("periodNumber") int periodNumber,
+                                                      @PathVariable("year") int year)
     {
-        List<Activity> activityList = activityRepository.findByStartDateLocalAfterAndType(DateUtil.firstDayOfCurrentMonth(), activityTypeName);
+        Period period = DateUtil.getPeriod(PeriodType.valueOf(periodType.toUpperCase()), periodNumber, year);
+        List<Activity> activityList;
+        if (activityType.equalsIgnoreCase("all"))
+        {
+            activityList = activityRepository.findByStartDateLocalBetween(period.getStart(), period.getEnd());
+        } else
+        {
+            activityList = activityRepository.findByStartDateLocalBetweenAndType(period.getStart(), period.getEnd(), activityType);
+        }
         return getLeaderboardEntries(activityList);
     }
 

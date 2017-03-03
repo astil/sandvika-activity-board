@@ -15,72 +15,89 @@ public class LeaderboardEntry
     private int minutes;
     private double handicap;
 
-    public LeaderboardEntry(String lastName, Double points) {
+    public LeaderboardEntry(String lastName, Double points)
+    {
         this.athleteLastName = lastName;
         this.points = points;
     }
 
-    public double getKilometers() {
+    public double getKilometers()
+    {
         return Utils.scaledDouble(kilometers);
     }
 
-    public void setKilometers(double kilometers) {
+    public void setKilometers(double kilometers)
+    {
         this.kilometers = kilometers;
     }
 
-    public int getMinutes() {
+    public int getMinutes()
+    {
         return minutes;
     }
 
-    public void setMinutes(int minutes) {
+    public void setMinutes(int minutes)
+    {
         this.minutes = minutes;
     }
 
-    public double getHandicap() {
+    public double getHandicap()
+    {
         return Utils.scaledDouble(handicap);
     }
 
-    public void setHandicap(double handicap) {
+    public void setHandicap(double handicap)
+    {
         this.handicap = handicap;
     }
 
-    public int getNumberOfActivities() {
+    public int getNumberOfActivities()
+    {
         return numberOfActivities;
     }
 
-    public void setNumberOfActivities(int numberOfActivities) {
+    public void setNumberOfActivities(int numberOfActivities)
+    {
         this.numberOfActivities = numberOfActivities;
     }
 
-    public String getAthleteLastName() {
+    public String getAthleteLastName()
+    {
         return athleteLastName;
     }
 
-    public void setAthleteLastName(String athleteLastName) {
+    public void setAthleteLastName(String athleteLastName)
+    {
         this.athleteLastName = athleteLastName;
     }
 
-    public String getAthleteFirstName() {
+    public String getAthleteFirstName()
+    {
         return athleteFirstName;
     }
 
-    public void setAthleteFirstName(String athleteFirstName) {
+    public void setAthleteFirstName(String athleteFirstName)
+    {
         this.athleteFirstName = athleteFirstName;
     }
 
-    public double getPoints() {
+    public double getPoints()
+    {
         return Utils.scaledDouble(points);
     }
 
-    public void setPoints(double points) {
+    public void setPoints(double points)
+    {
         this.points = points;
     }
 
-    public Date getLastActivityDate() {
+    public Date getLastActivityDate()
+    {
         return lastActivityDate;
     }
 
-    public void setLastActivityDate(Date lastActivityDate) {
+    public void setLastActivityDate(Date lastActivityDate)
+    {
         this.lastActivityDate = lastActivityDate;
     }
 }
