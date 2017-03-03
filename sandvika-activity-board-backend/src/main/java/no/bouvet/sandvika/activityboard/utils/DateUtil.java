@@ -93,6 +93,8 @@ public class DateUtil
                 return getPeriodForMonth(periodNumber, year);
             case WEEK:
                 return getPeriodForWeek(periodNumber, year);
+            case COMPETITION:
+                return getPeriodForCompetition();
             default:
                 return null;
         }

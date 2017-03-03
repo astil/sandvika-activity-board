@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
+import no.bouvet.sandvika.activityboard.domain.ActivityType;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.domain.Handicap;
 import no.bouvet.sandvika.activityboard.domain.LeaderboardEntry;
@@ -161,52 +162,58 @@ public class ActivityController
                 .collect(Collectors.toList());
     }
 
-//    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/activities/all/stats/week/{weeks}", method = RequestMethod.GET)
-    public List<Statistics> getStatisticsByWeek(@PathVariable("weeks") int weeks)
+    @RequestMapping(value = "/activities/{activityType}/stats/{periodType}", method = RequestMethod.GET)
+    public Statistics getStatisticsForActivityTypeByWeek(@PathVariable("activityType") String activityType,
+                                                         @PathVariable("periodType") String periodType)
     {
-        List<Statistics> stats = new ArrayList<>();
-        IntStream.range(0, weeks).forEach(i ->
-            stats.add(createStatsForWeek(i)));
-        return stats;
+        return createStatsForCurrentPeriod(activityType, periodType);
     }
 
 //    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/activities/{activityType}/stats/week/{weeks}", method = RequestMethod.GET)
-    public List<Statistics> getStatisticsForActivityTypeByWeek(@PathVariable("activityType") String activityType, @PathVariable("weeks") int weeks)
+    @RequestMapping(value = "/activities/{activityType}/stats/{periodType}/{periodNumber}/{year}", method = RequestMethod.GET)
+    public Statistics getStatisticsForActivityTypeByWeek(@PathVariable("activityType") String activityType,
+                                                               @PathVariable("periodType") String periodType,
+                                                               @PathVariable("periodNumber") int periodNumber,
+                                                               @PathVariable("year") int year)
     {
-        List<Statistics> stats = new ArrayList<>();
-        IntStream.range(0, weeks).forEach(i ->
-            stats.add(createStatsForWeekByActivityType(i, activityType)));
-        return stats;
+        return createStatsForHistoricPeriod(activityType, periodType, periodNumber, year);
     }
 
-    private Statistics createStatsForWeekByActivityType(int weeksAgo, String activityType)
+    private Statistics createStatsForCurrentPeriod(String activityType, String periodType)
+    {
+        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
+
+        return getStatistics(activityType, periodType, period);
+    }
+
+
+    private Statistics createStatsForHistoricPeriod(String activityType, String periodType, int periodNumber, int year)
+    {
+        Period period = DateUtil.getPeriod(PeriodType.valueOf(periodType.toUpperCase()), periodNumber, year);
+
+        return getStatistics(activityType, periodType, period);
+    }
+
+    private Statistics getStatistics(String activityType, String periodType, Period period)
     {
         List<Activity> activities;
         if (activityType.equalsIgnoreCase("all"))
         {
-            activities = activityRepository.findByStartDateLocalBetween(DateUtil.firstDayOfWeek(weeksAgo), DateUtil.firstDayOfWeek(weeksAgo - 1));
+            activities = activityRepository.findByStartDateLocalBetween(period.getStart(), period.getEnd());
         } else
         {
-            activities = activityRepository.findByStartDateLocalBetweenAndType(DateUtil.firstDayOfWeek(weeksAgo), DateUtil.firstDayOfWeek(weeksAgo - 1), activityType);
+            activities = activityRepository.findByStartDateLocalBetweenAndType(period.getStart(), period.getEnd(), activityType);
         }
         Statistics stats = new Statistics();
         stats.setType(activityType);
-        stats.setPeriodType(PeriodType.WEEK);
-        stats.setStartDate(DateUtil.firstDayOfWeek(weeksAgo));
+        stats.setPeriodType(PeriodType.valueOf(periodType.toUpperCase()));
+        stats.setStartDate(period.getStart());
         stats.setAchievements(activities.stream().mapToInt(Activity::getAchievementCount).sum());
         stats.setMeters(Utils.scaledDouble(activities.stream().mapToDouble(Activity::getDistanceInMeters).sum()));
         stats.setMinutes(Utils.scaledDouble(activities.stream().mapToDouble(Activity::getMovingTimeInSeconds).sum() / 60));
         stats.setActivities(activities.size());
         stats.setCalories(activities.stream().mapToDouble(Activity::getCalories).sum());
         return stats;
-    }
-
-    private Statistics createStatsForWeek(int weeksAgo)
-    {
-        return createStatsForWeekByActivityType(weeksAgo, "all");
-
     }
 
 //    @CrossOrigin(origins = "*")
