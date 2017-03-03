@@ -2,5 +2,5 @@ package no.bouvet.sandvika.activityboard.domain;
 
 public enum PeriodType
 {
-    WEEK,MONTH;
+    WEEK,MONTH,COMPETITION;
 }

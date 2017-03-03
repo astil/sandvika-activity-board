@@ -10,6 +10,9 @@ import no.bouvet.sandvika.activityboard.domain.PeriodType;
 
 public class DateUtil
 {
+    // Denne må virkelig legges et annet sted!
+    private static final Date COMPETITION_START = firstDayOfMonth(1,2017);
+
     public static Date firstDayOfCurrentWeek()
     {
         Calendar cal = Calendar.getInstance();
@@ -148,9 +151,19 @@ public class DateUtil
                 return getPeriodForCurrentMonth();
             case WEEK:
                 return getPeriodForCurrentWeek();
+            case COMPETITION:
+                return getPeriodForCompetition();
             default:
                 return null;
         }
+    }
+
+    private static Period getPeriodForCompetition()
+    {
+        Period period = new Period();
+        period.setStart(COMPETITION_START);
+        period.setEnd(new Date());
+        return period;
     }
 
     private static Period getPeriodForCurrentWeek()
