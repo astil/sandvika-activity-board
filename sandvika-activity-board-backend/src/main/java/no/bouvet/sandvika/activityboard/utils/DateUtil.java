@@ -6,6 +6,8 @@ import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
 
+import sun.util.resources.cldr.ta.CalendarData_ta_IN;
+
 import no.bouvet.sandvika.activityboard.domain.PeriodType;
 
 public class DateUtil
@@ -197,6 +199,13 @@ public class DateUtil
         Calendar cal = Calendar.getInstance();
         cal.setTime(firstDayOfCurrentWeek());
         cal.add(Calendar.DAY_OF_YEAR, 6);
+        return cal.getTime();
+    }
+
+    public static Date getDateDaysAgo(int days)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR, -days);
         return cal.getTime();
     }
 }

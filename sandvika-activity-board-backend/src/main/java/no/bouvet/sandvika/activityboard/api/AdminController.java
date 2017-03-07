@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
@@ -22,6 +23,9 @@ public class AdminController
     @Autowired
     StravaSlurper stravaSlurper;
 
+    @Autowired
+    HandicapCalculator handicapCalculator;
+
     //TODO: This is just for testing, should be more secure.
     //    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/deleteAllFromDb", method = RequestMethod.GET)
@@ -36,6 +40,12 @@ public class AdminController
         athleteRepository.deleteByLastName(lastName);
     }
 
+    @RequestMapping(value = "/athlete/all/deleteFromDb", method = RequestMethod.GET)
+    public void deleteAthleteFromDb()
+    {
+        athleteRepository.deleteAll();
+    }
+
 
     //    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/refresh", method = RequestMethod.GET)
@@ -44,5 +54,16 @@ public class AdminController
         stravaSlurper.updateActivities();
     }
 
+    @RequestMapping(value = "/athlete/all/updateHandicap", method = RequestMethod.GET)
+    public void updateHandicapForAllAthletes()
+    {
+        handicapCalculator.updateHandicapForAllAthletes();
+    }
+
+    @RequestMapping(value = "/athlete/all/updateHistoricHandicap", method = RequestMethod.GET)
+    public void updateHistoricHandicapForAllAthletes()
+    {
+        handicapCalculator.updateHandicapForAllAthletesTheLast40Days();
+    }
 
 }

@@ -1,6 +1,5 @@
 package no.bouvet.sandvika.activityboard.domain;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
@@ -43,16 +42,20 @@ public class Activity
     private double handicap;
 
 
-    public Activity() {}
+    public Activity()
+    {
+    }
 
-    public Activity(int id, int points, String athleteLastName, String athletefirstName) {
+    public Activity(int id, int points, String athleteLastName, String athletefirstName)
+    {
         this.id = id;
         this.points = points;
         this.athletefirstName = athletefirstName;
         this.athleteLastName = athleteLastName;
     }
 
-    public Activity(int id, int points, String athleteLastName, String athletefirstName, Date startDateLocal) {
+    public Activity(int id, int points, String athleteLastName, String athletefirstName, Date startDateLocal)
+    {
         this.id = id;
         this.points = points;
         this.athletefirstName = athletefirstName;
@@ -60,242 +63,307 @@ public class Activity
         this.startDateLocal = startDateLocal;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public String getAthleteLastName() {
+    public String getAthleteLastName()
+    {
         return athleteLastName;
     }
 
-    public void setAthleteLastName(String athleteLastName) {
+    public void setAthleteLastName(String athleteLastName)
+    {
         this.athleteLastName = athleteLastName;
     }
 
-    public String getAthletefirstName() {
+    public String getAthletefirstName()
+    {
         return athletefirstName;
     }
 
-    public void setAthletefirstName(String athletefirstName) {
+    public void setAthletefirstName(String athletefirstName)
+    {
         this.athletefirstName = athletefirstName;
     }
 
-    public String getDescription() {
+    public String getDescription()
+    {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(String description)
+    {
         this.description = description;
     }
 
-    public float getDistanceInMeters() {
+    public float getDistanceInMeters()
+    {
         return distanceInMeters;
     }
 
-    public void setDistanceInMeters(float distanceInMeters) {
+    public void setDistanceInMeters(float distanceInMeters)
+    {
         this.distanceInMeters = distanceInMeters;
     }
 
-    public int getMovingTimeInSeconds() {
+    public int getMovingTimeInSeconds()
+    {
         return movingTimeInSeconds;
     }
 
-    public void setMovingTimeInSeconds(int movingTimeInSeconds) {
+    public void setMovingTimeInSeconds(int movingTimeInSeconds)
+    {
         this.movingTimeInSeconds = movingTimeInSeconds;
     }
 
-    public int getElapsedTimeInSeconds() {
+    public int getElapsedTimeInSeconds()
+    {
         return elapsedTimeInSeconds;
     }
 
-    public void setElapsedTimeInSeconds(int elapsedTimeInSeconds) {
+    public void setElapsedTimeInSeconds(int elapsedTimeInSeconds)
+    {
         this.elapsedTimeInSeconds = elapsedTimeInSeconds;
     }
 
-    public float getTotalElevationGaininMeters() {
+    public float getTotalElevationGaininMeters()
+    {
         return totalElevationGaininMeters;
     }
 
-    public void setTotalElevationGaininMeters(float totalElevationGaininMeters) {
+    public void setTotalElevationGaininMeters(float totalElevationGaininMeters)
+    {
         this.totalElevationGaininMeters = totalElevationGaininMeters;
     }
 
-    public String getType() {
+    public String getType()
+    {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(String type)
+    {
         this.type = type;
     }
 
-    public Date getStartDateLocal() {
+    public Date getStartDateLocal()
+    {
         return startDateLocal;
     }
 
-    public void setStartDateLocal(Date startDateLocal) {
+    public void setStartDateLocal(Date startDateLocal)
+    {
         this.startDateLocal = startDateLocal;
     }
 
-    public String getTimezone() {
+    public String getTimezone()
+    {
         return timezone;
     }
 
-    public void setTimezone(String timezone) {
+    public void setTimezone(String timezone)
+    {
         this.timezone = timezone;
     }
 
-    public double[] getStartLatLng() {
+    public double[] getStartLatLng()
+    {
         return startLatLng;
     }
 
-    public void setStartLatLng(double[] startLatLng) {
+    public void setStartLatLng(double[] startLatLng)
+    {
         this.startLatLng = startLatLng;
     }
 
-    public double[] getEndLatLng() {
+    public double[] getEndLatLng()
+    {
         return endLatLng;
     }
 
-    public void setEndLatLng(double[] endLatLng) {
+    public void setEndLatLng(double[] endLatLng)
+    {
         this.endLatLng = endLatLng;
     }
 
-    public int getAchievementCount() {
+    public int getAchievementCount()
+    {
         return achievementCount;
     }
 
-    public void setAchievementCount(int achievementCount) {
+    public void setAchievementCount(int achievementCount)
+    {
         this.achievementCount = achievementCount;
     }
 
-    public int getKudosCount() {
+    public int getKudosCount()
+    {
         return kudosCount;
     }
 
-    public void setKudosCount(int kudosCount) {
+    public void setKudosCount(int kudosCount)
+    {
         this.kudosCount = kudosCount;
     }
 
-    public int getCommentCount() {
+    public int getCommentCount()
+    {
         return commentCount;
     }
 
-    public void setCommentCount(int commentCount) {
+    public void setCommentCount(int commentCount)
+    {
         this.commentCount = commentCount;
     }
 
-    public int getAthleteCount() {
+    public int getAthleteCount()
+    {
         return athleteCount;
     }
 
-    public void setAthleteCount(int athleteCount) {
+    public void setAthleteCount(int athleteCount)
+    {
         this.athleteCount = athleteCount;
     }
 
-    public boolean isTrainer() {
+    public boolean isTrainer()
+    {
         return trainer;
     }
 
-    public void setTrainer(boolean trainer) {
+    public void setTrainer(boolean trainer)
+    {
         this.trainer = trainer;
     }
 
-    public boolean isCommute() {
+    public boolean isCommute()
+    {
         return commute;
     }
 
-    public void setCommute(boolean commute) {
+    public void setCommute(boolean commute)
+    {
         this.commute = commute;
     }
 
-    public boolean isManual() {
+    public boolean isManual()
+    {
         return manual;
     }
 
-    public void setManual(boolean manual) {
+    public void setManual(boolean manual)
+    {
         this.manual = manual;
     }
 
-    public float getAverageSpeedInMetersPerSecond() {
+    public float getAverageSpeedInMetersPerSecond()
+    {
         return averageSpeedInMetersPerSecond;
     }
 
-    public void setAverageSpeedInMetersPerSecond(float averageSpeedInMetersPerSecond) {
+    public void setAverageSpeedInMetersPerSecond(float averageSpeedInMetersPerSecond)
+    {
         this.averageSpeedInMetersPerSecond = averageSpeedInMetersPerSecond;
     }
 
-    public float getMaxSpeedInMetersPerSecond() {
+    public float getMaxSpeedInMetersPerSecond()
+    {
         return maxSpeedInMetersPerSecond;
     }
 
-    public void setMaxSpeedInMetersPerSecond(float maxSpeedInMetersPerSecond) {
+    public void setMaxSpeedInMetersPerSecond(float maxSpeedInMetersPerSecond)
+    {
         this.maxSpeedInMetersPerSecond = maxSpeedInMetersPerSecond;
     }
 
-    public boolean isHasHeartrate() {
+    public boolean isHasHeartrate()
+    {
         return hasHeartrate;
     }
 
-    public void setHasHeartrate(boolean hasHeartrate) {
+    public void setHasHeartrate(boolean hasHeartrate)
+    {
         this.hasHeartrate = hasHeartrate;
     }
 
-    public float getAverageHeartrate() {
+    public float getAverageHeartrate()
+    {
         return averageHeartrate;
     }
 
-    public void setAverageHeartrate(float averageHeartrate) {
+    public void setAverageHeartrate(float averageHeartrate)
+    {
         this.averageHeartrate = averageHeartrate;
     }
 
-    public int getMaxHeartrate() {
+    public int getMaxHeartrate()
+    {
         return maxHeartrate;
     }
 
-    public void setMaxHeartrate(int maxHeartrate) {
+    public void setMaxHeartrate(int maxHeartrate)
+    {
         this.maxHeartrate = maxHeartrate;
     }
 
-    public float getCalories() {
+    public float getCalories()
+    {
         return calories;
     }
 
-    public void setCalories(float calories) {
+    public void setCalories(float calories)
+    {
         this.calories = calories;
     }
 
-    public int getSufferScore() {
+    public int getSufferScore()
+    {
         return sufferScore;
     }
 
-    public void setSufferScore(int sufferScore) {
+    public void setSufferScore(int sufferScore)
+    {
         this.sufferScore = sufferScore;
     }
 
-    public double getPoints() {
+    public double getPoints()
+    {
         return points;
     }
 
-    public void setPoints(double points) {
+    public void setPoints(double points)
+    {
         this.points = points;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
 
         Activity activity = (Activity) o;
 
@@ -303,7 +371,8 @@ public class Activity
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return id;
     }
 
@@ -324,13 +393,13 @@ public class Activity
         return sb.toString();
     }
 
-    public void setHandicap(double handicap)
-    {
-        this.handicap = handicap;
-    }
-
     public double getHandicap()
     {
         return handicap;
+    }
+
+    public void setHandicap(double handicap)
+    {
+        this.handicap = handicap;
     }
 }
