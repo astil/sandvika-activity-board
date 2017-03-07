@@ -19,28 +19,28 @@ export class NgbdTabsetPills implements OnInit {
     }
 
     ngOnInit(): void {
-        // this.appRestService.getLeaderBoardMonthPoints()
-        //     .subscribe(
-        //         athlete => this.athletes = athlete,
-        //         error => this.errorMessage = <any>error);
+        this.appRestService.getLeaderBoardTotalPoints()
+            .subscribe(
+                athlete => this.athletes = athlete,
+                error => this.errorMessage = <any>error);
     }
 
     public beforeChange($event: NgbTabChangeEvent) {
         switch ($event.nextId) {
             case "Totalt" :
-                this.appRestService.getLeaderBoardMonthPoints()
+                this.appRestService.getLeaderBoardTotalPoints()
                     .subscribe(
                         athlete => this.athletes = athlete,
                         error => this.errorMessage = <any>error);
                 break;
             case "Måned" :
-                // this.appRestService.getLeaderBoardMonthPoints()
-                //     .subscribe(
-                //         athlete => this.athletes = athlete,
-                //         error => this.errorMessage = <any>error);
+                this.appRestService.getLeaderBoardMonthPoints()
+                    .subscribe(
+                        athlete => this.athletes = athlete,
+                        error => this.errorMessage = <any>error);
                 break;
             case "Uke" :
-                this.appRestService.getLeaderBoardMonthPoints()
+                this.appRestService.getLeaderBoardWeekPoints()
                     .subscribe(
                         athlete => this.athletes = athlete,
                         error => this.errorMessage = <any>error);

@@ -8,6 +8,7 @@ import no.bouvet.sandvika.activityboard.domain.Athlete;
 @RepositoryRestResource(collectionResourceRel = "athlete", path = "athlete")
 public interface AthleteRepository extends MongoRepository<Athlete, String>
 {
-    public Athlete findByLastName(String lastName);
+    Athlete findByLastName(String lastName);
 
+    void deleteByLastName(String lastName);
 }

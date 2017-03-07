@@ -18,16 +18,13 @@ export class StatsDataComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.appRestService.getAllStatsWeek(5).subscribe(
+        this.appRestService.getAllStatsWeek().subscribe(
             statistics => this.processResult(statistics),
             error => this.errorMessage = <any>error
         );
     }
 
-    processResult(result) : void {
-        if (result && result[0]) {
-            this.statistics = result;
-            this.thisWeekStats = result[0]
-        }
+    processResult(result): void {
+        this.thisWeekStats = result
     }
 }

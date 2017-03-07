@@ -1,11 +1,13 @@
 package no.bouvet.sandvika.activityboard.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
+import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
 
 @RestController
@@ -13,6 +15,9 @@ public class AdminController
 {
     @Autowired
     ActivityRepository activityRepository;
+
+    @Autowired
+    AthleteRepository athleteRepository;
 
     @Autowired
     StravaSlurper stravaSlurper;
@@ -24,6 +29,13 @@ public class AdminController
     {
         activityRepository.deleteAll();
     }
+
+    @RequestMapping(value = "/athlete/{lastName}/deleteFromDb", method = RequestMethod.GET)
+    public void deleteAthleteFromDb(@PathVariable("lastName") String lastName)
+    {
+        athleteRepository.deleteByLastName(lastName);
+    }
+
 
     //    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/refresh", method = RequestMethod.GET)

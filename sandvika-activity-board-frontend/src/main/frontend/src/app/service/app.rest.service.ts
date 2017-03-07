@@ -18,8 +18,20 @@ export class AppRestService {
     constructor(private http: Http) {
     }
 
+    getLeaderBoardWeekPoints(): Observable<Athlete[]> {
+        return this.http.get(this.restUrl + "leaderboard/all/week/")
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
     getLeaderBoardMonthPoints(): Observable<Athlete[]> {
-        return this.http.get(this.restUrl + "leaderboard/month/points")
+        return this.http.get(this.restUrl + "leaderboard/all/month/")
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    getLeaderBoardTotalPoints(): Observable<Athlete[]> {
+        return this.http.get(this.restUrl + "leaderboard/all/competition/")
             .map(this.extractData)
             .catch(this.handleError);
     }
@@ -30,8 +42,8 @@ export class AppRestService {
             .catch(this.handleError);
     }
 
-    getAllStatsWeek(weeks): Observable<Statistics[]> {
-        return this.http.get(this.restUrl + "activities/all/stats/week/" + weeks)
+    getAllStatsWeek(): Observable<Statistics> {
+        return this.http.get(this.restUrl + "activities/all/stats/week/")
             .map(this.extractData)
             .catch(this.handleError);
     }
