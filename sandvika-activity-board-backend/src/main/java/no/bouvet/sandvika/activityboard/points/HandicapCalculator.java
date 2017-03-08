@@ -52,7 +52,6 @@ public class HandicapCalculator
     {
         IntStream.range(0, 40).forEach(i ->
         {
-            deleteHandicapsForAllAthletsTheLast40Days();
             updateHandicapForAllAthletesForDate(DateUtil.getDateDaysAgo(i));
         });
     }

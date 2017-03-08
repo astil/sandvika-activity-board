@@ -14,7 +14,9 @@ public final class PointsCalculator
 {
     static final int KILOMETER_VALUE = 3;
     static final int MINUTE_VALUE = 1;
+    static final double ELEVATIOIN_METER_VALUE = 0.3;
     static final int SECONDS_IN_MINUTE = 60;
+
 
     private PointsCalculator()
     {
@@ -31,8 +33,14 @@ public final class PointsCalculator
             int achievementPoints = activity.getAchievementCount();
             double durationPoints = getPointsForDuration(activity.getMovingTimeInSeconds() / SECONDS_IN_MINUTE, activityType);
             double distancePoints = getPointsForDistance(activity.getDistanceInMeters() / 1000, activityType);
-            return Utils.scaledDouble((durationPoints + distancePoints + achievementPoints) * handicap);
+            double elevationPoints = getPointsForElevation(activity.getTotalElevationGaininMeters(), activityType);
+            return Utils.scaledDouble((durationPoints + distancePoints + achievementPoints + elevationPoints) * handicap);
         }
+    }
+
+    private static double getPointsForElevation(float totalElevationGaininMeters, ActivityType activityType)
+    {
+        return totalElevationGaininMeters * ELEVATIOIN_METER_VALUE;
     }
 
     private static double getPointsForDistance(double distanceInKilometers, ActivityType activityType)
