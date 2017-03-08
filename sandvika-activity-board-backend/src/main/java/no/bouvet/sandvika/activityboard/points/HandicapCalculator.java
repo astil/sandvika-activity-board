@@ -1,9 +1,11 @@
 package no.bouvet.sandvika.activityboard.points;
 
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
@@ -49,8 +51,24 @@ public class HandicapCalculator
     {
         IntStream.range(0, 40).forEach(i ->
         {
+            deleteHandicapsForAllAthletsTheLast40Days();
             updateHandicapForAllAthletesForDate(DateUtil.getDateDaysAgo(i));
         });
+    }
+
+    private void deleteHandicapsForAllAthletsTheLast40Days()
+    {
+        List<Athlete> athletes = athleteRepository.findAll();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -40);
+        for (Athlete athlete : athletes)
+        {
+            athlete.setHandicapList(athlete.getHandicapList()
+                .stream()
+                .filter(h -> h.getTimestamp().before(calendar.getTime()))
+                .collect(Collectors.toList()));
+        }
+        athleteRepository.save(athletes);
     }
 
     private void updateHandicapForAllAthletesForDate(Date dateDaysAgo)
@@ -90,7 +108,34 @@ public class HandicapCalculator
             .sum() / SECONDS_IN_HOUR;
     }
 
-    private double calculateHandicapForAthlete(Athlete athlete)
+    public List<Handicap> calculateHistoricHandicapForAthlete(Athlete athlete)
+    {
+        List<Handicap> handicaps = new ArrayList<>();
+        IntStream.range(0, 40).forEach(i ->
+        {
+            deleteHandicapsForAthleteTheLast40Days(athlete);
+            handicaps.add(createHandicapForAthleteForDate(athlete, DateUtil.getDateDaysAgo(i)));
+        });
+        return handicaps;
+    }
+
+    private Handicap createHandicapForAthleteForDate(Athlete athlete, Date dateDaysAgo)
+    {
+        return new Handicap(calculateHandicapForAthlete(athlete, dateDaysAgo), dateDaysAgo);
+    }
+
+    private void deleteHandicapsForAthleteTheLast40Days(Athlete athlete)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -40);
+        athlete.setHandicapList(athlete.getHandicapList()
+            .stream()
+            .filter(h -> h.getTimestamp().before(calendar.getTime()))
+            .collect(Collectors.toList()));
+        athleteRepository.save(athlete);
+    }
+
+    public double calculateHandicapForAthlete(Athlete athlete)
     {
         double activeHours = getActiveHoursByDaysAndAthlete(30, athlete);
         if (activeHours <= 4)

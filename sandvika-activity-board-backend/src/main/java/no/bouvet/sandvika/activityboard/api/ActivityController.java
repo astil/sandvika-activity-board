@@ -2,6 +2,7 @@ package no.bouvet.sandvika.activityboard.api;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -195,7 +196,7 @@ public class ActivityController
                 entry.setAthleteFirstName(activity.getAthletefirstName());
                 entry.setNumberOfActivities(1);
 
-                entry.setHandicap(getHandicapForActivity(activity));
+                entry.setHandicap(getHandicap(activity.getAthleteLastName(), getLastActivityDate(activityList)));
                 entry.setKilometers(activity.getDistanceInMeters() / 1000);
                 entry.setMinutes(activity.getMovingTimeInSeconds() / 60);
                 entry.setLastActivityDate(activity.getStartDateLocal());
@@ -219,6 +220,17 @@ public class ActivityController
             .stream()
             .sorted(Comparator.comparingDouble(LeaderboardEntry::getPoints).reversed())
             .collect(Collectors.toList());
+    }
+
+    private double getHandicap(String athleteLastName, Date lastActivityDate)
+    {
+        Athlete athlete = athleteRepository.findByLastName(athleteLastName);
+        return athlete.getHandicapForDate(lastActivityDate);
+    }
+
+    private Date getLastActivityDate(List<Activity> activityList)
+    {
+        return activityList.stream().map(Activity::getStartDateLocal).max(Comparator.naturalOrder()).get();
     }
 
     private double getHandicapForActivity(Activity activity)
