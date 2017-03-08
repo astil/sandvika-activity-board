@@ -2,6 +2,8 @@ package no.bouvet.sandvika.activityboard.domain;
 
 import java.util.Date;
 
+import no.bouvet.sandvika.activityboard.utils.Utils;
+
 public class Handicap
 {
     private double handicap;
@@ -17,7 +19,7 @@ public class Handicap
 
     public double getHandicap()
     {
-        return handicap;
+        return Utils.scaledDouble(handicap, 3);
     }
 
     public void setHandicap(double handicap)

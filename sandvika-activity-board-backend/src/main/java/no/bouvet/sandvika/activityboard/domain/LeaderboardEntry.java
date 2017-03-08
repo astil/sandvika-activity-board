@@ -43,7 +43,7 @@ public class LeaderboardEntry
 
     public double getHandicap()
     {
-        return Utils.scaledDouble(handicap);
+        return Utils.scaledDouble(handicap, 3);
     }
 
     public void setHandicap(double handicap)

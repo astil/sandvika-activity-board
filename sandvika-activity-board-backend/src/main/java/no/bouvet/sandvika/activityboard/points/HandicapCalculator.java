@@ -20,6 +20,7 @@ import no.bouvet.sandvika.activityboard.domain.Handicap;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
+import no.bouvet.sandvika.activityboard.utils.Utils;
 
 @Component
 public class HandicapCalculator
@@ -93,7 +94,7 @@ public class HandicapCalculator
             return 6;
         } else
         {
-            return BASE_HOURS / (activeHours / 4);
+            return Utils.scaledDouble(BASE_HOURS / (activeHours / 4), 3);
         }
     }
 
@@ -143,7 +144,7 @@ public class HandicapCalculator
             return 6;
         } else
         {
-            return BASE_HOURS / (activeHours / 4);
+            return Utils.scaledDouble(BASE_HOURS / (activeHours / 4), 3);
         }
     }
 
