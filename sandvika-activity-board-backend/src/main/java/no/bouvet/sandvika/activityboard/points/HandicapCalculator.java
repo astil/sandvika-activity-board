@@ -93,7 +93,13 @@ public class HandicapCalculator
     private double calculateHandicapForAthlete(Athlete athlete)
     {
         double activeHours = getActiveHoursByDaysAndAthlete(30, athlete);
-        return BASE_HOURS / (activeHours / 4);
+        if (activeHours <= 4)
+        {
+            return 6;
+        } else
+        {
+            return BASE_HOURS / (activeHours / 4);
+        }
     }
 
     private double getActiveHoursByDaysAndAthlete(int days, Athlete athlete)
