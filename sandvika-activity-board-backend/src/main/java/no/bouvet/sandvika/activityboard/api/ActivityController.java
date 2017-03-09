@@ -225,6 +225,7 @@ public class ActivityController
     private double getHandicap(String athleteLastName, Date lastActivityDate)
     {
         Athlete athlete = athleteRepository.findByLastName(athleteLastName);
+        if (athlete == null) return 1;
         return athlete.getHandicapForDate(lastActivityDate);
     }
 
