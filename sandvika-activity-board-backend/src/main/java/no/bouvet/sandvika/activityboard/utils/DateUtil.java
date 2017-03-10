@@ -26,6 +26,7 @@ public class DateUtil
     {
         Calendar cal = Calendar.getInstance();
         clearCalendar(cal);
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
         cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
         return cal.getTime();
     }
@@ -66,6 +67,7 @@ public class DateUtil
     public static Date firstDayOfWeek(int weeksAgo)
     {
         Calendar cal = Calendar.getInstance();
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
         cal.add(Calendar.WEEK_OF_YEAR, -weeksAgo);
         clearCalendar(cal);
         cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
@@ -128,6 +130,7 @@ public class DateUtil
     private static Date firstDayOfWeek(int week, int year)
     {
         Calendar cal = Calendar.getInstance();
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.WEEK_OF_YEAR, week);
         clearCalendar(cal);
