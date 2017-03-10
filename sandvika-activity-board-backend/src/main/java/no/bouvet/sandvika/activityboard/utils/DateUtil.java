@@ -13,7 +13,14 @@ import no.bouvet.sandvika.activityboard.domain.PeriodType;
 public class DateUtil
 {
     // Denne må virkelig legges et annet sted!
-    private static final Date COMPETITION_START = firstDayOfMonth(1,2017);
+    private static final Date COMPETITION_START = DateUtil.getDate(11, 3, 2017);
+
+    private static Date getDate(int day, int month, int year)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day, 0, 0, 0);
+        return cal.getTime();
+    }
 
     public static Date firstDayOfCurrentWeek()
     {
