@@ -34,7 +34,8 @@ public final class PointsCalculator
             double durationPoints = getPointsForDuration(activity.getMovingTimeInSeconds() / SECONDS_IN_MINUTE, activityType);
             double distancePoints = getPointsForDistance(activity.getDistanceInMeters() / 1000, activityType);
             double elevationPoints = getPointsForElevation(activity.getTotalElevationGaininMeters(), activityType);
-            return Utils.scaledDouble((durationPoints + distancePoints + achievementPoints + elevationPoints) * handicap);
+            // Deler på 2 for å forhindre inflasjon i poeng
+            return Utils.scaledDouble((durationPoints + distancePoints + achievementPoints + elevationPoints) * handicap)/2;
         }
     }
 
