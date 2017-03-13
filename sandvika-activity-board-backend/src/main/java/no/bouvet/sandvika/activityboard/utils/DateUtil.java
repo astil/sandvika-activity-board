@@ -13,12 +13,12 @@ import no.bouvet.sandvika.activityboard.domain.PeriodType;
 public class DateUtil
 {
     // Denne må virkelig legges et annet sted!
-    private static final Date COMPETITION_START = DateUtil.getDate(11, 3, 2017);
+    private static final Date COMPETITION_START = DateUtil.getDate(13, 3, 2017);
 
     private static Date getDate(int day, int month, int year)
     {
         Calendar cal = Calendar.getInstance();
-        cal.set(year, month, day, 0, 0, 0);
+        cal.set(year, month-1, day, 0, 0, 0);
         return cal.getTime();
     }
 
