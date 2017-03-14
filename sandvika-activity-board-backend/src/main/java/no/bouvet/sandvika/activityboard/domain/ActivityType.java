@@ -180,7 +180,7 @@ public enum ActivityType
         public static final double NORDIC_SKIIING_COEFFISIENT_KM = 0.6;
         public static final double RIDE_COEFFISIENT_KM = 0.4;
         public static final double VIRTUAL_RIDE_COEFFISIENT_KM = RIDE_COEFFISIENT_KM;
-        public static final double RUN_COEFFISIENT_KM = 1;
+        public static final double RUN_COEFFISIENT_KM = 1.3;
         public static final double SWIM_COEFFISIENT_KM = 3.5;
         public static final double HIKE_COEFFISIENT_KM = 2;
         public static final double WALK_COEFFISIENT_KM = 2;
