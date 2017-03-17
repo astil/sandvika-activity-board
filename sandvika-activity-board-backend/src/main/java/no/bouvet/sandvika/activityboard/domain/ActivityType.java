@@ -182,8 +182,8 @@ public enum ActivityType
         public static final double VIRTUAL_RIDE_COEFFISIENT_KM = RIDE_COEFFISIENT_KM;
         public static final double RUN_COEFFISIENT_KM = 1;
         public static final double SWIM_COEFFISIENT_KM = 3.5;
-        public static final double HIKE_COEFFISIENT_KM = 2;
-        public static final double WALK_COEFFISIENT_KM = 2;
+        public static final double HIKE_COEFFISIENT_KM = 1;
+        public static final double WALK_COEFFISIENT_KM = 1;
         public static final double WORKOUT_COEFFISIENT_KM = 0;
         public static final double WEIGHT_TRAINING_COEFFISIENT_KM = 0;
         public static final double ROLLER_SKI_COEFFISIENT_KM = 0.5;
@@ -196,8 +196,8 @@ public enum ActivityType
         public static final double VIRTUAL_RIDE_COEFFISIENT_MIN = RIDE_COEFFISIENT_MIN;
         public static final double RUN_COEFFISIENT_MIN = 1;
         public static final double SWIM_COEFFISIENT_MIN = 1;
-        public static final double HIKE_COEFFISIENT_MIN = 0.4;
-        public static final double WALK_COEFFISIENT_MIN = 0.4;
+        public static final double HIKE_COEFFISIENT_MIN = 0.2;
+        public static final double WALK_COEFFISIENT_MIN = 0.2;
         public static final double WORKOUT_COEFFISIENT_MIN = 1;
         public static final double WEIGHT_TRAINING_COEFFISIENT_MIN = 1;
         public static final double ROLLER_SKI_COEFFISIENT_MIN = 1;

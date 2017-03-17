@@ -144,10 +144,11 @@ public class ActivityController
 
     @RequestMapping(value = "/activities/{activityType}/latest/{numberOfActivities}", method = RequestMethod.GET)
     public List<Activity> getStatisticsForPeriodByActivityType(@PathVariable("activityType") String activityType,
-                                                           @PathVariable("numberOfActivities") int numberOfActivities)
+                                                               @PathVariable("numberOfActivities") int numberOfActivities)
     {
         List<Activity> activityList;
-        if (activityType.equalsIgnoreCase("")|| activityType.equalsIgnoreCase("all") ) {
+        if (activityType.equalsIgnoreCase("all") || activityType.equalsIgnoreCase(""))
+        {
             activityList = getActivities(numberOfActivities);
         } else
         {
@@ -254,7 +255,10 @@ public class ActivityController
     private double getHandicap(String athleteLastName, Date lastActivityDate)
     {
         Athlete athlete = athleteRepository.findByLastName(athleteLastName);
-        if (athlete == null) return 1;
+        if (athlete == null)
+        {
+            return 1;
+        }
         return athlete.getHandicapForDate(lastActivityDate);
     }
 
