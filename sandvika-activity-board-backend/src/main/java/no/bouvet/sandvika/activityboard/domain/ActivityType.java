@@ -61,6 +61,8 @@ public enum ActivityType {
             return ActivityType.ROLLER_SKI;
         } else if (activityName.equalsIgnoreCase(Constants.YOGA_NAME)) {
             return ActivityType.YOGA;
+        } else if (activityName.equalsIgnoreCase(Constants.E_BIKE_RIDE_NAME)) {
+            return ActivityType.E_BIKE_RIDE;
         } else {
             return null;
         }
