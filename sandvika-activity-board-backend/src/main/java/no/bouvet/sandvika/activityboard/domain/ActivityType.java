@@ -186,7 +186,7 @@ public enum ActivityType {
         public static final double WEIGHT_TRAINING_COEFFISIENT_MIN = 1;
         public static final double ROLLER_SKI_COEFFISIENT_MIN = 1;
         public static final double YOGA_COEFFISIENT_MIN = 1;
-        public static final double E_BIKE_RIDE_COEFFISIENT_MIN = 0.7;
+        public static final double E_BIKE_RIDE_COEFFISIENT_MIN = 0.5;
 
     }
 }
