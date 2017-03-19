@@ -1,14 +1,14 @@
 .container {
-    margin: 0 auto;
-    top: 120px;
-    width: 65%;
+    width: 100%;
     border: none;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
     background: rgb(255, 255, 255);
     background: rgba(255, 255, 255, 0.8);
-    padding: 0;
+    padding: 1%;
+    float: right;
+    margin: 0 ;
 }
 
 .table thead th {
@@ -23,6 +23,7 @@ th {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     /*align-items: flex-start;*/
 }
 
@@ -36,14 +37,6 @@ th {
     margin-top: 1.25rem;
 }
 
-stats-data-component {
-    width: 30%;
-}
-
-ngbd-tabset-pills {
-    width: 69%;
-}
-
 .panel.panel-default {
     display: flex;
     flex-wrap: wrap;
@@ -51,7 +44,7 @@ ngbd-tabset-pills {
 }
 
 .panel.panel-default > div {
-    width:  33%;
+    width: 33%;
     margin-bottom: 2px;
 }
 
@@ -61,7 +54,53 @@ h1.card-text {
 
 ngbd-tabset-pills {
     border: 1px solid #ddd;
-    -webkit-border-radius:5px;
-    -moz-border-radius:5px;
-    border-radius:5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+stats-data-component {
+    width: 100%;
+}
+
+ngbd-tabset-pills {
+    width: 100%;
+}
+
+@media (max-width: 576px) {
+    /*.container {*/
+    /*margin: 0 auto;*/
+    /*width: 100%;*/
+    /*}*/
+    /*stats-data-component {*/
+    /*width: 100%;*/
+    /*}*/
+    /*ngbd-tabset-pills {*/
+    /*width: 100%;*/
+    /*}*/
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding: 1%;
+        margin: 0.5% 2%;
+        width: 80%;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        width: 70%;
+    }
+
+    stats-data-component {
+        width: 29.5%;
+    }
+
+    ngbd-tabset-pills {
+        width: 69.5%;
+    }
+}
+
+@media (min-width: 1200px) {
 }

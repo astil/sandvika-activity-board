@@ -4,24 +4,26 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
+                    <th>#</th>
                     <th>Navn</th>
                     <th>Poeng</th>
-                    <th>Siste aktivitet</th>
-                    <th>Antall aktiviteter</th>
-                    <th>Km</th>
-                    <th>Totalt</th>
-                    <th>Handicap</th>
+                    <th class="hidden-md-down">Siste aktivitet</th>
+                    <th class="hidden-md-down">Antall aktiviteter</th>
+                    <th class="hidden-md-down">Km</th>
+                    <th class="hidden-md-down">Totalt</th>
+                    <th class="hidden-md-down">Handicap</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let athlete of athletes">
+                <tr *ngFor="let athlete of athletes; let i = index">
+                    <td>{{i+1}}</td>
                     <td><ngbd-modal-component [athlete]="athlete"></ngbd-modal-component></td>
                     <td>{{athlete.points}}</td>
-                    <td>{{athlete.lastActivityDate | date: 'dd/MM/yyyy'}}</td>
-                    <td>{{athlete.numberOfActivities}}</td>
-                    <td>{{athlete.kilometers | number : '1.0-1'}} km</td>
-                    <td>{{athlete.minutes | minToHms}}</td>
-                    <td>{{athlete.handicap}}</td>
+                    <td class="hidden-md-down">{{athlete.lastActivityDate | date: 'dd/MM/yyyy'}}</td>
+                    <td class="hidden-md-down">{{athlete.numberOfActivities}}</td>
+                    <td class="hidden-md-down">{{athlete.kilometers | number : '1.0-1'}} km</td>
+                    <td class="hidden-md-down">{{athlete.minutes | minToHms}}</td>
+                    <td class="hidden-md-down">{{athlete.handicap}}</td>
                 </tr>
                 </tbody>
             </table>
