@@ -12,7 +12,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let activity of activities | orderBy:'-startDateLocal'">
+            <tr *ngFor="let activity of activities | orderBy:'-points'">
                 <td>{{activity.athletefirstName}}</td>
                 <td><a href="https://www.strava.com/activities/{{activity.id}}">{{activity.name}}</a></td>
                 <td>{{activity.points}}</td>
