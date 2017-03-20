@@ -49,7 +49,7 @@ th {
     justify-content: space-between;
 }
 
-.panel.panel-default > div {
+.mini-cards > div {
     width: 33%;
     margin-bottom: 2px;
 }
@@ -69,6 +69,14 @@ stats-data-component {
     width: 100%;
 }
 
+.top-activities .card {
+    width: 100%;
+}
+
+.card {
+    padding-top: 10px;
+}
+
 ngbd-tabset-pills {
     width: 100%;
 }
@@ -78,6 +86,25 @@ ngbd-tabset-pills {
         padding: 1%;
         margin: 0;
         width: 100%;
+    }
+
+    .vertical-wrapper {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    latest-activities-component {
+        width: 32.9%;
+    }
+
+    top-activities-component {
+        width: 32.9%;
+    }
+
+    stats-data-component {
+        width: 32.9%;
     }
 }
 
@@ -89,11 +116,25 @@ ngbd-tabset-pills {
       margin: 0.5% 2%;
     }
 
-    stats-data-component {
+    .vertical-wrapper {
         width: 29.5%;
+        display: block;
+        justify-content: space-between;
     }
 
     ngbd-tabset-pills {
         width: 69.5%;
+    }
+
+    latest-activities-component {
+        width: 100%;
+    }
+
+    top-activities-component {
+        width: 100%;
+    }
+
+    stats-data-component {
+        width: 100%;
     }
 }

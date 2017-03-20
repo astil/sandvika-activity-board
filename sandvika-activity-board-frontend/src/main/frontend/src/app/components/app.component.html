@@ -1,7 +1,11 @@
 <div class="container">
 
     <div class="flex-wrapper">
-        <stats-data-component></stats-data-component>
+        <div class="vertical-wrapper">
+            <latest-activities-component></latest-activities-component>
+            <stats-data-component></stats-data-component>
+            <top-activities-component [periodtype]="" [numberofactivities]="1"></top-activities-component>
+        </div>
         <ngbd-tabset-pills></ngbd-tabset-pills>
     </div>
     <div class="strava-brand"><img src="../../assets/api_logo_pwrdBy_strava_horiz_light.svg"></div>

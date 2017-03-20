@@ -7,7 +7,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 import {Athlete} from '../domain/athlete';
-import {Activity} from "../domain/activities";
+import {Activity} from "../domain/activity";
 import {Statistics} from "../domain/Statistics";
 
 @Injectable()
@@ -50,6 +50,18 @@ export class AppRestService {
 
     getAthleteByLastName(lastName): Observable<Activity[]> {
         return this.http.get(this.restUrl + "athlete/" + lastName + "/activities")
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    getLatestActivities(numberOfActivities): Observable<Activity[]> {
+        return this.http.get(this.restUrl + "/activities/run/latest/" + numberOfActivities)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    getTopActivities(numberOfActivities, periodType): Observable<Activity[]> {
+        return this.http.get(this.restUrl + "/activities/all/top/" + numberOfActivities + "/" + periodType)
             .map(this.extractData)
             .catch(this.handleError);
     }

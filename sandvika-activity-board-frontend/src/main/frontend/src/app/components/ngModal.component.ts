@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 
 import {NgbModal, NgbActiveModal, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
 import {AppRestService} from "../service/app.rest.service";
-import {Activity} from "../domain/activities";
+import {Activity} from "../domain/activity";
 import {Athlete} from "../domain/athlete";
 
 @Component({
@@ -32,7 +32,7 @@ import {Athlete} from "../domain/athlete";
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let activity of activitys | orderBy:'-startDateLocal'">
+                    <tr *ngFor="let activity of activities | orderBy:'-startDateLocal'">
                         <td>{{activity.startDateLocal | date: 'dd/MM/yyyy'}}</td>
                         <td><a href="https://www.strava.com/activities/{{activity.id}}">{{activity.name}}</a></td>
                         <td>{{activity.type}}</td>
@@ -54,7 +54,7 @@ import {Athlete} from "../domain/athlete";
   `
 })
 export class NgbdModalContent {
-    @Input() activitys;
+    @Input() activities;
     @Input() athlete;
 
     constructor(public activeModal: NgbActiveModal) {}
@@ -67,7 +67,7 @@ export class NgbdModalContent {
     inputs: ['athlete']
 })
 export class NgbdModalComponent implements OnInit {
-    private activitys: Activity[];
+    private activities: Activity[];
     private errorMessage: any;
     private athlete: Athlete;
 
@@ -78,13 +78,13 @@ export class NgbdModalComponent implements OnInit {
             windowClass: "modal-custom-size"
         };
         const modalRef = this.modalService.open(NgbdModalContent, options);
-        modalRef.componentInstance.activitys = this.activitys;
+        modalRef.componentInstance.activities = this.activities;
         modalRef.componentInstance.athlete = this.athlete;
     }
 
     ngOnInit(): void {
         this.appRestService.getAthleteByLastName(this.athlete.athleteLastName).subscribe(
-            activity => this.activitys = activity,
+            activity => this.activities = activity,
             error =>  this.errorMessage = <any>error);
     }
 }

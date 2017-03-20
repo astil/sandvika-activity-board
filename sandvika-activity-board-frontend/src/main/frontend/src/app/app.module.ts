@@ -12,6 +12,8 @@ import {TimeConverterPipe, ConvertMinToHhMmSs, ConvertMinToHhT} from "./pipes/ti
 import {OrderBy} from "./pipes/customOrderBy";
 import {NgbdTabsetPills} from "./components/nav.tabset.pills";
 import {StatsDataComponent} from "./components/stats.data.component";
+import {LatestActivities} from "./components/latest.activities.component";
+import {TopActivities} from "./components/top.activities.component";
 
 @NgModule({
     declarations: [
@@ -20,6 +22,8 @@ import {StatsDataComponent} from "./components/stats.data.component";
         NgbdModalContent,
         NgbdTabsetPills,
         StatsDataComponent,
+        LatestActivities,
+        TopActivities,
         MeterToKilometerPipe,
         TimeConverterPipe,
         OrderBy,
