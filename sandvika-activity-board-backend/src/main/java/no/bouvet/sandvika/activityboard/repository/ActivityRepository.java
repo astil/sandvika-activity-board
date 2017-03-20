@@ -2,6 +2,7 @@ package no.bouvet.sandvika.activityboard.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -18,7 +19,9 @@ public interface ActivityRepository extends MongoRepository<Activity, Integer>
     public List<Activity> findById(int id);
     public List<Activity> findByStartDateLocalAfterAndType(Date startDate, String type);
 
+    Stream<Activity> findByTypeOrderByStartDateLocalDesc(String type);
     List<Activity> findByStartDateLocalBetweenAndType(Date startDate, Date endDate, String type);
     List<Activity> findByStartDateLocalBetweenAndAthleteLastName(Date startDate, Date endDate, String lastName);
 
+    Stream<Activity> findAllByOrderByStartDateLocalDesc();
 }

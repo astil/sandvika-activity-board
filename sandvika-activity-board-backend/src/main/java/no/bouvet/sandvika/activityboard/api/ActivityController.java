@@ -142,6 +142,36 @@ public class ActivityController
         return createStatsForHistoricPeriod(activityType, periodType, periodNumber, year);
     }
 
+    @RequestMapping(value = "/activities/{activityType}/latest/{numberOfActivities}", method = RequestMethod.GET)
+    public List<Activity> getStatisticsForPeriodByActivityType(@PathVariable("activityType") String activityType,
+                                                               @PathVariable("numberOfActivities") int numberOfActivities)
+    {
+        List<Activity> activityList;
+        if (activityType.equalsIgnoreCase("all") || activityType.equalsIgnoreCase(""))
+        {
+            activityList = getActivities(numberOfActivities);
+        } else
+        {
+            activityList = getActivitiesByActivityType(activityType, numberOfActivities);
+        }
+        return activityList;
+    }
+
+    private List<Activity> getActivitiesByActivityType(String activityType, int numberOfActivities)
+    {
+        return activityRepository.findByTypeOrderByStartDateLocalDesc(activityType)
+            .limit(numberOfActivities)
+            .collect(Collectors.toList());
+    }
+
+    private List<Activity> getActivities(int numberOfActivities)
+    {
+        return activityRepository.findAllByOrderByStartDateLocalDesc()
+            .limit(numberOfActivities)
+            .collect(Collectors.toList());
+    }
+
+
     private Statistics createStatsForCurrentPeriod(String activityType, String periodType)
     {
         Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
@@ -225,7 +255,10 @@ public class ActivityController
     private double getHandicap(String athleteLastName, Date lastActivityDate)
     {
         Athlete athlete = athleteRepository.findByLastName(athleteLastName);
-        if (athlete == null) return 1;
+        if (athlete == null)
+        {
+            return 1;
+        }
         return athlete.getHandicapForDate(lastActivityDate);
     }
 
