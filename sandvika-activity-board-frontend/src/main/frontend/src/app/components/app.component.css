@@ -76,6 +76,10 @@ stats-data-component {
     border-radius: 5px;
 }
 
+.latest-activities .card {
+  width: 100%;
+}
+
 .card {
     width: 100%;
     padding-top: 10px;
