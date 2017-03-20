@@ -11,6 +11,11 @@
     margin: 0 ;
 }
 
+.card-block {
+    min-height: 87px;
+    max-height: 87px;
+}
+
 .table thead th {
     border: none;
 }
@@ -24,6 +29,7 @@ th {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    overflow: hidden;
     /*align-items: flex-start;*/
 }
 
@@ -67,30 +73,20 @@ ngbd-tabset-pills {
     width: 100%;
 }
 
-@media (max-width: 576px) {
-    /*.container {*/
-    /*margin: 0 auto;*/
-    /*width: 100%;*/
-    /*}*/
-    /*stats-data-component {*/
-    /*width: 100%;*/
-    /*}*/
-    /*ngbd-tabset-pills {*/
-    /*width: 100%;*/
-    /*}*/
-}
-
 @media (min-width: 768px) {
     .container {
         padding: 1%;
-        margin: 0.5% 2%;
-        width: 80%;
+        margin: 0;
+        width: 100%;
     }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1500px) {
     .container {
-        width: 70%;
+      width: 70%;
+      padding: 0;
+      overflow: hidden;
+      margin: 0.5% 2%;
     }
 
     stats-data-component {
@@ -100,7 +96,4 @@ ngbd-tabset-pills {
     ngbd-tabset-pills {
         width: 69.5%;
     }
-}
-
-@media (min-width: 1200px) {
 }
