@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, Input} from "@angular/core";
 import {AppRestService} from "../service/app.rest.service";
 import {Statistics} from "../domain/Statistics";
 
@@ -10,6 +10,9 @@ import {Statistics} from "../domain/Statistics";
     styleUrls: ['app.component.css']
 })
 export class StatsDataComponent implements OnInit {
+    @Input() periodType: String;
+    private title: String;
+
     private statistics: Statistics[];
     private thisWeekStats: Statistics;
     private errorMessage: any;
@@ -18,7 +21,15 @@ export class StatsDataComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.appRestService.getAllStatsWeek().subscribe(
+        if (this.periodType == "competition") {
+            this.title = "Totalt fram til nå";
+        } else if (this.periodType == "month") {
+            this.title = "Totalt denne måned en";
+        } else if (this.periodType == "week") {
+            this.title = "Totalt denne uken";
+        }
+
+        this.appRestService.getAllStats(this.periodType).subscribe(
             statistics => this.processResult(statistics),
             error => this.errorMessage = <any>error
         );

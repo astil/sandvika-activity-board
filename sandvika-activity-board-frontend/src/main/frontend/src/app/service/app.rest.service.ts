@@ -42,8 +42,8 @@ export class AppRestService {
             .catch(this.handleError);
     }
 
-    getAllStatsWeek(): Observable<Statistics> {
-        return this.http.get(this.restUrl + "activities/all/stats/week/")
+    getAllStats(periodType): Observable<Statistics> {
+        return this.http.get(this.restUrl + "activities/all/stats/" + periodType + "/")
             .map(this.extractData)
             .catch(this.handleError);
     }

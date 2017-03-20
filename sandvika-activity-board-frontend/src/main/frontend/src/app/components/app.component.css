@@ -5,10 +5,9 @@
     -moz-border-radius: 5px;
     border-radius: 5px;
     background: rgb(255, 255, 255);
-    background: rgba(255, 255, 255, 0.8);
     padding: 1%;
-    float: right;
-    margin: 0 ;
+    margin: 0;
+    overflow: hidden;
 }
 
 .card-block {
@@ -30,7 +29,7 @@ th {
     justify-content: space-between;
     flex-wrap: wrap;
     overflow: hidden;
-    /*align-items: flex-start;*/
+    align-items: flex-start;
 }
 
 .strava-brand {
@@ -51,79 +50,118 @@ th {
 
 .mini-cards > div {
     width: 33%;
-    margin-bottom: 2px;
 }
 
 h1.card-text {
     text-align: center;
 }
 
-ngbd-tabset-pills {
-    border: 1px solid #ddd;
+/*ngbd-tabset-pills {*/
+/*border: 1px solid #ddd;*/
+/*-webkit-border-radius: 5px;*/
+/*-moz-border-radius: 5px;*/
+/*border-radius: 5px;*/
+/*}*/
+
+stats-data-component {
+    width: 100%;
+}
+
+.table-wrapper {
+    width: 100%;
+
+    border: 1px solid #dddddd;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+}
+
+.card {
+    width: 100%;
+    padding-top: 10px;
+    margin-bottom: 10px;
+}
+
+ngbd-tabset-pills {
+    width: 100%;
+}
+
+.vertical-wrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: flex-start;
+}
+
+latest-activities-component {
+    width: 100%;
+}
+
+top-activities-component {
+    width: 100%;
 }
 
 stats-data-component {
     width: 100%;
 }
 
-.top-activities .card {
-    width: 100%;
-}
-
-.card {
-    padding-top: 10px;
-}
-
-ngbd-tabset-pills {
-    width: 100%;
+.nav {
+    flex-wrap: wrap;
 }
 
 @media (min-width: 768px) {
     .container {
         padding: 1%;
-        margin: 0;
+        margin: 0 auto;
         width: 100%;
-    }
-
-    .vertical-wrapper {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        align-items: flex-start;
-    }
-
-    latest-activities-component {
-        width: 32.9%;
-    }
-
-    top-activities-component {
-        width: 32.9%;
-    }
-
-    stats-data-component {
-        width: 32.9%;
     }
 }
 
-@media (min-width: 1500px) {
+
+@media (min-width: 992px) {
     .container {
-      width: 70%;
-      padding: 0;
-      overflow: hidden;
-      margin: 0.5% 2%;
+        width: 100%;
+        margin: 20px auto;
+    }
+
+    latest-activities-component {
+        width: 32.5%;
+    }
+
+    top-activities-component {
+        width: 32.5%;
+    }
+
+    stats-data-component {
+        width: 32.5%;
+    }
+
+    .modal-dialog {
+        max-width: 80%;
+    }
+}
+
+
+@media (min-width: 1400px) {
+    .container {
+        width: 90%;
+    }
+}
+
+@media (min-width: 1600px) {
+    .container {
+        width: 70%;
     }
 
     .vertical-wrapper {
-        width: 29.5%;
+        width: 34.5%;
         display: block;
         justify-content: space-between;
     }
 
-    ngbd-tabset-pills {
-        width: 69.5%;
+    .table-wrapper {
+        width: 64.5%;
     }
 
     latest-activities-component {

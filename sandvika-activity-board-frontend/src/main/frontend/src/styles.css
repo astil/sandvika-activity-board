@@ -1,10 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
-body {
-    background: url(assets/logo.svg) 3% 3% no-repeat,
-                url(assets/kystlinje.svg) top left no-repeat;
-    background-attachment: fixed;
-    background-size: 8%, 30%;
-}
+/*body {*/
+    /*!*background: url(assets/logo.svg) 3% 3% no-repeat,*!*/
+                /*!*url(assets/kystlinje.svg) top left no-repeat;*!*/
+
+
+    /*background: url(assets/kystlinje.svg) top left no-repeat;*/
+
+    /*background-attachment: fixed;*/
+    /*!*background-size: 8%, 30%;*!*/
+    /*background-size: 100%;*/
+/*}*/
 
 @media (max-width: 1000px) {
     body {
@@ -12,12 +17,13 @@ body {
     }
 }
 
-.modal-dialog {
-    max-width: 60%;
+.nav {
+    flex-wrap: wrap;
+    padding: 5px;
 }
 
-.nav {
-    padding: 5px;
+.nav-item {
+    width: 100%;
 }
 
 .nav-pills .nav-item.show .nav-link, .nav-pills .nav-link.active {
@@ -35,4 +41,30 @@ a {
 a:focus, a:hover {
     color: #5c5c5c;
     text-decoration: underline;
+}
+
+.modal-dialog {
+    max-width: 100%;
+}
+
+@media (min-width: 768px) {
+    .nav-item {
+        width: auto;
+    }
+}
+
+
+@media (min-width: 992px) {}
+
+
+@media (min-width: 1300px) {
+    .modal-dialog {
+        max-width: 80%;
+    }
+}
+
+@media (min-width: 1600px) {
+    .modal-dialog {
+        max-width: 60%;
+    }
 }

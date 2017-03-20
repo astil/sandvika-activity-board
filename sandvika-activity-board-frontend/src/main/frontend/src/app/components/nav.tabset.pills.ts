@@ -2,6 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {AppRestService} from "../service/app.rest.service";
 import {Athlete} from "../domain/athlete";
 import {NgbTabChangeEvent} from "@ng-bootstrap/ng-bootstrap";
+import {TabContent} from "../domain/TabContent";
 
 @Component({
     selector: 'ngbd-tabset-pills',
@@ -11,7 +12,7 @@ import {NgbTabChangeEvent} from "@ng-bootstrap/ng-bootstrap";
 })
 export class NgbdTabsetPills implements OnInit {
     private athletes: Athlete[];
-    private pillTab: String[] = ["Totalt", "Måned", "Uke"];
+    private pillTab: TabContent[] = [new TabContent("all", "Totalt", "competition"), new TabContent("month", "Måned", "month"), new TabContent("week", "Uke", "week")];
 
     private errorMessage: any;
 
@@ -27,19 +28,19 @@ export class NgbdTabsetPills implements OnInit {
 
     public beforeChange($event: NgbTabChangeEvent) {
         switch ($event.nextId) {
-            case "Totalt" :
+            case "all" :
                 this.appRestService.getLeaderBoardTotalPoints()
                     .subscribe(
                         athlete => this.athletes = athlete,
                         error => this.errorMessage = <any>error);
                 break;
-            case "Måned" :
+            case "month" :
                 this.appRestService.getLeaderBoardMonthPoints()
                     .subscribe(
                         athlete => this.athletes = athlete,
                         error => this.errorMessage = <any>error);
                 break;
-            case "Uke" :
+            case "week" :
                 this.appRestService.getLeaderBoardWeekPoints()
                     .subscribe(
                         athlete => this.athletes = athlete,

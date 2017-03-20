@@ -9,8 +9,9 @@ import {Activity} from "../domain/activity";
     styleUrls: ['app.component.css']
 })
 export class TopActivities implements OnInit {
-    @Input('periodtype') periodtype: String;
-    @Input('numberofactivities') numberofactivities: number;
+    @Input() periodType: String;
+    @Input() numberOfActivities: number;
+    private title: String;
 
     private activities: Activity[];
     private errorMessage: any;
@@ -19,7 +20,15 @@ export class TopActivities implements OnInit {
     }
 
     ngOnInit(): void {
-        this.appRestService.getTopActivities(5, 'week').subscribe(
+        if (this.periodType == "competition") {
+            this.title = "Best uttelling";
+        } else if (this.periodType == "month") {
+            this.title = "Best uttelling denne måneden";
+        } else if (this.periodType == "week") {
+            this.title = "Best uttelling denne uken";
+        }
+
+        this.appRestService.getTopActivities(5, this.periodType).subscribe(
             activities => this.processResult(activities),
             error => this.errorMessage = <any>error
         );

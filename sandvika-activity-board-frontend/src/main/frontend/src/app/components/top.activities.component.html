@@ -1,7 +1,7 @@
 <div class="panel panel-default top-activities" *ngIf="activities">
 
     <div class="card">
-        <h1 class="card-text" style="font-family: 'Roboto', sans-serif;">Topp aktiviteter</h1>
+        <h2 class="card-text" style="font-family: 'Roboto', sans-serif; text-align: center">{{title}}</h2>
 
         <table class="table">
             <thead>
@@ -12,10 +12,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let activity of activities | orderBy:'-startDateLocal'">
+            <tr *ngFor="let activity of activities">
                 <td>{{activity.athletefirstName}}</td>
                 <td><a href="https://www.strava.com/activities/{{activity.id}}">{{activity.name}}</a></td>
-                <td>{{activity.points}}</td>
+                <td>{{activity.points | number : '1.0-1'}}</td>
             </tr>
             </tbody>
         </table>
