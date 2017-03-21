@@ -1,0 +1,24 @@
+<div class="panel panel-default top-activities" *ngIf="activities">
+
+    <div class="card">
+        <h2 class="card-text" style="font-family: 'Roboto', sans-serif; text-align: center">{{title}}</h2>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Navn</th>
+                <th>Aktivitet</th>
+                <th>Poeng</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let activity of activities | orderBy:'-points'">
+                <td>{{activity.athletefirstName}}</td>
+                <td><a href="https://www.strava.com/activities/{{activity.id}}">{{activity.name}}</a></td>
+                <td>{{activity.points | number : '1.0-1'}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
