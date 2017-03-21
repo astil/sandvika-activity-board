@@ -8,7 +8,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 @Pipe({name: 'meterToKm'})
 export class MeterToKilometerPipe implements PipeTransform {
 
-    transform(value: number): string {
-        return (value/1000).toFixed(1);
+    transform(value: number, fixed: number): string {
+        return (value/1000).toFixed(fixed);
     }
 }

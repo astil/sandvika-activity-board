@@ -37,9 +37,13 @@ th {
 }
 
 .strava-brand img {
-    width: 10%;
+    width: 50%;
     float: right;
     margin-top: 1.25rem;
+}
+
+.bouvet-brand img {
+    width: 100%;
 }
 
 .panel.panel-default {
@@ -54,6 +58,7 @@ th {
 
 h1.card-text {
     text-align: center;
+    font-size: 2em;
 }
 
 /*ngbd-tabset-pills {*/
@@ -144,12 +149,23 @@ stats-data-component {
     .modal-dialog {
         max-width: 80%;
     }
+
+    .bouvet-brand img {
+        width: 10%;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+    }
 }
 
 
 @media (min-width: 1400px) {
     .container {
         width: 90%;
+    }
+
+    .strava-brand img {
+        width: 20%;
     }
 }
 

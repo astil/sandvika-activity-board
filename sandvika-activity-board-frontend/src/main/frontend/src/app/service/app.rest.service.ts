@@ -55,7 +55,7 @@ export class AppRestService {
     }
 
     getLatestActivities(numberOfActivities): Observable<Activity[]> {
-        return this.http.get(this.restUrl + "/activities/run/latest/" + numberOfActivities)
+        return this.http.get(this.restUrl + "/activities/all/latest/" + numberOfActivities)
             .map(this.extractData)
             .catch(this.handleError);
     }
