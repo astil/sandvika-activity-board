@@ -36,13 +36,13 @@ import {Athlete} from "../domain/athlete";
                         <td class="hidden-sm-down">{{activity.startDateLocal | date: 'dd/MM/yyyy'}}</td>
                         <td><a href="https://www.strava.com/activities/{{activity.id}}">{{activity.name}}</a></td>
                         <td>{{activity.type}}</td>
-                        <td>{{activity.points}}</td>
+                        <td>{{activity.points | number : '1.0-1'}}</td>
                         <td class="hidden-sm-down">{{activity.distanceInMeters | meterToKm}} km</td>
                         <td class="hidden-sm-down">{{activity.movingTimeInSeconds | convertToHours}}</td>
                         <td class="hidden-md-down">{{activity.elapsedTimeInSeconds | convertToHours}}</td>
                         <td class="hidden-md-down">{{activity.totalElevationGaininMeters}}</td>
                         <td class="hidden-md-down">{{activity.sufferScore}}</td>  
-                        <td class="hidden-md-down">{{activity.handicap}}</td>  
+                        <td class="hidden-md-down">{{activity.handicap | number : '1.0-1'}}</td>  
                     </tr>
                 </tbody>
             </table>
