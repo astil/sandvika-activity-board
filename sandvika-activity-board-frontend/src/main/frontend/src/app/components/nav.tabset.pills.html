@@ -29,7 +29,7 @@
                             <td>
                                 <ngbd-modal-component [athlete]="athlete"></ngbd-modal-component>
                             </td>
-                            <td>{{athlete.points}}</td>
+                            <td>{{athlete.points | number : '1.0-1'}}</td>
                             <td class="hidden-md-down">{{athlete.lastActivityDate | date:
                                 'dd/MM/yyyy'}}
                             </td>
@@ -38,7 +38,7 @@
                                 km
                             </td>
                             <td class="hidden-md-down">{{athlete.minutes | minToHms}}</td>
-                            <td class="hidden-md-down">{{athlete.handicap}}</td>
+                            <td class="hidden-md-down">{{athlete.handicap | number : '1.0-1'}}</td>
                         </tr>
                         </tbody>
                     </table>
