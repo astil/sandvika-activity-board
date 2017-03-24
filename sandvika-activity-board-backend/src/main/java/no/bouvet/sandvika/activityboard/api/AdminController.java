@@ -1,6 +1,7 @@
 package no.bouvet.sandvika.activityboard.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +26,10 @@ public class AdminController
 
     @Autowired
     HandicapCalculator handicapCalculator;
+
+    @Value("${ssb.test}")
+    String test;
+
 
     //TODO: This is just for testing, should be more secure.
     //    @CrossOrigin(origins = "*")
@@ -70,6 +75,12 @@ public class AdminController
     public void deleteActivity(@PathVariable("id") int id)
     {
         activityRepository.delete(id);
+    }
+
+    @RequestMapping(value = "/property", method = RequestMethod.GET)
+    public String getProperty()
+    {
+        return test;
     }
 
 }
