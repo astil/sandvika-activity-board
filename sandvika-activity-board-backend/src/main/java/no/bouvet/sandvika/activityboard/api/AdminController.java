@@ -66,4 +66,10 @@ public class AdminController
         handicapCalculator.updateHandicapForAllAthletesTheLast40Days();
     }
 
+    @RequestMapping(value = "/activities/{id}", method = RequestMethod.DELETE)
+    public void deleteActivity(@PathVariable("id") int id)
+    {
+        activityRepository.delete(id);
+    }
+
 }

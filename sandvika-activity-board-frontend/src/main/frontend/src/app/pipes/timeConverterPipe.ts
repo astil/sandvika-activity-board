@@ -34,3 +34,21 @@ export class ConvertMinToHhMmSs implements PipeTransform {
         return ((h > 0 ? h + "t " + (m < 10 ? "0" : "") : "") + m + "m");
     }
 }
+
+/*
+ * Convert from minutes to HH't'
+ *
+ * Usage:
+ *   value | minToHms
+ */
+@Pipe({name: 'minToHht'})
+export class ConvertMinToHhT implements PipeTransform {
+
+    transform(value: number): string {
+        value = Number(value*60);
+        let h = Math.floor(value / 3600);
+        let m = Math.floor(value % 3600 / 60);
+
+        return h > 0 ? h + "t" : "0";
+    }
+}

@@ -171,7 +171,7 @@ public enum ActivityType {
         public static final double WEIGHT_TRAINING_COEFFISIENT_KM = 0;
         public static final double ROLLER_SKI_COEFFISIENT_KM = 0.5;
         public static final double YOGA_COEFFISIENT_KM = 0;
-        public static final double E_BIKE_RIDE_COEFFISIENT_KM = 0.3;
+        public static final double E_BIKE_RIDE_COEFFISIENT_KM = 0.1;
 
         public static final double ROWING_COEFFISIENT_MIN = 1;
         public static final double KAYAKING_COEFFISIENT_MIN = 1;
@@ -186,7 +186,7 @@ public enum ActivityType {
         public static final double WEIGHT_TRAINING_COEFFISIENT_MIN = 1;
         public static final double ROLLER_SKI_COEFFISIENT_MIN = 1;
         public static final double YOGA_COEFFISIENT_MIN = 1;
-        public static final double E_BIKE_RIDE_COEFFISIENT_MIN = 0.5;
+        public static final double E_BIKE_RIDE_COEFFISIENT_MIN = 0.3;
 
     }
 }

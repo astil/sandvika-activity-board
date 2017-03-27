@@ -1,8 +1,8 @@
-<div class="panel panel-default" *ngIf="thisWeekStats">
+<div class="panel panel-default mini-cards" *ngIf="thisWeekStats">
 
     <div class="card">
         <div class="card-block">
-            <h2 class="card-text" style="font-family: 'Roboto', sans-serif;">Totalt denne uka</h2>
+            <h2 class="card-text" style="font-family: 'Roboto', sans-serif;">{{title}}</h2>
         </div>
     </div>
 
@@ -17,7 +17,7 @@
 
     <div class="card">
         <div class="card-block" style="border-bottom: 1px solid #dddddd">
-            <h1 class="card-text" style="font-family: 'Roboto', sans-serif;">{{thisWeekStats.meters | meterToKm}}</h1>
+            <h1 class="card-text" style="font-family: 'Roboto', sans-serif;">{{thisWeekStats.meters | meterToKm : 0}}</h1>
         </div>
         <div class="card-block">
             <p class="card-text">Kilometer tilbakelagt</p>
@@ -26,7 +26,7 @@
 
     <div class="card">
         <div class="card-block" style="border-bottom: 1px solid #dddddd">
-            <h1 class="card-text" style="font-family: 'Roboto', sans-serif;">{{thisWeekStats.minutes | convertToHours}}</h1>
+            <h1 class="card-text" style="font-family: 'Roboto', sans-serif;">{{thisWeekStats.minutes | minToHht}}</h1>
         </div>
         <div class="card-block">
             <p class="card-text">Timer brukt</p>

@@ -1,30 +1,49 @@
 <ngb-tabset type="pills" (tabChange)="beforeChange($event)">
-    <ngb-tab *ngFor="let tab of pillTab" title="{{tab}}" id="{{tab}}">
+    <ngb-tab *ngFor="let tab of pillTab" title="{{tab.decode}}" id="{{tab.code}}">
         <template ngbTabContent>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Navn</th>
-                    <th>Poeng</th>
-                    <th>Siste aktivitet</th>
-                    <th>Antall aktiviteter</th>
-                    <th>Km</th>
-                    <th>Totalt</th>
-                    <th>Handicap</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let athlete of athletes">
-                    <td><ngbd-modal-component [athlete]="athlete"></ngbd-modal-component></td>
-                    <td>{{athlete.points}}</td>
-                    <td>{{athlete.lastActivityDate | date: 'dd/MM/yyyy'}}</td>
-                    <td>{{athlete.numberOfActivities}}</td>
-                    <td>{{athlete.kilometers | number : '1.0-1'}} km</td>
-                    <td>{{athlete.minutes | minToHms}}</td>
-                    <td>{{athlete.handicap}}</td>
-                </tr>
-                </tbody>
-            </table>
+
+            <div class="flex-wrapper">
+                <div class="vertical-wrapper">
+                    <latest-activities-component></latest-activities-component>
+                    <stats-data-component periodType="{{tab.altDecode}}" title=""></stats-data-component>
+                    <top-activities-component periodType="{{tab.altDecode}}" numberOfActivities="5"></top-activities-component>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Navn</th>
+                            <th>Poeng</th>
+                            <th class="hidden-md-down">Siste</th>
+                            <th class="hidden-md-down">Antall</th>
+                            <th class="hidden-md-down">Km</th>
+                            <th class="hidden-md-down">Tid</th>
+                            <th class="hidden-md-down">Handicap</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let athlete of athletes; let i = index">
+                            <td>{{i+1}}</td>
+                            <td>
+                                <ngbd-modal-component [athlete]="athlete"></ngbd-modal-component>
+                            </td>
+                            <td>{{athlete.points | number : '1.0-1'}}</td>
+                            <td class="hidden-md-down">{{athlete.lastActivityDate | date:
+                                'dd/MM/yyyy'}}
+                            </td>
+                            <td class="hidden-md-down">{{athlete.numberOfActivities}}</td>
+                            <td class="hidden-md-down">{{athlete.kilometers | number : '1.0-1'}}
+                                km
+                            </td>
+                            <td class="hidden-md-down">{{athlete.minutes | minToHms}}</td>
+                            <td class="hidden-md-down">{{athlete.handicap | number : '1.0-1'}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </template>
     </ngb-tab>
 </ngb-tabset>

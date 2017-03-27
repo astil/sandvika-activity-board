@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 
 import {NgbModal, NgbActiveModal, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
 import {AppRestService} from "../service/app.rest.service";
-import {Activity} from "../domain/activities";
+import {Activity} from "../domain/activity";
 import {Athlete} from "../domain/athlete";
 
 @Component({
@@ -19,30 +19,30 @@ import {Athlete} from "../domain/athlete";
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Dato</th>
+                        <th class="hidden-sm-down">Dato</th>
                         <th>Navn</th>
                         <th>Type</th>
                         <th>Poeng</th>
-                        <th>Distanse</th>
-                        <th>Tid i bevegelse</th>
-                        <th>Totaltid</th>
-                        <th>Høydemeter</th>
-                        <th>SufferScore</th>
-                        <th>Handicap</th>
+                        <th class="hidden-sm-down">Distanse</th>
+                        <th class="hidden-sm-down">Tid i bevegelse</th>
+                        <th class="hidden-md-down">Totaltid</th>
+                        <th class="hidden-md-down">Høydemeter</th>
+                        <th class="hidden-md-down">SufferScore</th>
+                        <th class="hidden-md-down">Handicap</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let activity of activitys | orderBy:'-startDateLocal'">
-                        <td>{{activity.startDateLocal | date: 'dd/MM/yyyy'}}</td>
+                    <tr *ngFor="let activity of activities | orderBy:'-startDateLocal'">
+                        <td class="hidden-sm-down">{{activity.startDateLocal | date: 'dd/MM/yyyy'}}</td>
                         <td><a href="https://www.strava.com/activities/{{activity.id}}">{{activity.name}}</a></td>
                         <td>{{activity.type}}</td>
-                        <td>{{activity.points}}</td>
-                        <td>{{activity.distanceInMeters | meterToKm}} km</td>
-                        <td>{{activity.movingTimeInSeconds | convertToHours}}</td>
-                        <td>{{activity.elapsedTimeInSeconds | convertToHours}}</td>
-                        <td>{{activity.totalElevationGaininMeters}}</td>
-                        <td>{{activity.sufferScore}}</td>  
-                        <td>{{activity.handicap}}</td>  
+                        <td>{{activity.points | number : '1.0-1'}}</td>
+                        <td class="hidden-sm-down">{{activity.distanceInMeters | meterToKm}} km</td>
+                        <td class="hidden-sm-down">{{activity.movingTimeInSeconds | convertToHours}}</td>
+                        <td class="hidden-md-down">{{activity.elapsedTimeInSeconds | convertToHours}}</td>
+                        <td class="hidden-md-down">{{activity.totalElevationGaininMeters}}</td>
+                        <td class="hidden-md-down">{{activity.sufferScore}}</td>  
+                        <td class="hidden-md-down">{{activity.handicap | number : '1.0-1'}}</td>  
                     </tr>
                 </tbody>
             </table>
@@ -54,7 +54,7 @@ import {Athlete} from "../domain/athlete";
   `
 })
 export class NgbdModalContent {
-    @Input() activitys;
+    @Input() activities;
     @Input() athlete;
 
     constructor(public activeModal: NgbActiveModal) {}
@@ -67,7 +67,7 @@ export class NgbdModalContent {
     inputs: ['athlete']
 })
 export class NgbdModalComponent implements OnInit {
-    private activitys: Activity[];
+    private activities: Activity[];
     private errorMessage: any;
     private athlete: Athlete;
 
@@ -78,13 +78,13 @@ export class NgbdModalComponent implements OnInit {
             windowClass: "modal-custom-size"
         };
         const modalRef = this.modalService.open(NgbdModalContent, options);
-        modalRef.componentInstance.activitys = this.activitys;
+        modalRef.componentInstance.activities = this.activities;
         modalRef.componentInstance.athlete = this.athlete;
     }
 
     ngOnInit(): void {
         this.appRestService.getAthleteByLastName(this.athlete.athleteLastName).subscribe(
-            activity => this.activitys = activity,
+            activity => this.activities = activity,
             error =>  this.errorMessage = <any>error);
     }
 }

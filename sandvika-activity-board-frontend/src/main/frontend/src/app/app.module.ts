@@ -8,10 +8,12 @@ import {AppComponent} from './components/app.component';
 import {AppRestService} from "./service/app.rest.service";
 import {NgbdModalComponent, NgbdModalContent} from "./components/ngModal.component";
 import {MeterToKilometerPipe} from "./pipes/meterToKmPipe";
-import {TimeConverterPipe, ConvertMinToHhMmSs} from "./pipes/timeConverterPipe";
+import {TimeConverterPipe, ConvertMinToHhMmSs, ConvertMinToHhT} from "./pipes/timeConverterPipe";
 import {OrderBy} from "./pipes/customOrderBy";
 import {NgbdTabsetPills} from "./components/nav.tabset.pills";
 import {StatsDataComponent} from "./components/stats.data.component";
+import {LatestActivities} from "./components/latest.activities.component";
+import {TopActivities} from "./components/top.activities.component";
 
 @NgModule({
     declarations: [
@@ -20,10 +22,13 @@ import {StatsDataComponent} from "./components/stats.data.component";
         NgbdModalContent,
         NgbdTabsetPills,
         StatsDataComponent,
+        LatestActivities,
+        TopActivities,
         MeterToKilometerPipe,
         TimeConverterPipe,
         OrderBy,
-        ConvertMinToHhMmSs
+        ConvertMinToHhMmSs,
+        ConvertMinToHhT
     ],
     entryComponents: [NgbdModalContent],
     imports: [

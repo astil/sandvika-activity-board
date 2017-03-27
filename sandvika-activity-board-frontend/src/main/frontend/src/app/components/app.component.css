@@ -1,14 +1,18 @@
 .container {
-    margin: 0 auto;
-    top: 120px;
-    width: 65%;
+    width: 100%;
     border: none;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
     background: rgb(255, 255, 255);
-    background: rgba(255, 255, 255, 0.8);
-    padding: 0;
+    padding: 1%;
+    margin: 0;
+    overflow: hidden;
+}
+
+.card-block {
+    min-height: 87px;
+    max-height: 87px;
 }
 
 .table thead th {
@@ -23,7 +27,9 @@ th {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    /*align-items: flex-start;*/
+    flex-wrap: wrap;
+    overflow: hidden;
+    align-items: flex-start;
 }
 
 .strava-brand {
@@ -31,17 +37,13 @@ th {
 }
 
 .strava-brand img {
-    width: 10%;
+    width: 50%;
     float: right;
     margin-top: 1.25rem;
 }
 
-stats-data-component {
-    width: 30%;
-}
-
-ngbd-tabset-pills {
-    width: 69%;
+.bouvet-brand img {
+    width: 100%;
 }
 
 .panel.panel-default {
@@ -50,18 +52,147 @@ ngbd-tabset-pills {
     justify-content: space-between;
 }
 
-.panel.panel-default > div {
-    width:  33%;
-    margin-bottom: 2px;
+.mini-cards > div {
+    width: 33%;
 }
 
 h1.card-text {
     text-align: center;
+    font-size: 2em;
+}
+
+/*ngbd-tabset-pills {*/
+/*border: 1px solid #ddd;*/
+/*-webkit-border-radius: 5px;*/
+/*-moz-border-radius: 5px;*/
+/*border-radius: 5px;*/
+/*}*/
+
+stats-data-component {
+    width: 100%;
+}
+
+.table-wrapper {
+    width: 100%;
+
+    border: 1px solid #dddddd;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.latest-activities .card {
+  width: 100%;
+}
+
+.card {
+    width: 100%;
+    padding-top: 10px;
+    margin-bottom: 10px;
 }
 
 ngbd-tabset-pills {
-    border: 1px solid #ddd;
-    -webkit-border-radius:5px;
-    -moz-border-radius:5px;
-    border-radius:5px;
+    width: 100%;
+}
+
+.vertical-wrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: flex-start;
+}
+
+latest-activities-component {
+    width: 100%;
+}
+
+top-activities-component {
+    width: 100%;
+}
+
+stats-data-component {
+    width: 100%;
+}
+
+.nav {
+    flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding: 1%;
+        margin: 0 auto;
+        width: 100%;
+    }
+}
+
+
+@media (min-width: 992px) {
+    .container {
+        width: 100%;
+        margin: 20px auto;
+    }
+
+    latest-activities-component {
+        width: 32.5%;
+    }
+
+    top-activities-component {
+        width: 32.5%;
+    }
+
+    stats-data-component {
+        width: 32.5%;
+    }
+
+    .modal-dialog {
+        max-width: 80%;
+    }
+
+    .bouvet-brand img {
+        width: 10%;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+    }
+}
+
+
+@media (min-width: 1400px) {
+    .container {
+        width: 90%;
+    }
+
+    .strava-brand img {
+        width: 20%;
+    }
+}
+
+@media (min-width: 1600px) {
+    .container {
+        width: 70%;
+    }
+
+    .vertical-wrapper {
+        width: 34.5%;
+        display: block;
+        justify-content: space-between;
+    }
+
+    .table-wrapper {
+        width: 64.5%;
+    }
+
+    latest-activities-component {
+        width: 100%;
+    }
+
+    top-activities-component {
+        width: 100%;
+    }
+
+    stats-data-component {
+        width: 100%;
+    }
 }
