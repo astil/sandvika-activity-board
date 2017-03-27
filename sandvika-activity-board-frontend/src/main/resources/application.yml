@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: ssb
+security:
+  basic:
+    enabled: false
+server:
+  port: 8005
+
