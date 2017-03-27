@@ -4,6 +4,9 @@ spring:
 security:
   basic:
     enabled: false
+  user:
+    name: test
+    password: test
 server:
   port: 8005
 
