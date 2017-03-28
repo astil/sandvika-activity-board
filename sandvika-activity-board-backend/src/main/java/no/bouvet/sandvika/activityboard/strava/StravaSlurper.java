@@ -3,6 +3,7 @@ package no.bouvet.sandvika.activityboard.strava;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,8 +47,13 @@ public class StravaSlurper
         log.info("Updating activities");
         ClubAPI api = getApi();
         List<Activity> activities = new ArrayList<>();
-        Arrays.asList(api.listRecentClubActivities(STRAVA_CLUB_ID, 1, 200)).forEach(stravaActivity -> activities.add(createActivity(stravaActivity)));
-        activityRepository.save(activities);
+        Arrays.asList(api.listRecentClubActivities(STRAVA_CLUB_ID, 1, 200))
+                .forEach(stravaActivity ->
+                        activities.add(createActivity(stravaActivity)));
+        activityRepository.save(activities
+                .stream()
+                .filter(activity -> activity.getPoints() > 0)
+                .collect(Collectors.toList()));
     }
 
     private Activity createActivity(StravaActivity stravaActivity)
