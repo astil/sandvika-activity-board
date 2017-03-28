@@ -10,9 +10,21 @@ import org.springframework.data.annotation.Id;
 
 public class Athlete
 {
+
     @Id
+    private int id;
     private String lastName;
     private List<Handicap> handicapList;
+    private String firstName;
+    private String profile;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public List<Handicap> getHandicapList()
     {
@@ -91,4 +103,22 @@ public class Athlete
 
         return handicap.getAsDouble();
     }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+
 }

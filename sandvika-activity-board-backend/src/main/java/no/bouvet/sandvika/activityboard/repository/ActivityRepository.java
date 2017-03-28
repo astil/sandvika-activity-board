@@ -13,7 +13,7 @@ import no.bouvet.sandvika.activityboard.domain.Activity;
 @RepositoryRestResource(collectionResourceRel = "activity", path = "activity")
 public interface ActivityRepository extends MongoRepository<Activity, Integer>
 {
-    public List<Activity> findByAthleteLastName(String lastname);
+    public List<Activity> findByAthleteId(int id);
     public List<Activity> findByStartDateLocalAfter(Date startDate);
     public List<Activity> findByStartDateLocalBetween(Date startDate, Date endDate);
     public List<Activity> findById(int id);
@@ -21,7 +21,9 @@ public interface ActivityRepository extends MongoRepository<Activity, Integer>
 
     Stream<Activity> findByTypeOrderByStartDateLocalDesc(String type);
     List<Activity> findByStartDateLocalBetweenAndType(Date startDate, Date endDate, String type);
-    List<Activity> findByStartDateLocalBetweenAndAthleteLastName(Date startDate, Date endDate, String lastName);
+    List<Activity> findByStartDateLocalBetweenAndAthleteId(Date startDate, Date endDate, int athleteId);
 
     Stream<Activity> findAllByOrderByStartDateLocalDesc();
+
+    Activity findOneByAthleteLastName(String lastName);
 }

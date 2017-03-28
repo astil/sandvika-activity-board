@@ -1,5 +1,7 @@
 package no.bouvet.sandvika.activityboard.api;
 
+import no.bouvet.sandvika.activityboard.domain.Activity;
+import no.bouvet.sandvika.activityboard.domain.Athlete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +12,8 @@ import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
+
+import java.util.List;
 
 @RestController
 public class AdminController
@@ -34,11 +38,23 @@ public class AdminController
         activityRepository.deleteAll();
     }
 
-    @RequestMapping(value = "/athlete/{lastName}/deleteFromDb", method = RequestMethod.GET)
-    public void deleteAthleteFromDb(@PathVariable("lastName") String lastName)
+    @RequestMapping(value = "/athlete/{id}/deleteFromDb", method = RequestMethod.GET)
+    public void deleteAthleteFromDb(@PathVariable("id") int id)
     {
-        athleteRepository.deleteByLastName(lastName);
+        athleteRepository.deleteById(id);
     }
+
+    @RequestMapping(value = "/athlete/migrate", method = RequestMethod.GET)
+    public void migrateUsers()
+    {
+        List<Athlete> allAthletes = athleteRepository.findAll();
+        for (Athlete athlete : allAthletes) {
+            Activity a = activityRepository.findOneByAthleteLastName(athlete.getLastName());
+            athlete.setId(a.getAthleteId());
+            athleteRepository.save(athlete);
+        }
+    }
+
 
     @RequestMapping(value = "/athlete/all/deleteFromDb", method = RequestMethod.GET)
     public void deleteAthleteFromDb()

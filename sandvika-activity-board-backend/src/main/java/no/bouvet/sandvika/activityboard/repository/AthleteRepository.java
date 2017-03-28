@@ -6,9 +6,9 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
 
 @RepositoryRestResource(collectionResourceRel = "athlete", path = "athlete")
-public interface AthleteRepository extends MongoRepository<Athlete, String>
+public interface AthleteRepository extends MongoRepository<Athlete, Integer>
 {
-    Athlete findByLastName(String lastName);
+    Athlete findById(int id);
 
-    void deleteByLastName(String lastName);
+    void deleteById(int id);
 }

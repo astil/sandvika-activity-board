@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
-import no.bouvet.sandvika.activityboard.domain.Handicap;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 
@@ -35,24 +34,10 @@ public class AthleteController
 
 
 //    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/athlete/{lastName}/activities", method = RequestMethod.GET)
-    public List<Activity> getUserActivities(@PathVariable("lastName") String lastName)
+    @RequestMapping(value = "/athlete/{id}/activities", method = RequestMethod.GET)
+    public List<Activity> getUserActivities(@PathVariable("id") int id)
     {
-        return activityRepository.findByAthleteLastName(lastName);
-    }
-
-    //    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/athlete/{lastName}/handicap", method = RequestMethod.PUT)
-    public Athlete updateAthlete(@PathVariable("lastName") String lastName, @RequestBody Handicap handicap)
-    {
-        Athlete athlete = athleteRepository.findByLastName(lastName);
-        if (athlete == null)
-        {
-            athlete = new Athlete();
-            athlete.setLastName(lastName);
-        }
-        athlete.getHandicapList().add(handicap);
-        return athleteRepository.save(athlete);
+        return activityRepository.findByAthleteId(id);
     }
 
     //    @CrossOrigin(origins = "*")
@@ -63,10 +48,10 @@ public class AthleteController
     }
 
     //    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/athlete/{lastName}", method = RequestMethod.GET)
-    public Athlete getAllAthletes(@PathVariable("lastName") String lastName)
+    @RequestMapping(value = "/athlete/{id}", method = RequestMethod.GET)
+    public Athlete getAllAthletes(@PathVariable("id") int id)
     {
-        return athleteRepository.findByLastName(lastName);
+        return athleteRepository.findById(id);
     }
 
 

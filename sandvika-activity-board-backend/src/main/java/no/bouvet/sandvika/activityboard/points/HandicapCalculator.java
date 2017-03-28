@@ -102,7 +102,7 @@ public class HandicapCalculator
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dateDaysAgo);
         calendar.add(Calendar.DAY_OF_YEAR, -days);
-        List<Activity> activities = activityRepository.findByStartDateLocalBetweenAndAthleteLastName(calendar.getTime(), dateDaysAgo, athlete.getLastName());
+        List<Activity> activities = activityRepository.findByStartDateLocalBetweenAndAthleteId(calendar.getTime(), dateDaysAgo, athlete.getId());
         return activities.stream()
             .mapToInt(Activity::getMovingTimeInSeconds)
             .sum() / SECONDS_IN_HOUR;
@@ -149,7 +149,7 @@ public class HandicapCalculator
 
     private double getActiveHoursByDaysAndAthlete(int days, Athlete athlete)
     {
-        List<Activity> activities = activityRepository.findByStartDateLocalBetweenAndAthleteLastName(DateUtil.getDateDaysAgo(days), new Date(), athlete.getLastName());
+        List<Activity> activities = activityRepository.findByStartDateLocalBetweenAndAthleteId(DateUtil.getDateDaysAgo(days), new Date(), athlete.getId());
         return activities.stream()
             .mapToInt(Activity::getMovingTimeInSeconds)
             .sum() / SECONDS_IN_HOUR;

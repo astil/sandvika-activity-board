@@ -226,7 +226,7 @@ public class ActivityController
                 entry.setAthleteFirstName(activity.getAthletefirstName());
                 entry.setNumberOfActivities(1);
 
-                entry.setHandicap(getHandicap(activity.getAthleteLastName(), getLastActivityDate(activityList)));
+                entry.setHandicap(getHandicap(activity.getAthleteId(), getLastActivityDate(activityList)));
                 entry.setKilometers(activity.getDistanceInMeters() / 1000);
                 entry.setMinutes(activity.getMovingTimeInSeconds() / 60);
                 entry.setLastActivityDate(activity.getStartDateLocal());
@@ -252,9 +252,9 @@ public class ActivityController
             .collect(Collectors.toList());
     }
 
-    private double getHandicap(String athleteLastName, Date lastActivityDate)
+    private double getHandicap(int athleteId, Date lastActivityDate)
     {
-        Athlete athlete = athleteRepository.findByLastName(athleteLastName);
+        Athlete athlete = athleteRepository.findById(athleteId);
         if (athlete == null)
         {
             return 1;
@@ -269,7 +269,7 @@ public class ActivityController
 
     private double getHandicapForActivity(Activity activity)
     {
-        Athlete athlete = athleteRepository.findByLastName(activity.getAthleteLastName());
+        Athlete athlete = athleteRepository.findById(activity.getAthleteId());
         if (athlete == null || athlete.getHandicapList().isEmpty())
         {
             return 1;
