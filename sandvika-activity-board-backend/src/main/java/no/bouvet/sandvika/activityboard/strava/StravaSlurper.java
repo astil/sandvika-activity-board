@@ -58,14 +58,17 @@ public class StravaSlurper {
     }
 
     private void addMissingAthletes(List<StravaActivity> activities) {
-        activities
+//        List<StravaAthlete> missingAthletes =
+                activities
                 .stream()
                 .map(StravaActivity::getAthlete)
-                .filter(a -> athleteRepository.exists(a.getId()))
+                .filter(a -> !athleteRepository.exists(a.getId()))
                 .forEach(this::saveAthlete);
+//                .collect(Collectors.toList());
+//        missingAthletes.forEach;
     }
 
-    private void saveAthlete(StravaAthlete stravaAthlete) {
+    public void saveAthlete(StravaAthlete stravaAthlete) {
         Athlete athlete = new Athlete();
         athlete.setLastName(stravaAthlete.getLastname());
         athlete.setFirstName(stravaAthlete.getFirstname());

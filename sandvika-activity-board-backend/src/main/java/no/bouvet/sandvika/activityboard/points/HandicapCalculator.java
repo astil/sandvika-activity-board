@@ -48,9 +48,9 @@ public class HandicapCalculator
         athleteRepository.save(athletes);
     }
 
-    public void updateHandicapForAllAthletesTheLast40Days()
+    public void updateHandicapForAllAthletesTheLast100Days()
     {
-        IntStream.range(0, 40).forEach(i ->
+        IntStream.range(0, 100).forEach(i ->
         {
             updateHandicapForAllAthletesForDate(DateUtil.getDateDaysAgo(i));
         });

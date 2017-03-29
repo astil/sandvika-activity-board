@@ -1,5 +1,5 @@
 export class Athlete {
-  "id": Number;
+  "athleteId": Number;
   "athleteLastName": String;
   "athleteFirstName": String;
   "points": Number;

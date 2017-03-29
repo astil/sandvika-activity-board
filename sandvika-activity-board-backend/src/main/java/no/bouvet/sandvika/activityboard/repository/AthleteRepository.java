@@ -9,6 +9,6 @@ import no.bouvet.sandvika.activityboard.domain.Athlete;
 public interface AthleteRepository extends MongoRepository<Athlete, Integer>
 {
     Athlete findById(int id);
-
     void deleteById(int id);
+    Athlete findOneByLastNameAndFirstName(String lastName, String firstName);
 }

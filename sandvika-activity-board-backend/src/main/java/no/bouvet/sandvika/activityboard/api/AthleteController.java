@@ -31,9 +31,7 @@ public class AthleteController
         return athleteRepository.save(request);
     }
 
-
-
-//    @CrossOrigin(origins = "*")
+    //    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete/{id}/activities", method = RequestMethod.GET)
     public List<Activity> getUserActivities(@PathVariable("id") int id)
     {
