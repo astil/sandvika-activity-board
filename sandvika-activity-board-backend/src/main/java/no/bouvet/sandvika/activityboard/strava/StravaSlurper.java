@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javastrava.api.v3.model.StravaAthlete;
+import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class StravaSlurper {
 
     @Autowired
     AthleteRepository athleteRepository;
+
+    @Autowired
+    HandicapCalculator handicapCalculator;
 
     @Scheduled(fixedRate = 1000 * 60 * 10)
     public void updateActivities() {
@@ -103,8 +107,8 @@ public class StravaSlurper {
         activity.setMovingTimeInSeconds(stravaActivity.getMovingTime());
         activity.setDistanceInMeters(stravaActivity.getDistance());
         activity.setStartDateLocal(DateUtil.getDateFromLocalDateTime(stravaActivity.getStartDateLocal()));
-        activity.setPoints(PointsCalculator.getPointsForActivity(activity, getHandicapForActivity(activity)));
-        activity.setHandicap(getHandicapForActivity(activity));
+        activity.setPoints(PointsCalculator.getPointsForActivity(activity, handicapCalculator.getHandicapForActivity(activity)));
+        activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
         log.debug("Created activity: " + activity.toString());
         return activity;
     }
@@ -126,14 +130,7 @@ public class StravaSlurper {
         return token;
     }
 
-    private double getHandicapForActivity(Activity activity) {
-        Athlete athlete = athleteRepository.findById(activity.getAthleteId());
-        if (athlete == null || athlete.getHandicapList().isEmpty()) {
-            return 1;
-        } else {
-            return athlete.getHandicapForDate(activity.getStartDateLocal());
-        }
-    }
+
 
 
 }

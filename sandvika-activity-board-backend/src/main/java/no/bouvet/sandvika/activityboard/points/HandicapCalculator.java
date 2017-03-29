@@ -48,19 +48,29 @@ public class HandicapCalculator
         athleteRepository.save(athletes);
     }
 
-    public void updateHandicapForAllAthletesTheLast100Days()
+    public void updateHandicapForAllAthletesTheLast300Days()
     {
-        IntStream.range(0, 100).forEach(i ->
+        deleteHandicapsForAllAthletsTheLast300Days();
+        IntStream.range(0, 300).forEach(i ->
         {
             updateHandicapForAllAthletesForDate(DateUtil.getDateDaysAgo(i));
         });
     }
 
-    private void deleteHandicapsForAllAthletsTheLast40Days()
+    public double getHandicapForActivity(Activity activity) {
+        Athlete athlete = athleteRepository.findById(activity.getAthleteId());
+        if (athlete == null || athlete.getHandicapList().isEmpty()) {
+            return 1;
+        } else {
+            return athlete.getHandicapForDate(activity.getStartDateLocal());
+        }
+    }
+
+    private void deleteHandicapsForAllAthletsTheLast300Days()
     {
         List<Athlete> athletes = athleteRepository.findAll();
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, -40);
+        calendar.add(Calendar.DAY_OF_YEAR, -300);
         for (Athlete athlete : athletes)
         {
             athlete.setHandicapList(athlete.getHandicapList()
@@ -111,9 +121,9 @@ public class HandicapCalculator
     public List<Handicap> calculateHistoricHandicapForAthlete(Athlete athlete)
     {
         List<Handicap> handicaps = new ArrayList<>();
-        IntStream.range(0, 40).forEach(i ->
+        IntStream.range(0, 300).forEach(i ->
         {
-            deleteHandicapsForAthleteTheLast40Days(athlete);
+            deleteHandicapsForAthleteTheLast300Days(athlete);
             handicaps.add(createHandicapForAthleteForDate(athlete, DateUtil.getDateDaysAgo(i)));
         });
         return handicaps;
@@ -124,10 +134,10 @@ public class HandicapCalculator
         return new Handicap(calculateHandicapForAthlete(athlete, dateDaysAgo), dateDaysAgo);
     }
 
-    private void deleteHandicapsForAthleteTheLast40Days(Athlete athlete)
+    private void deleteHandicapsForAthleteTheLast300Days(Athlete athlete)
     {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, -40);
+        calendar.add(Calendar.DAY_OF_YEAR, -300);
         athlete.setHandicapList(athlete.getHandicapList()
             .stream()
             .filter(h -> h.getTimestamp().before(calendar.getTime()))

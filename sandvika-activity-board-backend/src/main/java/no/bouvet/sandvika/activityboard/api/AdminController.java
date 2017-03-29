@@ -2,6 +2,7 @@ package no.bouvet.sandvika.activityboard.api;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
+import no.bouvet.sandvika.activityboard.points.PointsCalculator;
 import org.apache.log4j.spi.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,6 +84,26 @@ public class AdminController
         }
     }
 
+    @RequestMapping(value = "/reload", method = RequestMethod.GET)
+    public void reloadUsersAndPoint() {
+        athleteRepository.deleteAll();
+
+        List<Activity> allActivities = activityRepository.findAll();
+        allActivities
+                .stream()
+                .filter(a -> !athleteRepository.exists(a.getAthleteId()))
+                .forEach(this::saveAthlete);
+
+        updateHistoricHandicapForAllAthletes();
+    }
+
+    private void saveAthlete(Activity activity) {
+            Athlete athlete = new Athlete();
+            athlete.setLastName(activity.getAthleteLastName());
+            athlete.setFirstName(activity.getAthletefirstName());
+            athlete.setId(activity.getAthleteId());
+            athleteRepository.save(athlete);
+        }
 
     @RequestMapping(value = "/athlete/all/deleteFromDb", method = RequestMethod.GET)
     public void deleteAthleteFromDb()
@@ -107,7 +128,13 @@ public class AdminController
     @RequestMapping(value = "/athlete/all/updateHistoricHandicap", method = RequestMethod.GET)
     public void updateHistoricHandicapForAllAthletes()
     {
-        handicapCalculator.updateHandicapForAllAthletesTheLast100Days();
+        handicapCalculator.updateHandicapForAllAthletesTheLast300Days();
+        List<Activity> activities = activityRepository.findAll();
+        for (Activity activity : activities) {
+            activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
+            activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
+            activityRepository.save(activity);
+        }
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.DELETE)

@@ -1,5 +1,6 @@
 package no.bouvet.sandvika.activityboard.points;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
@@ -17,10 +18,10 @@ public final class PointsCalculator
     static final double ELEVATIOIN_METER_VALUE = 0.3;
     static final int SECONDS_IN_MINUTE = 60;
 
-
     private PointsCalculator()
     {
     }
+
 
     public static double getPointsForActivity(Activity activity, double handicap)
     {
