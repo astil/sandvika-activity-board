@@ -61,8 +61,12 @@ public class AdminController
         List<Athlete> allAthletes = athleteRepository.findAll();
         for (Athlete athlete : allAthletes) {
             Activity a = activityRepository.findOneByAthleteLastName(athlete.getLastName());
-            athlete.setId(a.getAthleteId());
-            athleteRepository.save(athlete);
+            if (a != null) {
+                athlete.setId(a.getAthleteId());
+                athleteRepository.save(athlete);
+            } else {
+                log.info("Kunne ikke finne en aktivitet for " + athlete.getLastName());
+            }
         }
         List<Activity> allActivities = activityRepository.findAll();
         for (Activity activity : allActivities) {
