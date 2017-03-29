@@ -61,7 +61,7 @@ public class AdminController
         List<Athlete> allAthletes = athleteRepository.findAll();
         for (Athlete athlete : allAthletes) {
             Activity a = activityRepository.findOneByAthleteLastName(athlete.getLastName());
-            if (a != null) {
+            if (a != null || a.getAthleteId() == null) {
                 athlete.setId(a.getAthleteId());
                 athleteRepository.save(athlete);
             } else {
