@@ -23,8 +23,7 @@ import no.bouvet.sandvika.activityboard.utils.DateUtil;
 import no.bouvet.sandvika.activityboard.utils.Utils;
 
 @Component
-public class HandicapCalculator
-{
+public class HandicapCalculator {
     private static final int SECONDS_IN_HOUR = 3600;
     private static final int BASE_HOURS = 6;
     private static Logger log = LoggerFactory.getLogger(HandicapCalculator.class);
@@ -35,12 +34,10 @@ public class HandicapCalculator
     private ActivityRepository activityRepository;
 
     @Scheduled(cron = "0 0 0 * * *")
-    public void updateHandicapForAllAthletes()
-    {
+    public void updateHandicapForAllAthletes() {
         List<Athlete> athletes = athleteRepository.findAll();
 
-        for (Athlete athlete : athletes)
-        {
+        for (Athlete athlete : athletes) {
             Handicap hc = new Handicap(calculateHandicapForAthlete(athlete), new Date());
             log.info("Adding new HC for " + athlete.getLastName() + " " + hc.toString());
             athlete.getHandicapList().add(hc);
@@ -48,8 +45,7 @@ public class HandicapCalculator
         athleteRepository.save(athletes);
     }
 
-    public void updateHandicapForAllAthletesTheLast300Days()
-    {
+    public void updateHandicapForAllAthletesTheLast300Days() {
         deleteHandicapsForAllAthletsTheLast300Days();
         IntStream.range(0, 300).forEach(i ->
         {
@@ -66,27 +62,23 @@ public class HandicapCalculator
         }
     }
 
-    private void deleteHandicapsForAllAthletsTheLast300Days()
-    {
+    private void deleteHandicapsForAllAthletsTheLast300Days() {
         List<Athlete> athletes = athleteRepository.findAll();
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, -300);
-        for (Athlete athlete : athletes)
-        {
+        for (Athlete athlete : athletes) {
             athlete.setHandicapList(athlete.getHandicapList()
-                .stream()
-                .filter(h -> h.getTimestamp().before(calendar.getTime()))
-                .collect(Collectors.toList()));
+                    .stream()
+                    .filter(h -> h.getTimestamp().before(calendar.getTime()))
+                    .collect(Collectors.toList()));
         }
         athleteRepository.save(athletes);
     }
 
-    private void updateHandicapForAllAthletesForDate(Date dateDaysAgo)
-    {
+    private void updateHandicapForAllAthletesForDate(Date dateDaysAgo) {
         List<Athlete> athletes = athleteRepository.findAll();
 
-        for (Athlete athlete : athletes)
-        {
+        for (Athlete athlete : athletes) {
             Handicap hc = new Handicap(calculateHandicapForAthlete(athlete, dateDaysAgo), dateDaysAgo);
             log.info("Adding new HC for " + athlete.getLastName() + " " + hc.toString());
             athlete.getHandicapList().add(hc);
@@ -95,74 +87,39 @@ public class HandicapCalculator
 
     }
 
-    private double calculateHandicapForAthlete(Athlete athlete, Date dateDaysAgo)
-    {
+    private double calculateHandicapForAthlete(Athlete athlete, Date dateDaysAgo) {
         double activeHours = getActiveHoursByDaysAndDateAndAthlete(30, dateDaysAgo, athlete);
-        if (activeHours <= 4)
-        {
+        if (activeHours <= 4) {
             return 6;
-        } else
-        {
+        } else {
             return Utils.scaledDouble(BASE_HOURS / (activeHours / 4), 3);
         }
     }
 
-    private double getActiveHoursByDaysAndDateAndAthlete(int days, Date dateDaysAgo, Athlete athlete)
-    {
+    private double getActiveHoursByDaysAndDateAndAthlete(int days, Date dateDaysAgo, Athlete athlete) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dateDaysAgo);
         calendar.add(Calendar.DAY_OF_YEAR, -days);
         List<Activity> activities = activityRepository.findByStartDateLocalBetweenAndAthleteId(calendar.getTime(), dateDaysAgo, athlete.getId());
         return activities.stream()
-            .mapToInt(Activity::getMovingTimeInSeconds)
-            .sum() / SECONDS_IN_HOUR;
+                .mapToInt(Activity::getMovingTimeInSeconds)
+                .sum() / SECONDS_IN_HOUR;
     }
 
-    public List<Handicap> calculateHistoricHandicapForAthlete(Athlete athlete)
-    {
-        List<Handicap> handicaps = new ArrayList<>();
-        IntStream.range(0, 300).forEach(i ->
-        {
-            deleteHandicapsForAthleteTheLast300Days(athlete);
-            handicaps.add(createHandicapForAthleteForDate(athlete, DateUtil.getDateDaysAgo(i)));
-        });
-        return handicaps;
-    }
-
-    private Handicap createHandicapForAthleteForDate(Athlete athlete, Date dateDaysAgo)
-    {
-        return new Handicap(calculateHandicapForAthlete(athlete, dateDaysAgo), dateDaysAgo);
-    }
-
-    private void deleteHandicapsForAthleteTheLast300Days(Athlete athlete)
-    {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, -300);
-        athlete.setHandicapList(athlete.getHandicapList()
-            .stream()
-            .filter(h -> h.getTimestamp().before(calendar.getTime()))
-            .collect(Collectors.toList()));
-        athleteRepository.save(athlete);
-    }
-
-    public double calculateHandicapForAthlete(Athlete athlete)
-    {
+    private double calculateHandicapForAthlete(Athlete athlete) {
         double activeHours = getActiveHoursByDaysAndAthlete(30, athlete);
-        if (activeHours <= 4)
-        {
+        if (activeHours <= 4) {
             return 6;
-        } else
-        {
+        } else {
             return Utils.scaledDouble(BASE_HOURS / (activeHours / 4), 3);
         }
     }
 
-    private double getActiveHoursByDaysAndAthlete(int days, Athlete athlete)
-    {
+    private double getActiveHoursByDaysAndAthlete(int days, Athlete athlete) {
         List<Activity> activities = activityRepository.findByStartDateLocalBetweenAndAthleteId(DateUtil.getDateDaysAgo(days), new Date(), athlete.getId());
         return activities.stream()
-            .mapToInt(Activity::getMovingTimeInSeconds)
-            .sum() / SECONDS_IN_HOUR;
+                .mapToInt(Activity::getMovingTimeInSeconds)
+                .sum() / SECONDS_IN_HOUR;
     }
 
 

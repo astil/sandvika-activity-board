@@ -55,6 +55,7 @@ public class StravaSlurper {
 
         stravaActivities.forEach(stravaActivity ->
                 activities.add(createActivity(stravaActivity)));
+
         activityRepository.save(activities
                 .stream()
                 .filter(activity -> activity.getPoints() > 0)
@@ -62,14 +63,11 @@ public class StravaSlurper {
     }
 
     private void addMissingAthletes(List<StravaActivity> activities) {
-//        List<StravaAthlete> missingAthletes =
-                activities
+        activities
                 .stream()
                 .map(StravaActivity::getAthlete)
                 .filter(a -> !athleteRepository.exists(a.getId()))
                 .forEach(this::saveAthlete);
-//                .collect(Collectors.toList());
-//        missingAthletes.forEach;
     }
 
     public void saveAthlete(StravaAthlete stravaAthlete) {
@@ -129,8 +127,6 @@ public class StravaSlurper {
         }
         return token;
     }
-
-
 
 
 }
