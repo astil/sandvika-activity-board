@@ -40,8 +40,6 @@ public class AdminController
             .filter(a -> a.getAthleteId() != null && !athleteRepository.exists(a.getAthleteId()))
             .forEach(this::saveAthlete);
 
-        updateHistoricHandicapForAllAthletes();
-
         allActivities = activityRepository.findAll();
         for (Activity activity : allActivities)
         {
@@ -59,6 +57,7 @@ public class AdminController
                 }
             }
         }
+        updateHistoricHandicapForAllAthletes();
     }
 
     private void saveAthlete(Activity activity)
