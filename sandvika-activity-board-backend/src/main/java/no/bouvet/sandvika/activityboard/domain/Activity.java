@@ -40,6 +40,7 @@ public class Activity
     private float calories;
     private int sufferScore;
     private double handicap;
+    private Integer athleteId;
 
 
     public Activity()
@@ -401,5 +402,13 @@ public class Activity
     public void setHandicap(double handicap)
     {
         this.handicap = handicap;
+    }
+
+    public void setAthleteId(Integer athleteId) {
+        this.athleteId = athleteId;
+    }
+
+    public Integer getAthleteId() {
+        return athleteId;
     }
 }

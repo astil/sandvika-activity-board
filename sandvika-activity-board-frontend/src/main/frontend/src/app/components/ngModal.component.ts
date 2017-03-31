@@ -83,7 +83,7 @@ export class NgbdModalComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.appRestService.getAthleteByLastName(this.athlete.athleteLastName).subscribe(
+        this.appRestService.getAthleteById(this.athlete.athleteId).subscribe(
             activity => this.activities = activity,
             error =>  this.errorMessage = <any>error);
     }

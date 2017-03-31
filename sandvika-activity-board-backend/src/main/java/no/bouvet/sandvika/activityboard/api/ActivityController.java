@@ -227,24 +227,25 @@ public class ActivityController
 
     private List<LeaderboardEntry> getLeaderboardEntries(List<Activity> activityList)
     {
-        Map<String, LeaderboardEntry> entries = new HashMap<>();
+        Map<Integer, LeaderboardEntry> entries = new HashMap<>();
         for (Activity activity : activityList)
         {
-            if (!entries.containsKey(activity.getAthleteLastName()))
+            if (!entries.containsKey(activity.getAthleteId()))
             {
-                LeaderboardEntry entry = new LeaderboardEntry(activity.getAthleteLastName(), activity.getPoints());
+                LeaderboardEntry entry = new LeaderboardEntry(activity.getAthleteId(), activity.getPoints());
+                entry.setAthleteLastName(activity.getAthleteLastName());
                 entry.setAthleteFirstName(activity.getAthletefirstName());
                 entry.setNumberOfActivities(1);
 
-                entry.setHandicap(getHandicap(activity.getAthleteLastName(), getLastActivityDate(activityList)));
+                entry.setHandicap(getHandicap(activity.getAthleteId(), getLastActivityDate(activityList)));
                 entry.setKilometers(activity.getDistanceInMeters() / 1000);
                 entry.setMinutes(activity.getMovingTimeInSeconds() / 60);
                 entry.setLastActivityDate(activity.getStartDateLocal());
-                entries.put(entry.getAthleteLastName(), entry);
+                entries.put(entry.getAthleteId(), entry);
 
             } else
             {
-                LeaderboardEntry entry = entries.get(activity.getAthleteLastName());
+                LeaderboardEntry entry = entries.get(activity.getAthleteId());
                 entry.setNumberOfActivities(entry.getNumberOfActivities() + 1);
                 entry.setKilometers(entry.getKilometers() + (activity.getDistanceInMeters() / 1000));
                 entry.setMinutes(Double.valueOf(entry.getMinutes() + (activity.getMovingTimeInSeconds() / 60)).intValue());
@@ -262,9 +263,9 @@ public class ActivityController
             .collect(Collectors.toList());
     }
 
-    private double getHandicap(String athleteLastName, Date lastActivityDate)
+    private double getHandicap(int athleteId, Date lastActivityDate)
     {
-        Athlete athlete = athleteRepository.findByLastName(athleteLastName);
+        Athlete athlete = athleteRepository.findById(athleteId);
         if (athlete == null)
         {
             return 1;
@@ -279,7 +280,7 @@ public class ActivityController
 
     private double getHandicapForActivity(Activity activity)
     {
-        Athlete athlete = athleteRepository.findByLastName(activity.getAthleteLastName());
+        Athlete athlete = athleteRepository.findById(activity.getAthleteId());
         if (athlete == null || athlete.getHandicapList().isEmpty())
         {
             return 1;

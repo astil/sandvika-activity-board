@@ -1,5 +1,9 @@
 package no.bouvet.sandvika.activityboard.api;
 
+import no.bouvet.sandvika.activityboard.domain.Activity;
+import no.bouvet.sandvika.activityboard.domain.Athlete;
+import no.bouvet.sandvika.activityboard.points.PointsCalculator;
+import org.apache.log4j.spi.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +14,9 @@ import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
+
+import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 public class AdminController
@@ -26,25 +33,42 @@ public class AdminController
     @Autowired
     HandicapCalculator handicapCalculator;
 
-    //TODO: This is just for testing, should be more secure.
-    //    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/activities/deleteAllFromDb", method = RequestMethod.GET)
-    public void deleteAllActivitiesFromDb()
-    {
-        activityRepository.deleteAll();
-    }
+    private static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AdminController.class);
 
-    @RequestMapping(value = "/athlete/{lastName}/deleteFromDb", method = RequestMethod.GET)
-    public void deleteAthleteFromDb(@PathVariable("lastName") String lastName)
-    {
-        athleteRepository.deleteByLastName(lastName);
-    }
-
-    @RequestMapping(value = "/athlete/all/deleteFromDb", method = RequestMethod.GET)
-    public void deleteAthleteFromDb()
-    {
+    @RequestMapping(value = "/reload", method = RequestMethod.GET)
+    public void reloadUsersAndPoint() {
         athleteRepository.deleteAll();
+
+        List<Activity> allActivities = activityRepository.findAll();
+        allActivities
+                .stream()
+                .filter(a -> !athleteRepository.exists(a.getAthleteId()))
+                .forEach(this::saveAthlete);
+
+        updateHistoricHandicapForAllAthletes();
+
+        allActivities = activityRepository.findAll();
+        for (Activity activity : allActivities) {
+            if (activity.getAthleteId() == null || activity.getAthleteId() == 0) {
+                Athlete athlete = athleteRepository.findOneByLastNameAndFirstName(activity.getAthleteLastName(), activity.getAthletefirstName());
+                if (athlete != null) {
+                    activity.setAthleteId(athlete.getId());
+                    activityRepository.save(activity);
+                } else {
+                    log.info("Activity missing athlteteId and no Athlete found: " + activity.toString());
+
+                }
+            }
+        }
     }
+
+    private void saveAthlete(Activity activity) {
+            Athlete athlete = new Athlete();
+            athlete.setLastName(activity.getAthleteLastName());
+            athlete.setFirstName(activity.getAthletefirstName());
+            athlete.setId(activity.getAthleteId());
+            athleteRepository.save(athlete);
+        }
 
 
     //    @CrossOrigin(origins = "*")
@@ -54,16 +78,16 @@ public class AdminController
         stravaSlurper.updateActivities();
     }
 
-    @RequestMapping(value = "/athlete/all/updateHandicap", method = RequestMethod.GET)
-    public void updateHandicapForAllAthletes()
-    {
-        handicapCalculator.updateHandicapForAllAthletes();
-    }
-
     @RequestMapping(value = "/athlete/all/updateHistoricHandicap", method = RequestMethod.GET)
     public void updateHistoricHandicapForAllAthletes()
     {
-        handicapCalculator.updateHandicapForAllAthletesTheLast40Days();
+        handicapCalculator.updateHandicapForAllAthletesTheLast300Days();
+        List<Activity> activities = activityRepository.findAll();
+        for (Activity activity : activities) {
+            activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
+            activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
+            activityRepository.save(activity);
+        }
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.DELETE)

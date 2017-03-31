@@ -48,8 +48,8 @@ export class AppRestService {
             .catch(this.handleError);
     }
 
-    getAthleteByLastName(lastName): Observable<Activity[]> {
-        return this.http.get(this.restUrl + "athlete/" + lastName + "/activities")
+    getAthleteById(id): Observable<Activity[]> {
+        return this.http.get(this.restUrl + "athlete/" + id + "/activities")
             .map(this.extractData)
             .catch(this.handleError);
     }
