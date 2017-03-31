@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,6 +64,15 @@ public class ActivityController
         Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
         List<Activity> activityList;
         activityList = getActivitiesForPeriodByActivityType(activityType, period);
+        return getLeaderboardEntries(activityList);
+    }
+
+    @RequestMapping(value = "/leaderboard/total/{date}", method = RequestMethod.GET)
+    public List<LeaderboardEntry> getTotalLeaderboardOnDate(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date)
+    {
+        Period period = DateUtil.getPeriodFromCompetitionStartToDate(date);
+        List<Activity> activityList;
+        activityList = getActivitiesForPeriodByActivityType("all", period);
         return getLeaderboardEntries(activityList);
     }
 

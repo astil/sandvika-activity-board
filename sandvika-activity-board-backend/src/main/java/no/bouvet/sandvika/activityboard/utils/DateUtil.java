@@ -218,4 +218,12 @@ public class DateUtil
         cal.add(Calendar.DAY_OF_YEAR, -days);
         return cal.getTime();
     }
+
+    public static Period getPeriodFromCompetitionStartToDate(Date date)
+    {
+        Period period = new Period();
+        period.setStart(COMPETITION_START);
+        period.setEnd(date);
+        return period;
+    }
 }
