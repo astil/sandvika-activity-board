@@ -1,60 +1,59 @@
 package no.bouvet.sandvika.activityboard.api;
 
-import no.bouvet.sandvika.activityboard.domain.Activity;
-import no.bouvet.sandvika.activityboard.domain.Athlete;
-import no.bouvet.sandvika.activityboard.points.PointsCalculator;
-import org.apache.log4j.spi.LoggerFactory;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import no.bouvet.sandvika.activityboard.domain.Activity;
+import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
+import no.bouvet.sandvika.activityboard.points.PointsCalculator;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
 
-import java.util.List;
-import java.util.logging.Logger;
-
 @RestController
 public class AdminController
 {
+    private static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AdminController.class);
     @Autowired
     ActivityRepository activityRepository;
-
     @Autowired
     AthleteRepository athleteRepository;
-
     @Autowired
     StravaSlurper stravaSlurper;
-
     @Autowired
     HandicapCalculator handicapCalculator;
 
-    private static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AdminController.class);
-
     @RequestMapping(value = "/reload", method = RequestMethod.GET)
-    public void reloadUsersAndPoint() {
+    public void reloadUsersAndPoint()
+    {
         athleteRepository.deleteAll();
 
         List<Activity> allActivities = activityRepository.findAll();
         allActivities
-                .stream()
-                .filter(a -> !athleteRepository.exists(a.getAthleteId()))
-                .forEach(this::saveAthlete);
+            .stream()
+            .filter(a -> a.getAthleteId() != null && !athleteRepository.exists(a.getAthleteId()))
+            .forEach(this::saveAthlete);
 
         updateHistoricHandicapForAllAthletes();
 
         allActivities = activityRepository.findAll();
-        for (Activity activity : allActivities) {
-            if (activity.getAthleteId() == null || activity.getAthleteId() == 0) {
+        for (Activity activity : allActivities)
+        {
+            if (activity.getAthleteId() == null || activity.getAthleteId() == 0)
+            {
                 Athlete athlete = athleteRepository.findOneByLastNameAndFirstName(activity.getAthleteLastName(), activity.getAthletefirstName());
-                if (athlete != null) {
+                if (athlete != null)
+                {
                     activity.setAthleteId(athlete.getId());
                     activityRepository.save(activity);
-                } else {
+                } else
+                {
                     log.info("Activity missing athlteteId and no Athlete found: " + activity.toString());
 
                 }
@@ -62,13 +61,14 @@ public class AdminController
         }
     }
 
-    private void saveAthlete(Activity activity) {
-            Athlete athlete = new Athlete();
-            athlete.setLastName(activity.getAthleteLastName());
-            athlete.setFirstName(activity.getAthletefirstName());
-            athlete.setId(activity.getAthleteId());
-            athleteRepository.save(athlete);
-        }
+    private void saveAthlete(Activity activity)
+    {
+        Athlete athlete = new Athlete();
+        athlete.setLastName(activity.getAthleteLastName());
+        athlete.setFirstName(activity.getAthletefirstName());
+        athlete.setId(activity.getAthleteId());
+        athleteRepository.save(athlete);
+    }
 
 
     //    @CrossOrigin(origins = "*")
@@ -83,7 +83,8 @@ public class AdminController
     {
         handicapCalculator.updateHandicapForAllAthletesTheLast300Days();
         List<Activity> activities = activityRepository.findAll();
-        for (Activity activity : activities) {
+        for (Activity activity : activities)
+        {
             activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
             activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
             activityRepository.save(activity);
