@@ -92,8 +92,17 @@ public class ActivityController
     private List<LeaderboardEntry> addChangeToLeaderboard(List<LeaderboardEntry> currentLeaderboard, List<LeaderboardEntry> comparingLeaderboard)
     {
         currentLeaderboard.forEach(leaderboardEntry ->
-            leaderboardEntry.setChange(
-                getRankingByAthleteId(leaderboardEntry.getAthleteId(), comparingLeaderboard) - leaderboardEntry.getRanking()));
+        {
+            int comparingRank = getRankingByAthleteId(leaderboardEntry.getAthleteId(), comparingLeaderboard);
+            if (comparingRank == 0)
+            {
+                leaderboardEntry.setChange(99);
+            } else
+            {
+                leaderboardEntry.setChange(
+                    comparingRank - leaderboardEntry.getRanking());
+            }
+        });
         return currentLeaderboard;
     }
 
@@ -300,7 +309,7 @@ public class ActivityController
 
         for (LeaderboardEntry e : sortedEntries)
         {
-            e.setRanking(sortedEntries.indexOf(e));
+            e.setRanking(sortedEntries.indexOf(e) + 1);
         }
         return sortedEntries;
     }
