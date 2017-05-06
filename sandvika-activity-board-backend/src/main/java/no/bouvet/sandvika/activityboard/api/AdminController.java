@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
+import no.bouvet.sandvika.activityboard.domain.Badge;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.points.PointsCalculator;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
+import no.bouvet.sandvika.activityboard.repository.BadgeRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
 
 @RestController
@@ -23,6 +25,8 @@ public class AdminController
     private static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AdminController.class);
     @Autowired
     ActivityRepository activityRepository;
+    @Autowired
+    BadgeRepository badgeRepository;
     @Autowired
     AthleteRepository athleteRepository;
     @Autowired
@@ -104,5 +108,13 @@ public class AdminController
     {
         activityRepository.delete(id);
     }
+
+
+    @RequestMapping(value = "/badges/", method = RequestMethod.POST)
+    public void addBadge(@RequestBody Badge badge)
+    {
+        badgeRepository.save(badge);
+    }
+
 
 }
