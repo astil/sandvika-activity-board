@@ -1,5 +1,8 @@
 package no.bouvet.sandvika.activityboard.domain;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import org.springframework.data.annotation.Id;
 
 public class Badge
@@ -10,7 +13,8 @@ public class Badge
     private String activityType;
     private int distanceCriteria;
     private String timeCriteria;
-    private String moreOrLess;
+    private String beforeOrAfter;
+    private List<Activity> activities;
 
     public String getName()
     {
@@ -62,13 +66,50 @@ public class Badge
         this.timeCriteria = timeCriteria;
     }
 
-    public String getMoreOrLess()
+    public String getBeforeOrAfter()
     {
-        return moreOrLess;
+        return beforeOrAfter;
     }
 
-    public void setMoreOrLess(String moreOrLess)
+    public void setBeforeOrAfter(String beforeOrAfter)
     {
-        this.moreOrLess = moreOrLess;
+        this.beforeOrAfter = beforeOrAfter;
+    }
+
+    public List<Activity> getActivities()
+    {
+        if (activities == null)
+        {
+            activities = new ArrayList<Activity>();
+        }
+        return activities;
+    }
+
+    public void setActivities(List<Activity> activities)
+    {
+        this.activities = activities;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        Badge badge = (Badge) o;
+
+        return name != null ? name.equals(badge.name) : badge.name == null;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return name != null ? name.hashCode() : 0;
     }
 }

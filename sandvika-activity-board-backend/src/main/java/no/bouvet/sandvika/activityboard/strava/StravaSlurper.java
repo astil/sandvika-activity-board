@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javastrava.api.v3.model.StravaAthlete;
-import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +15,23 @@ import javastrava.api.v3.auth.TokenManager;
 import javastrava.api.v3.auth.model.Token;
 import javastrava.api.v3.auth.ref.AuthorisationScope;
 import javastrava.api.v3.model.StravaActivity;
+import javastrava.api.v3.model.StravaAthlete;
 import javastrava.api.v3.rest.API;
 import javastrava.api.v3.rest.ClubAPI;
 import javastrava.api.v3.service.exception.BadRequestException;
 import javastrava.api.v3.service.exception.UnauthorizedException;
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
+import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
+import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.points.PointsCalculator;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
 
 @Component
-public class StravaSlurper {
+public class StravaSlurper
+{
     private static final int STRAVA_CLUB_ID = 259508;
     public static String USERNAME = "sondrewe@gmail.com";
     public static String PASSWORD = "passordForSandvika";
@@ -45,8 +47,12 @@ public class StravaSlurper {
     @Autowired
     HandicapCalculator handicapCalculator;
 
+    @Autowired
+    BadgeAppointer badgeAppointer;
+
     @Scheduled(fixedRate = 1000 * 60 * 10)
-    public void updateActivities() {
+    public void updateActivities()
+    {
         log.info("Updating activities");
         ClubAPI api = getApi();
         List<Activity> activities = new ArrayList<>();
@@ -54,23 +60,25 @@ public class StravaSlurper {
         addMissingAthletes(stravaActivities);
 
         stravaActivities.forEach(stravaActivity ->
-                activities.add(createActivity(stravaActivity)));
+            activities.add(createActivity(stravaActivity)));
 
         activityRepository.save(activities
-                .stream()
-                .filter(activity -> activity.getPoints() > 0)
-                .collect(Collectors.toList()));
+            .stream()
+            .filter(activity -> activity.getPoints() > 0)
+            .collect(Collectors.toList()));
     }
 
-    private void addMissingAthletes(List<StravaActivity> activities) {
+    private void addMissingAthletes(List<StravaActivity> activities)
+    {
         activities
-                .stream()
-                .map(StravaActivity::getAthlete)
-                .filter(a -> !athleteRepository.exists(a.getId()))
-                .forEach(this::saveAthlete);
+            .stream()
+            .map(StravaActivity::getAthlete)
+            .filter(a -> !athleteRepository.exists(a.getId()))
+            .forEach(this::saveAthlete);
     }
 
-    public void saveAthlete(StravaAthlete stravaAthlete) {
+    public void saveAthlete(StravaAthlete stravaAthlete)
+    {
         Athlete athlete = new Athlete();
         athlete.setLastName(stravaAthlete.getLastname());
         athlete.setFirstName(stravaAthlete.getFirstname());
@@ -79,7 +87,8 @@ public class StravaSlurper {
         athleteRepository.save(athlete);
     }
 
-    private Activity createActivity(StravaActivity stravaActivity) {
+    private Activity createActivity(StravaActivity stravaActivity)
+    {
         Activity activity = new Activity();
         activity.setAthletefirstName(stravaActivity.getAthlete().getFirstname());
         activity.setAthleteLastName(stravaActivity.getAthlete().getLastname());
@@ -87,7 +96,8 @@ public class StravaSlurper {
         activity.setType(stravaActivity.getType().getValue());
         activity.setId(stravaActivity.getId());
         activity.setName(stravaActivity.getName());
-        if (stravaActivity.getCalories() != null) {
+        if (stravaActivity.getCalories() != null)
+        {
             activity.setCalories(stravaActivity.getCalories());
         }
         // Må vente på ny versjon som tar med SufferScore
@@ -96,10 +106,12 @@ public class StravaSlurper {
         //    activity.setSufferScore(stravaActivity.getSufferScore());
         //}
         activity.setElapsedTimeInSeconds(stravaActivity.getElapsedTime());
-        if (stravaActivity.getAchievementCount() != null) {
+        if (stravaActivity.getAchievementCount() != null)
+        {
             activity.setAchievementCount(stravaActivity.getAchievementCount());
         }
-        if (stravaActivity.getTotalElevationGain() != null) {
+        if (stravaActivity.getTotalElevationGain() != null)
+        {
             activity.setTotalElevationGaininMeters(stravaActivity.getTotalElevationGain());
         }
         activity.setMovingTimeInSeconds(stravaActivity.getMovingTime());
@@ -107,21 +119,27 @@ public class StravaSlurper {
         activity.setStartDateLocal(DateUtil.getDateFromLocalDateTime(stravaActivity.getStartDateLocal()));
         activity.setPoints(PointsCalculator.getPointsForActivity(activity, handicapCalculator.getHandicapForActivity(activity)));
         activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
+        activity.setBadges(badgeAppointer.getBadgesForActivity(activity));
         log.debug("Created activity: " + activity.toString());
         return activity;
     }
 
-    private ClubAPI getApi() {
+    private ClubAPI getApi()
+    {
         return API.instance(ClubAPI.class, getValidToken());
     }
 
-    private Token getValidToken(final AuthorisationScope... scopes) {
+    private Token getValidToken(final AuthorisationScope... scopes)
+    {
         Token token = TokenManager.instance().retrieveTokenWithExactScope(USERNAME, scopes);
-        if (token == null) {
-            try {
+        if (token == null)
+        {
+            try
+            {
                 token = StravaUtils.getStravaAccessToken(USERNAME, PASSWORD, scopes);
                 TokenManager.instance().storeToken(token);
-            } catch (BadRequestException | UnauthorizedException e) {
+            } catch (BadRequestException | UnauthorizedException e)
+            {
                 return null;
             }
         }

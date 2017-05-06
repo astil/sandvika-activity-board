@@ -1,9 +1,12 @@
 package no.bouvet.sandvika.activityboard.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.OptionalDouble;
 
 import org.springframework.data.annotation.Id;
@@ -17,13 +20,31 @@ public class Athlete
     private List<Handicap> handicapList;
     private String firstName;
     private String profile;
+    private Map<Badge, List<Activity>> badges;
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
+    }
+
+    public Map<Badge, List<Activity>> getBadges()
+    {
+
+        if (badges == null)
+        {
+            badges = new HashMap<>();
+        }
+        return badges;
+    }
+
+    public void setBadges(Map<Badge, List<Activity>> badges)
+    {
+        this.badges = badges;
     }
 
     public List<Handicap> getHandicapList()
@@ -104,21 +125,36 @@ public class Athlete
         return handicap.getAsDouble();
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getFirstName() {
+    public String getFirstName()
+    {
         return firstName;
     }
 
-    public void setProfile(String profile) {
-        this.profile = profile;
+    public void setFirstName(String firstName)
+    {
+        this.firstName = firstName;
     }
 
-    public String getProfile() {
+    public String getProfile()
+    {
         return profile;
     }
 
+    public void setProfile(String profile)
+    {
+        this.profile = profile;
+    }
 
+    public void addBadge(Badge badge, Activity activity)
+    {
+        Map<Badge, List<Activity>> badges = getBadges();
+        if (badges.containsKey(badge))
+        {
+            badges.get(badge).add(activity);
+        } else
+        {
+            badges.put(badge, Arrays.asList(activity));
+        }
+
+    }
 }
