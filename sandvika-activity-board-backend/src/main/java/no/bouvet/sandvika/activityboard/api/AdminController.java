@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -75,6 +76,14 @@ public class AdminController
     public void refreshActivities()
     {
         stravaSlurper.updateActivities();
+    }
+
+    @RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT)
+    public void addActivity(@PathVariable("id") int id, @RequestBody Activity activity)
+    {
+        activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
+        activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
+        activityRepository.save(activity);
     }
 
     @RequestMapping(value = "/athlete/all/updateHistoricHandicap", method = RequestMethod.GET)
