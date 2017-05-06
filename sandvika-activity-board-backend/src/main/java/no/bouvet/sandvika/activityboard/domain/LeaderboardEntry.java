@@ -15,6 +15,7 @@ public class LeaderboardEntry
     private double kilometers;
     private int minutes;
     private double handicap;
+    private int change;
 
     public LeaderboardEntry(int athleteId, Double points)
     {
@@ -108,5 +109,15 @@ public class LeaderboardEntry
     public void setLastActivityDate(Date lastActivityDate)
     {
         this.lastActivityDate = lastActivityDate;
+    }
+
+    public int getChange()
+    {
+        return change;
+    }
+
+    public void setChange(int change)
+    {
+        this.change = change;
     }
 }
