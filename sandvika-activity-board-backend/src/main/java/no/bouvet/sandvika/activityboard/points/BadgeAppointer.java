@@ -36,7 +36,7 @@ public class BadgeAppointer
                 badge.getActivities().add(activity);
                 badgeRepository.save(badge);
                 Athlete athlete = athleteRepository.findById(activity.getAthleteId());
-                athlete.addBadge(badge);
+                athlete.addBadge(badge, activity);
                 athleteRepository.save(athlete);
             }
         }
