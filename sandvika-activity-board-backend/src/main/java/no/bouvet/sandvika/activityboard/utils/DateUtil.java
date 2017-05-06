@@ -228,4 +228,20 @@ public class DateUtil
         period.setEnd(date);
         return period;
     }
+
+    public static Period getPeriodFromWeekStartToDate(Date date)
+    {
+        Period period = new Period();
+        period.setStart(firstDayOfCurrentWeek());
+        period.setEnd(date);
+        return period;
+    }
+
+    public static Period getPeriodFromMonthStartToDate(Date date)
+    {
+        Period period = new Period();
+        period.setStart(firstDayOfCurrentMonth());
+        period.setEnd(date);
+        return period;
+    }
 }

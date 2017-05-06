@@ -61,9 +61,21 @@ public class ActivityController
                                                                  @PathVariable("periodType") String periodType)
     {
         Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
-        List<Activity> activityList;
-        activityList = getActivitiesForPeriodByActivityType(activityType, period);
-        return getLeaderboardEntries(activityList);
+        List<LeaderboardEntry> currentLeaderboard = getLeaderboardEntries(getActivitiesForPeriodByActivityType(activityType, period));
+        Period comparingPeriod;
+        if (periodType.equalsIgnoreCase("week"))
+        {
+            comparingPeriod = DateUtil.getPeriodFromWeekStartToDate(DateUtil.getDateDaysAgo(1));
+        } else if (periodType.equalsIgnoreCase("month"))
+        {
+            comparingPeriod = DateUtil.getPeriodFromMonthStartToDate(DateUtil.getDateDaysAgo(7));
+        } else
+        {
+            comparingPeriod = DateUtil.getPeriodFromCompetitionStartToDate(DateUtil.firstDayOfCurrentMonth());
+        }
+        List<LeaderboardEntry> comparingLeaderboard = getLeaderboardEntries(getActivitiesForPeriodByActivityType("all", comparingPeriod));
+
+        return addChangeToLeaderboard(currentLeaderboard, comparingLeaderboard);
     }
 
     @RequestMapping(value = "/leaderboard/total/{date}", method = RequestMethod.GET)
