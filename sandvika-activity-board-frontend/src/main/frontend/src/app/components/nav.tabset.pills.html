@@ -21,6 +21,7 @@
                             <th class="hidden-md-down">Km</th>
                             <th class="hidden-md-down">Tid</th>
                             <th class="hidden-md-down">Handicap</th>
+                            <th class="hidden-md-down">Endring</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -39,6 +40,7 @@
                             </td>
                             <td class="hidden-md-down">{{athlete.minutes | minToHms}}</td>
                             <td class="hidden-md-down">{{athlete.handicap | number : '1.0-1'}}</td>
+                            <td class="hidden-md-down">{{athlete.change | number : '1.0-1'}}</td>
                         </tr>
                         </tbody>
                     </table>

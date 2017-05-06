@@ -6,8 +6,6 @@ import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
 
-import sun.util.resources.cldr.ta.CalendarData_ta_IN;
-
 import no.bouvet.sandvika.activityboard.domain.PeriodType;
 
 public class DateUtil
@@ -18,7 +16,7 @@ public class DateUtil
     private static Date getDate(int day, int month, int year)
     {
         Calendar cal = Calendar.getInstance();
-        cal.set(year, month-1, day, 0, 0, 0);
+        cal.set(year, month - 1, day, 0, 0, 0);
         return cal.getTime();
     }
 
@@ -226,6 +224,28 @@ public class DateUtil
         Period period = new Period();
         period.setStart(COMPETITION_START);
         period.setEnd(date);
+        return period;
+    }
+
+    public static Period getPeriodFromWeekStartToDate(Date date)
+    {
+        Period period = new Period();
+        period.setStart(firstDayOfCurrentWeek());
+        period.setEnd(date);
+        return period;
+    }
+
+    public static Period getPeriodFromMonthStartToDate(Date date)
+    {
+        Period period = new Period();
+        period.setStart(firstDayOfCurrentMonth());
+        if (date.before(firstDayOfCurrentMonth()))
+        {
+            period.setEnd(firstDayOfCurrentMonth());
+        } else
+        {
+            period.setEnd(date);
+        }
         return period;
     }
 }

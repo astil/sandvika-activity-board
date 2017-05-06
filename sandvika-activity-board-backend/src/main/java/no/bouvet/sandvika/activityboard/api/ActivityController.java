@@ -1,6 +1,5 @@
 package no.bouvet.sandvika.activityboard.api;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,18 +61,58 @@ public class ActivityController
                                                                  @PathVariable("periodType") String periodType)
     {
         Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
-        List<Activity> activityList;
-        activityList = getActivitiesForPeriodByActivityType(activityType, period);
-        return getLeaderboardEntries(activityList);
+        List<LeaderboardEntry> currentLeaderboard = getLeaderboardEntries(getActivitiesForPeriodByActivityType(activityType, period));
+        Period comparingPeriod;
+        if (periodType.equalsIgnoreCase("week"))
+        {
+            comparingPeriod = DateUtil.getPeriodFromWeekStartToDate(DateUtil.getDateDaysAgo(1));
+        } else if (periodType.equalsIgnoreCase("month"))
+        {
+            comparingPeriod = DateUtil.getPeriodFromMonthStartToDate(DateUtil.getDateDaysAgo(7));
+        } else
+        {
+            comparingPeriod = DateUtil.getPeriodFromCompetitionStartToDate(DateUtil.firstDayOfCurrentMonth());
+        }
+        List<LeaderboardEntry> comparingLeaderboard = getLeaderboardEntries(getActivitiesForPeriodByActivityType("all", comparingPeriod));
+
+        return addChangeToLeaderboard(currentLeaderboard, comparingLeaderboard);
     }
 
     @RequestMapping(value = "/leaderboard/total/{date}", method = RequestMethod.GET)
-    public List<LeaderboardEntry> getTotalLeaderboardOnDate(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date)
+    public List<LeaderboardEntry> getTotalLeaderboardOnDate(@PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date)
     {
         Period period = DateUtil.getPeriodFromCompetitionStartToDate(date);
-        List<Activity> activityList;
-        activityList = getActivitiesForPeriodByActivityType("all", period);
-        return getLeaderboardEntries(activityList);
+        List<LeaderboardEntry> currentLeaderboard = getLeaderboardEntries(getActivitiesForPeriodByActivityType("all", period));
+        Period comparingPeriod = DateUtil.getPeriodFromCompetitionStartToDate(DateUtil.firstDayOfCurrentMonth());
+        List<LeaderboardEntry> comparingLeaderboard = getLeaderboardEntries(getActivitiesForPeriodByActivityType("all", comparingPeriod));
+
+        return addChangeToLeaderboard(currentLeaderboard, comparingLeaderboard);
+    }
+
+    private List<LeaderboardEntry> addChangeToLeaderboard(List<LeaderboardEntry> currentLeaderboard, List<LeaderboardEntry> comparingLeaderboard)
+    {
+        currentLeaderboard.forEach(leaderboardEntry ->
+        {
+            int comparingRank = getRankingByAthleteId(leaderboardEntry.getAthleteId(), comparingLeaderboard);
+            if (comparingRank == 0)
+            {
+                leaderboardEntry.setChange(99);
+            } else
+            {
+                leaderboardEntry.setChange(
+                    comparingRank - leaderboardEntry.getRanking());
+            }
+        });
+        return currentLeaderboard;
+    }
+
+    private int getRankingByAthleteId(int athleteId, List<LeaderboardEntry> comparingLeaderboard)
+    {
+        return comparingLeaderboard
+            .stream()
+            .filter(l -> l.getAthleteId() == athleteId)
+            .mapToInt(LeaderboardEntry::getRanking)
+            .sum();
     }
 
     private List<Activity> getActivitiesForPeriodByActivityType(String activityType, Period period)
@@ -96,10 +135,16 @@ public class ActivityController
                                                           @PathVariable("periodNumber") int periodNumber,
                                                           @PathVariable("year") int year)
     {
+        return getLeaderboardEntries(getActivities(activityType, periodType, periodNumber, year));
+    }
+
+    private List<Activity> getActivities(String activityType,
+                                         String periodType,
+                                         int periodNumber,
+                                         int year)
+    {
         Period period = DateUtil.getPeriod(PeriodType.valueOf(periodType.toUpperCase()), periodNumber, year);
-        List<Activity> activityList;
-        activityList = getActivitiesForPeriodByActivityType(activityType, period);
-        return getLeaderboardEntries(activityList);
+        return getActivitiesForPeriodByActivityType(activityType, period);
     }
 
 
@@ -257,10 +302,16 @@ public class ActivityController
             }
         }
 
-        return new ArrayList<>(entries.values())
+        List<LeaderboardEntry> sortedEntries = (entries.values())
             .stream()
             .sorted(Comparator.comparingDouble(LeaderboardEntry::getPoints).reversed())
             .collect(Collectors.toList());
+
+        for (LeaderboardEntry e : sortedEntries)
+        {
+            e.setRanking(sortedEntries.indexOf(e) + 1);
+        }
+        return sortedEntries;
     }
 
     private double getHandicap(int athleteId, Date lastActivityDate)

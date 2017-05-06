@@ -6,6 +6,7 @@ import no.bouvet.sandvika.activityboard.utils.Utils;
 
 public class LeaderboardEntry
 {
+    private int ranking;
     private int athleteId;
     private String athleteLastName;
     private String athleteFirstName;
@@ -15,11 +16,22 @@ public class LeaderboardEntry
     private double kilometers;
     private int minutes;
     private double handicap;
+    private int change;
 
     public LeaderboardEntry(int athleteId, Double points)
     {
         this.athleteId = athleteId;
         this.points = points;
+    }
+
+    public int getRanking()
+    {
+        return ranking;
+    }
+
+    public void setRanking(int ranking)
+    {
+        this.ranking = ranking;
     }
 
     public int getAthleteId() {
@@ -108,5 +120,15 @@ public class LeaderboardEntry
     public void setLastActivityDate(Date lastActivityDate)
     {
         this.lastActivityDate = lastActivityDate;
+    }
+
+    public int getChange()
+    {
+        return change;
+    }
+
+    public void setChange(int change)
+    {
+        this.change = change;
     }
 }
