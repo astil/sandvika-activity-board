@@ -22,17 +22,17 @@ public class BadgeAppointer
     @Autowired
     AthleteRepository athleteRepository;
 
-    public List<Badge> getBadgesForActivity(Activity activity)
+    public List<String> getBadgesForActivity(Activity activity)
     {
         List<Badge> allBadges = badgeRepository.findBadgeByActivityTypeIn(Arrays.asList(activity.getType(), "all"));
 
-        List<Badge> awardedBadges = new ArrayList<>();
+        List<String> awardedBadges = new ArrayList<>();
 
         for (Badge badge : allBadges)
         {
             if (badge.getType().equalsIgnoreCase("distance") && activity.getDistanceInMeters() < badge.getDistanceCriteria())
             {
-                awardedBadges.add(badge);
+                awardedBadges.add(badge.getName());
                 badge.getActivities().add(activity);
                 badgeRepository.save(badge);
                 Athlete athlete = athleteRepository.findById(activity.getAthleteId());
