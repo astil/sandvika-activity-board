@@ -30,7 +30,7 @@ public class BadgeAppointer
 
         for (Badge badge : allBadges)
         {
-            if (badge.getType().equalsIgnoreCase("length") && activity.getDistanceInMeters() > badge.getDistanceCriteria())
+            if (badge.getType().equalsIgnoreCase("distance") && activity.getDistanceInMeters() < badge.getDistanceCriteria())
             {
                 awardedBadges.add(badge);
                 badge.getActivities().add(activity);
