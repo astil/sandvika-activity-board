@@ -42,7 +42,7 @@ public class Activity
     private int sufferScore;
     private double handicap;
     private Integer athleteId;
-    private List<Badge> badges;
+    private List<String> badges;
 
 
     public Activity()
@@ -76,12 +76,12 @@ public class Activity
         this.name = name;
     }
 
-    public List<Badge> getBadges()
+    public List<String> getBadges()
     {
         return badges;
     }
 
-    public void setBadges(List<Badge> badges)
+    public void setBadges(List<String> badges)
     {
         this.badges = badges;
     }
