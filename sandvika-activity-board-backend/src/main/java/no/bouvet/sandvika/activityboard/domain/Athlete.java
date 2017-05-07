@@ -13,14 +13,13 @@ import org.springframework.data.annotation.Id;
 
 public class Athlete
 {
-
     @Id
     private int id;
     private String lastName;
     private List<Handicap> handicapList;
     private String firstName;
     private String profile;
-    private Map<Badge, List<Activity>> badges;
+    private Map<String, List<Activity>> badges;
 
     public int getId()
     {
@@ -32,7 +31,7 @@ public class Athlete
         this.id = id;
     }
 
-    public Map<Badge, List<Activity>> getBadges()
+    public Map<String, List<Activity>> getBadges()
     {
 
         if (badges == null)
@@ -42,7 +41,7 @@ public class Athlete
         return badges;
     }
 
-    public void setBadges(Map<Badge, List<Activity>> badges)
+    public void setBadges(Map<String, List<Activity>> badges)
     {
         this.badges = badges;
     }
@@ -147,13 +146,13 @@ public class Athlete
 
     public void addBadge(Badge badge, Activity activity)
     {
-        Map<Badge, List<Activity>> badges = getBadges();
+        Map<String, List<Activity>> badges = getBadges();
         if (badges.containsKey(badge))
         {
             badges.get(badge).add(activity);
         } else
         {
-            badges.put(badge, Arrays.asList(activity));
+            badges.put(badge.getName(), Arrays.asList(activity));
         }
 
     }
