@@ -99,6 +99,19 @@ public class AdminController
         }
     }
 
+    @RequestMapping(value = "/athlete/{id}/updateHistoricHandicap", method = RequestMethod.GET)
+    public void updateHistoricHandicapForAllAthletes(@PathVariable("id") int id)
+    {
+        handicapCalculator.updateHandicapForAthleteTheLast300Days(id);
+        List<Activity> activities = activityRepository.findAll();
+        for (Activity activity : activities)
+        {
+            activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
+            activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
+            activityRepository.save(activity);
+        }
+    }
+
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.DELETE)
     public void deleteActivity(@PathVariable("id") int id)
     {

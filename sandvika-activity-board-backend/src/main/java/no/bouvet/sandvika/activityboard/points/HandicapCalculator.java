@@ -139,4 +139,15 @@ public class HandicapCalculator
     }
 
 
+    public void updateHandicapForAthleteTheLast300Days(int athleteId)
+    {
+        Athlete athlete = athleteRepository.findById(athleteId);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -300);
+        athlete.setHandicapList(athlete.getHandicapList()
+            .stream()
+            .filter(h -> h.getTimestamp().before(calendar.getTime()))
+            .collect(Collectors.toList()));
+        athleteRepository.save(athlete);
+    }
 }
