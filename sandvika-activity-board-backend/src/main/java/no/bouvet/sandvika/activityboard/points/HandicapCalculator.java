@@ -139,4 +139,31 @@ public class HandicapCalculator
     }
 
 
+    public void updateHandicapForAthleteTheLast300Days(int athleteId)
+    {
+        deleteHandicapsForAthleteTheLast300Days(athleteId);
+        IntStream.range(0, 300).forEach(i ->
+            updateHandicapForAthleteForDate(athleteId, DateUtil.getDateDaysAgo(i)));
+    }
+
+    private void updateHandicapForAthleteForDate(int athleteId, Date dateDaysAgo)
+    {
+        Athlete athlete = athleteRepository.findById(athleteId);
+        Handicap hc = new Handicap(calculateHandicapForAthlete(athlete, dateDaysAgo), dateDaysAgo);
+        log.info("Adding new HC for " + athlete.getLastName() + " " + hc.toString());
+        athlete.getHandicapList().add(hc);
+        athleteRepository.save(athlete);
+    }
+
+    private void deleteHandicapsForAthleteTheLast300Days(int athleteId)
+    {
+        Athlete athlete = athleteRepository.findById(athleteId);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -300);
+        athlete.setHandicapList(athlete.getHandicapList()
+            .stream()
+            .filter(h -> h.getTimestamp().before(calendar.getTime()))
+            .collect(Collectors.toList()));
+        athleteRepository.save(athlete);
+    }
 }
