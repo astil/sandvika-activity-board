@@ -56,13 +56,15 @@ public class HandicapCalculator
 
     public double getHandicapForActivity(Activity activity)
     {
-        Athlete athlete = athleteRepository.findById(activity.getAthleteId());
+        Athlete athlete = athleteRepository.findById(activity.getAthlete().getId());
         if (athlete == null || athlete.getHandicapList().isEmpty())
         {
             return 1;
         } else
         {
-            return athlete.getHandicapForDate(activity.getStartDateLocal());
+            //TODO: Fikse dette
+            return 0;
+//            return athlete.getHandicapForDate(activity.getStartDateLocal());
         }
     }
 
@@ -114,7 +116,7 @@ public class HandicapCalculator
         calendar.add(Calendar.DAY_OF_YEAR, -days);
         List<Activity> activities = activityRepository.findByStartDateLocalBetweenAndAthleteId(calendar.getTime(), dateDaysAgo, athlete.getId());
         return activities.stream()
-            .mapToInt(Activity::getMovingTimeInSeconds)
+            .mapToInt(Activity::getMovingTime)
             .sum() / SECONDS_IN_HOUR;
     }
 
@@ -134,7 +136,7 @@ public class HandicapCalculator
     {
         List<Activity> activities = activityRepository.findByStartDateLocalBetweenAndAthleteId(DateUtil.getDateDaysAgo(days), new Date(), athlete.getId());
         return activities.stream()
-            .mapToInt(Activity::getMovingTimeInSeconds)
+            .mapToInt(Activity::getMovingTime)
             .sum() / SECONDS_IN_HOUR;
     }
 

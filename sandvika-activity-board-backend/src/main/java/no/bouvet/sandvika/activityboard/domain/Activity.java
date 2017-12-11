@@ -1,347 +1,184 @@
 package no.bouvet.sandvika.activityboard.domain;
 
-import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "id",
+    "resource_state",
+    "external_id",
+    "upload_id",
+    "athlete",
+    "name",
+    "distance",
+    "moving_time",
+    "elapsed_time",
+    "total_elevation_gain",
+    "type",
+    "start_date",
+    "start_date_local",
+    "timezone",
+    "utc_offset",
+    "start_latlng",
+    "end_latlng",
+    "location_city",
+    "location_state",
+    "location_country",
+    "start_latitude",
+    "start_longitude",
+    "achievement_count",
+    "kudos_count",
+    "comment_count",
+    "athlete_count",
+    "photo_count",
+    "map",
+    "trainer",
+    "commute",
+    "manual",
+    "private",
+    "flagged",
+    "gear_id",
+    "from_accepted_tag",
+    "average_speed",
+    "max_speed",
+    "average_watts",
+    "kilojoules",
+    "device_watts",
+    "has_heartrate",
+    "average_heartrate",
+    "max_heartrate",
+    "elev_high",
+    "elev_low",
+    "pr_count",
+    "total_photo_count",
+    "has_kudoed",
+    "workout_type",
+    "suffer_score"
+})
 public class Activity
 {
-    @Id
-    private int id;
-    private double points;
+    @JsonProperty("id")
+    private Integer id;
+    @JsonProperty("resource_state")
+    private Integer resourceState;
+    @JsonProperty("external_id")
+    private String externalId;
+    @JsonProperty("upload_id")
+    private Integer uploadId;
+    @JsonProperty("athlete")
+    private Athlete athlete;
+    @JsonProperty("name")
     private String name;
-    private String athleteLastName;
-    private String athletefirstName;
-    private String description;
-    private float distanceInMeters;
-    private int movingTimeInSeconds;
-    private int elapsedTimeInSeconds;
-    private float totalElevationGaininMeters;
+    @JsonProperty("distance")
+    private Double distance;
+    @JsonProperty("moving_time")
+    private Integer movingTime;
+    @JsonProperty("elapsed_time")
+    private Integer elapsedTime;
+    @JsonProperty("total_elevation_gain")
+    private Double totalElevationGain;
+    @JsonProperty("type")
     private String type;
-    private Date startDateLocal;
+    @JsonProperty("start_date")
+    private String startDate;
+    @JsonProperty("start_date_local")
+    private String startDateLocal;
+    @JsonProperty("timezone")
     private String timezone;
-    @GeoSpatialIndexed
-    private double[] startLatLng;
-    @GeoSpatialIndexed
-    private double[] endLatLng;
-    private int achievementCount;
-    private int kudosCount;
-    private int commentCount;
-    private int athleteCount;
-    private boolean trainer;
-    private boolean commute;
-    private boolean manual;
-    private float averageSpeedInMetersPerSecond;
-    private float maxSpeedInMetersPerSecond;
-    private boolean hasHeartrate;
-    private float averageHeartrate;
-    private int maxHeartrate;
-    private float calories;
-    private int sufferScore;
+    @JsonProperty("utc_offset")
+    private Integer utcOffset;
+    @JsonProperty("start_latlng")
+    private List<Double> startLatlng = null;
+    @JsonProperty("end_latlng")
+    private List<Double> endLatlng = null;
+    @JsonProperty("location_city")
+    private Object locationCity;
+    @JsonProperty("location_state")
+    private Object locationState;
+    @JsonProperty("location_country")
+    private String locationCountry;
+    @JsonProperty("start_latitude")
+    private Double startLatitude;
+    @JsonProperty("start_longitude")
+    private Double startLongitude;
+    @JsonProperty("achievement_count")
+    private Integer achievementCount;
+    @JsonProperty("kudos_count")
+    private Integer kudosCount;
+    @JsonProperty("comment_count")
+    private Integer commentCount;
+    @JsonProperty("athlete_count")
+    private Integer athleteCount;
+    @JsonProperty("photo_count")
+    private Integer photoCount;
+    @JsonProperty("map")
+    private Map map;
+    @JsonProperty("trainer")
+    private Boolean trainer;
+    @JsonProperty("commute")
+    private Boolean commute;
+    @JsonProperty("manual")
+    private Boolean manual;
+    @JsonProperty("private")
+    private Boolean _private;
+    @JsonProperty("flagged")
+    private Boolean flagged;
+    @JsonProperty("gear_id")
+    private String gearId;
+    @JsonProperty("from_accepted_tag")
+    private Boolean fromAcceptedTag;
+    @JsonProperty("average_speed")
+    private Double averageSpeed;
+    @JsonProperty("max_speed")
+    private Double maxSpeed;
+    @JsonProperty("average_watts")
+    private Double averageWatts;
+    @JsonProperty("kilojoules")
+    private Double kilojoules;
+    @JsonProperty("device_watts")
+    private Boolean deviceWatts;
+    @JsonProperty("has_heartrate")
+    private Boolean hasHeartrate;
+    @JsonProperty("average_heartrate")
+    private Double averageHeartrate;
+    @JsonProperty("max_heartrate")
+    private Integer maxHeartrate;
+    @JsonProperty("elev_high")
+    private Integer elevHigh;
+    @JsonProperty("elev_low")
+    private Integer elevLow;
+    @JsonProperty("pr_count")
+    private Integer prCount;
+    @JsonProperty("total_photo_count")
+    private Integer totalPhotoCount;
+    @JsonProperty("has_kudoed")
+    private Boolean hasKudoed;
+    @JsonProperty("workout_type")
+    private Integer workoutType;
+    @JsonProperty("suffer_score")
+    private Integer sufferScore;
+    @JsonIgnore
+    private java.util.Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private double points;
     private double handicap;
-    private Integer athleteId;
 
-
-    public Activity()
+    public double getHandicap()
     {
+        return handicap;
     }
 
-    public Activity(int id, int points, String athleteLastName, String athletefirstName)
+    public void setHandicap(double handicap)
     {
-        this.id = id;
-        this.points = points;
-        this.athletefirstName = athletefirstName;
-        this.athleteLastName = athleteLastName;
-    }
-
-    public Activity(int id, int points, String athleteLastName, String athletefirstName, Date startDateLocal)
-    {
-        this.id = id;
-        this.points = points;
-        this.athletefirstName = athletefirstName;
-        this.athleteLastName = athleteLastName;
-        this.startDateLocal = startDateLocal;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public int getId()
-    {
-        return id;
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
-    }
-
-    public String getAthleteLastName()
-    {
-        return athleteLastName;
-    }
-
-    public void setAthleteLastName(String athleteLastName)
-    {
-        this.athleteLastName = athleteLastName;
-    }
-
-    public String getAthletefirstName()
-    {
-        return athletefirstName;
-    }
-
-    public void setAthletefirstName(String athletefirstName)
-    {
-        this.athletefirstName = athletefirstName;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-
-    public float getDistanceInMeters()
-    {
-        return distanceInMeters;
-    }
-
-    public void setDistanceInMeters(float distanceInMeters)
-    {
-        this.distanceInMeters = distanceInMeters;
-    }
-
-    public int getMovingTimeInSeconds()
-    {
-        return movingTimeInSeconds;
-    }
-
-    public void setMovingTimeInSeconds(int movingTimeInSeconds)
-    {
-        this.movingTimeInSeconds = movingTimeInSeconds;
-    }
-
-    public int getElapsedTimeInSeconds()
-    {
-        return elapsedTimeInSeconds;
-    }
-
-    public void setElapsedTimeInSeconds(int elapsedTimeInSeconds)
-    {
-        this.elapsedTimeInSeconds = elapsedTimeInSeconds;
-    }
-
-    public float getTotalElevationGaininMeters()
-    {
-        return totalElevationGaininMeters;
-    }
-
-    public void setTotalElevationGaininMeters(float totalElevationGaininMeters)
-    {
-        this.totalElevationGaininMeters = totalElevationGaininMeters;
-    }
-
-    public String getType()
-    {
-        return type;
-    }
-
-    public void setType(String type)
-    {
-        this.type = type;
-    }
-
-    public Date getStartDateLocal()
-    {
-        return startDateLocal;
-    }
-
-    public void setStartDateLocal(Date startDateLocal)
-    {
-        this.startDateLocal = startDateLocal;
-    }
-
-    public String getTimezone()
-    {
-        return timezone;
-    }
-
-    public void setTimezone(String timezone)
-    {
-        this.timezone = timezone;
-    }
-
-    public double[] getStartLatLng()
-    {
-        return startLatLng;
-    }
-
-    public void setStartLatLng(double[] startLatLng)
-    {
-        this.startLatLng = startLatLng;
-    }
-
-    public double[] getEndLatLng()
-    {
-        return endLatLng;
-    }
-
-    public void setEndLatLng(double[] endLatLng)
-    {
-        this.endLatLng = endLatLng;
-    }
-
-    public int getAchievementCount()
-    {
-        return achievementCount;
-    }
-
-    public void setAchievementCount(int achievementCount)
-    {
-        this.achievementCount = achievementCount;
-    }
-
-    public int getKudosCount()
-    {
-        return kudosCount;
-    }
-
-    public void setKudosCount(int kudosCount)
-    {
-        this.kudosCount = kudosCount;
-    }
-
-    public int getCommentCount()
-    {
-        return commentCount;
-    }
-
-    public void setCommentCount(int commentCount)
-    {
-        this.commentCount = commentCount;
-    }
-
-    public int getAthleteCount()
-    {
-        return athleteCount;
-    }
-
-    public void setAthleteCount(int athleteCount)
-    {
-        this.athleteCount = athleteCount;
-    }
-
-    public boolean isTrainer()
-    {
-        return trainer;
-    }
-
-    public void setTrainer(boolean trainer)
-    {
-        this.trainer = trainer;
-    }
-
-    public boolean isCommute()
-    {
-        return commute;
-    }
-
-    public void setCommute(boolean commute)
-    {
-        this.commute = commute;
-    }
-
-    public boolean isManual()
-    {
-        return manual;
-    }
-
-    public void setManual(boolean manual)
-    {
-        this.manual = manual;
-    }
-
-    public float getAverageSpeedInMetersPerSecond()
-    {
-        return averageSpeedInMetersPerSecond;
-    }
-
-    public void setAverageSpeedInMetersPerSecond(float averageSpeedInMetersPerSecond)
-    {
-        this.averageSpeedInMetersPerSecond = averageSpeedInMetersPerSecond;
-    }
-
-    public float getMaxSpeedInMetersPerSecond()
-    {
-        return maxSpeedInMetersPerSecond;
-    }
-
-    public void setMaxSpeedInMetersPerSecond(float maxSpeedInMetersPerSecond)
-    {
-        this.maxSpeedInMetersPerSecond = maxSpeedInMetersPerSecond;
-    }
-
-    public boolean isHasHeartrate()
-    {
-        return hasHeartrate;
-    }
-
-    public void setHasHeartrate(boolean hasHeartrate)
-    {
-        this.hasHeartrate = hasHeartrate;
-    }
-
-    public float getAverageHeartrate()
-    {
-        return averageHeartrate;
-    }
-
-    public void setAverageHeartrate(float averageHeartrate)
-    {
-        this.averageHeartrate = averageHeartrate;
-    }
-
-    public int getMaxHeartrate()
-    {
-        return maxHeartrate;
-    }
-
-    public void setMaxHeartrate(int maxHeartrate)
-    {
-        this.maxHeartrate = maxHeartrate;
-    }
-
-    public float getCalories()
-    {
-        return calories;
-    }
-
-    public void setCalories(float calories)
-    {
-        this.calories = calories;
-    }
-
-    public int getSufferScore()
-    {
-        return sufferScore;
-    }
-
-    public void setSufferScore(int sufferScore)
-    {
-        this.sufferScore = sufferScore;
+        this.handicap = handicap;
     }
 
     public double getPoints()
@@ -354,61 +191,616 @@ public class Activity
         this.points = points;
     }
 
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass())
-        {
-            return false;
-        }
-
-        Activity activity = (Activity) o;
-
-        return id == activity.id;
-    }
-
-    @Override
-    public int hashCode()
+    @JsonProperty("id")
+    public Integer getId()
     {
         return id;
     }
 
-    @Override
-    public String toString()
+    @JsonProperty("id")
+    public void setId(Integer id)
     {
-        final StringBuilder sb = new StringBuilder("Activity{");
-        sb.append("points=").append(points);
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", athleteLastName='").append(athleteLastName).append('\'');
-        sb.append(", athletefirstName='").append(athletefirstName).append('\'');
-        sb.append(", distanceInMeters=").append(distanceInMeters);
-        sb.append(", movingTimeInSeconds=").append(movingTimeInSeconds);
-        sb.append(", type='").append(type).append('\'');
-        sb.append(", achievementCount=").append(achievementCount);
-        sb.append(", kudosCount=").append(kudosCount);
-        sb.append('}');
-        return sb.toString();
+        this.id = id;
     }
 
-    public double getHandicap()
+    @JsonProperty("resource_state")
+    public Integer getResourceState()
     {
-        return handicap;
+        return resourceState;
     }
 
-    public void setHandicap(double handicap)
+    @JsonProperty("resource_state")
+    public void setResourceState(Integer resourceState)
     {
-        this.handicap = handicap;
+        this.resourceState = resourceState;
     }
 
-    public void setAthleteId(Integer athleteId) {
-        this.athleteId = athleteId;
+    @JsonProperty("external_id")
+    public String getExternalId()
+    {
+        return externalId;
     }
 
-    public Integer getAthleteId() {
-        return athleteId;
+    @JsonProperty("external_id")
+    public void setExternalId(String externalId)
+    {
+        this.externalId = externalId;
     }
+
+    @JsonProperty("upload_id")
+    public Integer getUploadId()
+    {
+        return uploadId;
+    }
+
+    @JsonProperty("upload_id")
+    public void setUploadId(Integer uploadId)
+    {
+        this.uploadId = uploadId;
+    }
+
+    @JsonProperty("athlete")
+    public Athlete getAthlete()
+    {
+        return athlete;
+    }
+
+    @JsonProperty("athlete")
+    public void setAthlete(Athlete athlete)
+    {
+        this.athlete = athlete;
+    }
+
+    @JsonProperty("name")
+    public String getName()
+    {
+        return name;
+    }
+
+    @JsonProperty("name")
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    @JsonProperty("distance")
+    public Double getDistance()
+    {
+        return distance;
+    }
+
+    @JsonProperty("distance")
+    public void setDistance(Double distance)
+    {
+        this.distance = distance;
+    }
+
+    @JsonProperty("moving_time")
+    public Integer getMovingTime()
+    {
+        return movingTime;
+    }
+
+    @JsonProperty("moving_time")
+    public void setMovingTime(Integer movingTime)
+    {
+        this.movingTime = movingTime;
+    }
+
+    @JsonProperty("elapsed_time")
+    public Integer getElapsedTime()
+    {
+        return elapsedTime;
+    }
+
+    @JsonProperty("elapsed_time")
+    public void setElapsedTime(Integer elapsedTime)
+    {
+        this.elapsedTime = elapsedTime;
+    }
+
+    @JsonProperty("total_elevation_gain")
+    public Double getTotalElevationGain()
+    {
+        return totalElevationGain;
+    }
+
+    @JsonProperty("total_elevation_gain")
+    public void setTotalElevationGain(Double totalElevationGain)
+    {
+        this.totalElevationGain = totalElevationGain;
+    }
+
+    @JsonProperty("type")
+    public String getType()
+    {
+        return type;
+    }
+
+    @JsonProperty("type")
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    @JsonProperty("start_date")
+    public String getStartDate()
+    {
+        return startDate;
+    }
+
+    @JsonProperty("start_date")
+    public void setStartDate(String startDate)
+    {
+        this.startDate = startDate;
+    }
+
+    @JsonProperty("start_date_local")
+    public String getStartDateLocal()
+    {
+        return startDateLocal;
+    }
+
+    @JsonProperty("start_date_local")
+    public void setStartDateLocal(String startDateLocal)
+    {
+        this.startDateLocal = startDateLocal;
+    }
+
+    @JsonProperty("timezone")
+    public String getTimezone()
+    {
+        return timezone;
+    }
+
+    @JsonProperty("timezone")
+    public void setTimezone(String timezone)
+    {
+        this.timezone = timezone;
+    }
+
+    @JsonProperty("utc_offset")
+    public Integer getUtcOffset()
+    {
+        return utcOffset;
+    }
+
+    @JsonProperty("utc_offset")
+    public void setUtcOffset(Integer utcOffset)
+    {
+        this.utcOffset = utcOffset;
+    }
+
+    @JsonProperty("start_latlng")
+    public List<Double> getStartLatlng()
+    {
+        return startLatlng;
+    }
+
+    @JsonProperty("start_latlng")
+    public void setStartLatlng(List<Double> startLatlng)
+    {
+        this.startLatlng = startLatlng;
+    }
+
+    @JsonProperty("end_latlng")
+    public List<Double> getEndLatlng()
+    {
+        return endLatlng;
+    }
+
+    @JsonProperty("end_latlng")
+    public void setEndLatlng(List<Double> endLatlng)
+    {
+        this.endLatlng = endLatlng;
+    }
+
+    @JsonProperty("location_city")
+    public Object getLocationCity()
+    {
+        return locationCity;
+    }
+
+    @JsonProperty("location_city")
+    public void setLocationCity(Object locationCity)
+    {
+        this.locationCity = locationCity;
+    }
+
+    @JsonProperty("location_state")
+    public Object getLocationState()
+    {
+        return locationState;
+    }
+
+    @JsonProperty("location_state")
+    public void setLocationState(Object locationState)
+    {
+        this.locationState = locationState;
+    }
+
+    @JsonProperty("location_country")
+    public String getLocationCountry()
+    {
+        return locationCountry;
+    }
+
+    @JsonProperty("location_country")
+    public void setLocationCountry(String locationCountry)
+    {
+        this.locationCountry = locationCountry;
+    }
+
+    @JsonProperty("start_latitude")
+    public Double getStartLatitude()
+    {
+        return startLatitude;
+    }
+
+    @JsonProperty("start_latitude")
+    public void setStartLatitude(Double startLatitude)
+    {
+        this.startLatitude = startLatitude;
+    }
+
+    @JsonProperty("start_longitude")
+    public Double getStartLongitude()
+    {
+        return startLongitude;
+    }
+
+    @JsonProperty("start_longitude")
+    public void setStartLongitude(Double startLongitude)
+    {
+        this.startLongitude = startLongitude;
+    }
+
+    @JsonProperty("achievement_count")
+    public Integer getAchievementCount()
+    {
+        return achievementCount;
+    }
+
+    @JsonProperty("achievement_count")
+    public void setAchievementCount(Integer achievementCount)
+    {
+        this.achievementCount = achievementCount;
+    }
+
+    @JsonProperty("kudos_count")
+    public Integer getKudosCount()
+    {
+        return kudosCount;
+    }
+
+    @JsonProperty("kudos_count")
+    public void setKudosCount(Integer kudosCount)
+    {
+        this.kudosCount = kudosCount;
+    }
+
+    @JsonProperty("comment_count")
+    public Integer getCommentCount()
+    {
+        return commentCount;
+    }
+
+    @JsonProperty("comment_count")
+    public void setCommentCount(Integer commentCount)
+    {
+        this.commentCount = commentCount;
+    }
+
+    @JsonProperty("athlete_count")
+    public Integer getAthleteCount()
+    {
+        return athleteCount;
+    }
+
+    @JsonProperty("athlete_count")
+    public void setAthleteCount(Integer athleteCount)
+    {
+        this.athleteCount = athleteCount;
+    }
+
+    @JsonProperty("photo_count")
+    public Integer getPhotoCount()
+    {
+        return photoCount;
+    }
+
+    @JsonProperty("photo_count")
+    public void setPhotoCount(Integer photoCount)
+    {
+        this.photoCount = photoCount;
+    }
+
+    @JsonProperty("map")
+    public Map getMap()
+    {
+        return map;
+    }
+
+    @JsonProperty("map")
+    public void setMap(Map map)
+    {
+        this.map = map;
+    }
+
+    @JsonProperty("trainer")
+    public Boolean getTrainer()
+    {
+        return trainer;
+    }
+
+    @JsonProperty("trainer")
+    public void setTrainer(Boolean trainer)
+    {
+        this.trainer = trainer;
+    }
+
+    @JsonProperty("commute")
+    public Boolean getCommute()
+    {
+        return commute;
+    }
+
+    @JsonProperty("commute")
+    public void setCommute(Boolean commute)
+    {
+        this.commute = commute;
+    }
+
+    @JsonProperty("manual")
+    public Boolean getManual()
+    {
+        return manual;
+    }
+
+    @JsonProperty("manual")
+    public void setManual(Boolean manual)
+    {
+        this.manual = manual;
+    }
+
+    @JsonProperty("private")
+    public Boolean getPrivate()
+    {
+        return _private;
+    }
+
+    @JsonProperty("private")
+    public void setPrivate(Boolean _private)
+    {
+        this._private = _private;
+    }
+
+    @JsonProperty("flagged")
+    public Boolean getFlagged()
+    {
+        return flagged;
+    }
+
+    @JsonProperty("flagged")
+    public void setFlagged(Boolean flagged)
+    {
+        this.flagged = flagged;
+    }
+
+    @JsonProperty("gear_id")
+    public String getGearId()
+    {
+        return gearId;
+    }
+
+    @JsonProperty("gear_id")
+    public void setGearId(String gearId)
+    {
+        this.gearId = gearId;
+    }
+
+    @JsonProperty("from_accepted_tag")
+    public Boolean getFromAcceptedTag()
+    {
+        return fromAcceptedTag;
+    }
+
+    @JsonProperty("from_accepted_tag")
+    public void setFromAcceptedTag(Boolean fromAcceptedTag)
+    {
+        this.fromAcceptedTag = fromAcceptedTag;
+    }
+
+    @JsonProperty("average_speed")
+    public Double getAverageSpeed()
+    {
+        return averageSpeed;
+    }
+
+    @JsonProperty("average_speed")
+    public void setAverageSpeed(Double averageSpeed)
+    {
+        this.averageSpeed = averageSpeed;
+    }
+
+    @JsonProperty("max_speed")
+    public Double getMaxSpeed()
+    {
+        return maxSpeed;
+    }
+
+    @JsonProperty("max_speed")
+    public void setMaxSpeed(Double maxSpeed)
+    {
+        this.maxSpeed = maxSpeed;
+    }
+
+    @JsonProperty("average_watts")
+    public Double getAverageWatts()
+    {
+        return averageWatts;
+    }
+
+    @JsonProperty("average_watts")
+    public void setAverageWatts(Double averageWatts)
+    {
+        this.averageWatts = averageWatts;
+    }
+
+    @JsonProperty("kilojoules")
+    public Double getKilojoules()
+    {
+        return kilojoules;
+    }
+
+    @JsonProperty("kilojoules")
+    public void setKilojoules(Double kilojoules)
+    {
+        this.kilojoules = kilojoules;
+    }
+
+    @JsonProperty("device_watts")
+    public Boolean getDeviceWatts()
+    {
+        return deviceWatts;
+    }
+
+    @JsonProperty("device_watts")
+    public void setDeviceWatts(Boolean deviceWatts)
+    {
+        this.deviceWatts = deviceWatts;
+    }
+
+    @JsonProperty("has_heartrate")
+    public Boolean getHasHeartrate()
+    {
+        return hasHeartrate;
+    }
+
+    @JsonProperty("has_heartrate")
+    public void setHasHeartrate(Boolean hasHeartrate)
+    {
+        this.hasHeartrate = hasHeartrate;
+    }
+
+    @JsonProperty("average_heartrate")
+    public Double getAverageHeartrate()
+    {
+        return averageHeartrate;
+    }
+
+    @JsonProperty("average_heartrate")
+    public void setAverageHeartrate(Double averageHeartrate)
+    {
+        this.averageHeartrate = averageHeartrate;
+    }
+
+    @JsonProperty("max_heartrate")
+    public Integer getMaxHeartrate()
+    {
+        return maxHeartrate;
+    }
+
+    @JsonProperty("max_heartrate")
+    public void setMaxHeartrate(Integer maxHeartrate)
+    {
+        this.maxHeartrate = maxHeartrate;
+    }
+
+    @JsonProperty("elev_high")
+    public Integer getElevHigh()
+    {
+        return elevHigh;
+    }
+
+    @JsonProperty("elev_high")
+    public void setElevHigh(Integer elevHigh)
+    {
+        this.elevHigh = elevHigh;
+    }
+
+    @JsonProperty("elev_low")
+    public Integer getElevLow()
+    {
+        return elevLow;
+    }
+
+    @JsonProperty("elev_low")
+    public void setElevLow(Integer elevLow)
+    {
+        this.elevLow = elevLow;
+    }
+
+    @JsonProperty("pr_count")
+    public Integer getPrCount()
+    {
+        return prCount;
+    }
+
+    @JsonProperty("pr_count")
+    public void setPrCount(Integer prCount)
+    {
+        this.prCount = prCount;
+    }
+
+    @JsonProperty("total_photo_count")
+    public Integer getTotalPhotoCount()
+    {
+        return totalPhotoCount;
+    }
+
+    @JsonProperty("total_photo_count")
+    public void setTotalPhotoCount(Integer totalPhotoCount)
+    {
+        this.totalPhotoCount = totalPhotoCount;
+    }
+
+    @JsonProperty("has_kudoed")
+    public Boolean getHasKudoed()
+    {
+        return hasKudoed;
+    }
+
+    @JsonProperty("has_kudoed")
+    public void setHasKudoed(Boolean hasKudoed)
+    {
+        this.hasKudoed = hasKudoed;
+    }
+
+    @JsonProperty("workout_type")
+    public Integer getWorkoutType()
+    {
+        return workoutType;
+    }
+
+    @JsonProperty("workout_type")
+    public void setWorkoutType(Integer workoutType)
+    {
+        this.workoutType = workoutType;
+    }
+
+    @JsonProperty("suffer_score")
+    public Integer getSufferScore()
+    {
+        return sufferScore;
+    }
+
+    @JsonProperty("suffer_score")
+    public void setSufferScore(Integer sufferScore)
+    {
+        this.sufferScore = sufferScore;
+    }
+
+    @JsonAnyGetter
+    public java.util.Map<String, Object> getAdditionalProperties()
+    {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value)
+    {
+        this.additionalProperties.put(name, value);
+    }
+
 }
