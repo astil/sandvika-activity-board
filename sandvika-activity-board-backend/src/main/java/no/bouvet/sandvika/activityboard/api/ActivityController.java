@@ -254,7 +254,7 @@ public class ActivityController
         stats.setMeters(Utils.scaledDouble(activities.stream().mapToDouble(Activity::getDistanceInMeters).sum()));
         stats.setMinutes(Utils.scaledDouble(activities.stream().mapToDouble(Activity::getMovingTimeInSeconds).sum() / 60));
         stats.setActivities(activities.size());
-        stats.setCalories(activities.stream().mapToDouble(Activity::getKiloJoules).sum());
+        stats.setKiloJoules(activities.stream().mapToDouble(Activity::getKiloJoules).sum());
         return stats;
     }
 
