@@ -38,18 +38,18 @@ public class AdminController
         List<Activity> allActivities = activityRepository.findAll();
         allActivities
             .stream()
-            .filter(a -> a.getAthlete().getId() != null && !athleteRepository.exists(a.getAthlete().getId()))
+            .filter(a -> a.getAthleteId() != null && !athleteRepository.exists(a.getAthleteId()))
             .forEach(this::saveAthlete);
 
         allActivities = activityRepository.findAll();
         for (Activity activity : allActivities)
         {
-            if (activity.getAthlete().getId() == null || activity.getAthlete().getId() == 0)
+            if (activity.getAthleteId() == null || activity.getAthleteId() == 0)
             {
-                Athlete athlete = athleteRepository.findOneByLastNameAndFirstName(activity.getAthlete().getLastName(), activity.getAthlete().getFirstName());
+                Athlete athlete = athleteRepository.findOneByLastNameAndFirstName(activity.getAthleteLastName(), activity.getAthletefirstName());
                 if (athlete != null)
                 {
-                    activity.setAthlete(athlete);
+                    activity.setAthleteId(athlete.getId());
                     activityRepository.save(activity);
                 } else
                 {
@@ -64,9 +64,9 @@ public class AdminController
     private void saveAthlete(Activity activity)
     {
         Athlete athlete = new Athlete();
-        athlete.setLastName(activity.getAthlete().getLastName());
-        athlete.setFirstName(activity.getAthlete().getFirstName());
-        athlete.setId(activity.getAthlete().getId());
+        athlete.setLastName(activity.getAthleteLastName());
+        athlete.setFirstName(activity.getAthletefirstName());
+        athlete.setId(activity.getAthleteId());
         athleteRepository.save(athlete);
     }
 

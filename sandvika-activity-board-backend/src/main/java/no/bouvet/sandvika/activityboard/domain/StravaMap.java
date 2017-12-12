@@ -14,7 +14,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "summary_polyline",
     "resource_state"
 })
-public class Map {
+public class StravaMap
+{
 
     @JsonProperty("id")
     private String id;

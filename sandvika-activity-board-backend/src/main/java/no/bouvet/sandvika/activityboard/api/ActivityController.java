@@ -251,10 +251,10 @@ public class ActivityController
         stats.setPeriodType(PeriodType.valueOf(periodType.toUpperCase()));
         stats.setStartDate(period.getStart());
         stats.setAchievements(activities.stream().mapToInt(Activity::getAchievementCount).sum());
-        stats.setMeters(Utils.scaledDouble(activities.stream().mapToDouble(Activity::getDistance).sum()));
-        stats.setMinutes(Utils.scaledDouble(activities.stream().mapToDouble(Activity::getMovingTime).sum() / 60));
+        stats.setMeters(Utils.scaledDouble(activities.stream().mapToDouble(Activity::getDistanceInMeters).sum()));
+        stats.setMinutes(Utils.scaledDouble(activities.stream().mapToDouble(Activity::getMovingTimeInSeconds).sum() / 60));
         stats.setActivities(activities.size());
-        stats.setCalories(activities.stream().mapToDouble(Activity::getKilojoules).sum());
+        stats.setCalories(activities.stream().mapToDouble(Activity::getKiloJoules).sum());
         return stats;
     }
 
@@ -265,7 +265,7 @@ public class ActivityController
         return activityRepository.findByStartDateLocalBetween(DateUtil.firstDayOfMonth(month - 1, year), DateUtil.lastDayOfMonth(month - 1, year))
             .stream()
             .filter(a -> a.getType().equalsIgnoreCase(activityType))
-            .mapToDouble(Activity::getDistance)
+            .mapToDouble(Activity::getDistanceInMeters)
             .sum();
     }
 
@@ -275,32 +275,30 @@ public class ActivityController
         Map<Integer, LeaderboardEntry> entries = new HashMap<>();
         for (Activity activity : activityList)
         {
-            if (!entries.containsKey(activity.getAthlete().getId()))
+            if (!entries.containsKey(activity.getAthleteId()))
             {
-                LeaderboardEntry entry = new LeaderboardEntry(activity.getAthlete().getId(), activity.getPoints());
-                entry.setAthleteLastName(activity.getAthlete().getLastName());
-                entry.setAthleteFirstName(activity.getAthlete().getFirstName());
+                LeaderboardEntry entry = new LeaderboardEntry(activity.getAthleteId(), activity.getPoints());
+                entry.setAthleteLastName(activity.getAthleteLastName());
+                entry.setAthleteFirstName(activity.getAthletefirstName());
                 entry.setNumberOfActivities(1);
 
-                entry.setHandicap(getHandicap(activity.getAthlete().getId(), getLastActivityDate(activityList)));
-                entry.setKilometers(activity.getDistance() / 1000);
-                entry.setMinutes(activity.getMovingTime() / 60);
-                //TODO: Fikse dette
-//                entry.setLastActivityDate(activity.getStartDateLocal());
+                entry.setHandicap(getHandicap(activity.getAthleteId(), getLastActivityDate(activityList)));
+                entry.setKilometers(activity.getDistanceInMeters() / 1000);
+                entry.setMinutes(activity.getMovingTimeInSeconds() / 60);
+                entry.setLastActivityDate(activity.getStartDateLocal());
                 entries.put(entry.getAthleteId(), entry);
 
             } else
             {
-                LeaderboardEntry entry = entries.get(activity.getAthlete().getId());
+                LeaderboardEntry entry = entries.get(activity.getAthleteId());
                 entry.setNumberOfActivities(entry.getNumberOfActivities() + 1);
-                entry.setKilometers(entry.getKilometers() + (activity.getDistance() / 1000));
-                entry.setMinutes(Double.valueOf(entry.getMinutes() + (activity.getMovingTime() / 60)).intValue());
+                entry.setKilometers(entry.getKilometers() + (activity.getDistanceInMeters() / 1000));
+                entry.setMinutes(Double.valueOf(entry.getMinutes() + (activity.getMovingTimeInSeconds() / 60)).intValue());
                 entry.setPoints(entry.getPoints() + activity.getPoints());
-                //TODO: Fikse dette
-                //                if (entry.getLastActivityDate().before(activity.getStartDateLocal()))
-//                {
-//                    entry.setLastActivityDate(activity.getStartDateLocal());
-//                }
+                if (entry.getLastActivityDate().before(activity.getStartDateLocal()))
+                {
+                    entry.setLastActivityDate(activity.getStartDateLocal());
+                }
             }
         }
 
@@ -328,22 +326,18 @@ public class ActivityController
 
     private Date getLastActivityDate(List<Activity> activityList)
     {
-        //TODO: Fikse dette
-        return new Date();
-        //return activityList.stream().map(Activity::getStartDateLocal).max(Comparator.naturalOrder()).get();
+        return activityList.stream().map(Activity::getStartDateLocal).max(Comparator.naturalOrder()).get();
     }
 
     private double getHandicapForActivity(Activity activity)
     {
-        Athlete athlete = athleteRepository.findById(activity.getAthlete().getId());
+        Athlete athlete = athleteRepository.findById(activity.getAthleteId());
         if (athlete == null || athlete.getHandicapList().isEmpty())
         {
             return 1;
         } else
         {
-            //TODO: Fikse dette
-            return 0;
-//            return athlete.getHandicapForDate(activity.getStartDateLocal());
+            return athlete.getHandicapForDate(activity.getStartDateLocal());
         }
     }
 

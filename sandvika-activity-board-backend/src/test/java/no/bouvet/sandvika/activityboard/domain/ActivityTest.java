@@ -15,8 +15,8 @@ public class ActivityTest
     {
         URL url = this.getClass().getResource("/activities.json");
 
-        Activity[] activities = new ObjectMapper()
-            .readerFor(Activity[].class)
+        StravaActivity[] activities = new ObjectMapper()
+            .readerFor(StravaActivity[].class)
             .readValue(url);
         System.out.println(activities[0]);
     }

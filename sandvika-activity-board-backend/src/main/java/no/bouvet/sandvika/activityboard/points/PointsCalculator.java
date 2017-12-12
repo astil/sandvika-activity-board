@@ -1,6 +1,5 @@
 package no.bouvet.sandvika.activityboard.points;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
@@ -27,15 +26,15 @@ public final class PointsCalculator {
             return 0;
         } else {
             int achievementPoints = activity.getAchievementCount();
-            double durationPoints = getPointsForDuration(activity.getMovingTime() / SECONDS_IN_MINUTE, activityType);
-            double distancePoints = getPointsForDistance(activity.getDistance() / 1000, activityType);
-            double elevationPoints = getPointsForElevation(activity.getTotalElevationGain(), activityType);
+            double durationPoints = getPointsForDuration(activity.getMovingTimeInSeconds() / SECONDS_IN_MINUTE, activityType);
+            double distancePoints = getPointsForDistance(activity.getDistanceInMeters() / 1000, activityType);
+            double elevationPoints = getPointsForElevation(activity.getTotalElevationGaininMeters(), activityType);
             // Deler på 2 for å forhindre inflasjon i poeng
             return Utils.scaledDouble((durationPoints + distancePoints + achievementPoints + elevationPoints) * handicap) / 2;
         }
     }
 
-    private static double getPointsForElevation(double totalElevationGaininMeters, ActivityType activityType) {
+    private static double getPointsForElevation(Double totalElevationGaininMeters, ActivityType activityType) {
         return totalElevationGaininMeters * ELEVATIOIN_METER_VALUE;
     }
 
