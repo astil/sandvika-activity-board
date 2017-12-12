@@ -1,5 +1,7 @@
 package no.bouvet.sandvika.activityboard.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -84,6 +86,21 @@ public class DateUtil
     {
         Instant instant = input.toInstant(ZoneOffset.ofHours(0));
         return Date.from(instant);
+    }
+
+    public static Date getDateFromLocalDateTimeString(String input)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Date d = null;
+        try
+        {
+            d = sdf.parse(input.substring(0, input.length()-1));
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+            return new Date();
+        }
+        return d;
     }
 
     public static Date lastDayOfWeek(int weeksAgo)

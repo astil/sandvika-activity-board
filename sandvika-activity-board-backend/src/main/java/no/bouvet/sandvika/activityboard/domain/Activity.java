@@ -14,10 +14,10 @@ public class Activity
     private String athleteLastName;
     private String athletefirstName;
     private String description;
-    private float distanceInMeters;
+    private double distanceInMeters;
     private int movingTimeInSeconds;
     private int elapsedTimeInSeconds;
-    private float totalElevationGaininMeters;
+    private double totalElevationGaininMeters;
     private String type;
     private Date startDateLocal;
     private String timezone;
@@ -37,7 +37,7 @@ public class Activity
     private boolean hasHeartrate;
     private float averageHeartrate;
     private int maxHeartrate;
-    private float calories;
+    private double kilojoules;
     private int sufferScore;
     private double handicap;
     private Integer athleteId;
@@ -114,12 +114,12 @@ public class Activity
         this.description = description;
     }
 
-    public float getDistanceInMeters()
+    public double getDistanceInMeters()
     {
         return distanceInMeters;
     }
 
-    public void setDistanceInMeters(float distanceInMeters)
+    public void setDistanceInMeters(double distanceInMeters)
     {
         this.distanceInMeters = distanceInMeters;
     }
@@ -144,12 +144,12 @@ public class Activity
         this.elapsedTimeInSeconds = elapsedTimeInSeconds;
     }
 
-    public float getTotalElevationGaininMeters()
+    public double getTotalElevationGaininMeters()
     {
         return totalElevationGaininMeters;
     }
 
-    public void setTotalElevationGaininMeters(float totalElevationGaininMeters)
+    public void setTotalElevationGaininMeters(double totalElevationGaininMeters)
     {
         this.totalElevationGaininMeters = totalElevationGaininMeters;
     }
@@ -324,14 +324,14 @@ public class Activity
         this.maxHeartrate = maxHeartrate;
     }
 
-    public float getCalories()
+    public double getKiloJoules()
     {
-        return calories;
+        return kilojoules;
     }
 
-    public void setCalories(float calories)
+    public void setKiloJoules(Double kiloJoules)
     {
-        this.calories = calories;
+        this.kilojoules = kiloJoules;
     }
 
     public int getSufferScore()

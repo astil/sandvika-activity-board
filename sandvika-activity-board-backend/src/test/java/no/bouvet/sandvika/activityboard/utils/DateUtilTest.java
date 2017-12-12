@@ -1,5 +1,6 @@
 package no.bouvet.sandvika.activityboard.utils;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import org.junit.Test;
@@ -17,6 +18,13 @@ public class DateUtilTest
     public void lastDayOfWeek() throws Exception
     {
         Date d = DateUtil.lastDayOfWeek(1);
+        System.out.println(d);
+    }
+
+    @Test
+    public void dateFromString() throws ParseException
+    {
+        Date d = DateUtil.getDateFromLocalDateTimeString("2017-12-12T06:14:58Z");
         System.out.println(d);
     }
 

@@ -7,7 +7,7 @@ public class Statistics
     private PeriodType periodType;
     private Date startDate;
     private double meters;
-    private double calories;
+    private double kiloJoules;
     private double minutes;
     private double activities;
     private double achievements;
@@ -43,14 +43,14 @@ public class Statistics
         this.meters = meters;
     }
 
-    public double getCalories()
+    public double getKiloJoules()
     {
-        return calories;
+        return kiloJoules;
     }
 
-    public void setCalories(double calories)
+    public void setKiloJoules(double kiloJoules)
     {
-        this.calories = calories;
+        this.kiloJoules = kiloJoules;
     }
 
     public double getMinutes()

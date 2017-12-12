@@ -1,6 +1,5 @@
 package no.bouvet.sandvika.activityboard.points;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
@@ -35,7 +34,7 @@ public final class PointsCalculator {
         }
     }
 
-    private static double getPointsForElevation(float totalElevationGaininMeters, ActivityType activityType) {
+    private static double getPointsForElevation(Double totalElevationGaininMeters, ActivityType activityType) {
         return totalElevationGaininMeters * ELEVATIOIN_METER_VALUE;
     }
 
