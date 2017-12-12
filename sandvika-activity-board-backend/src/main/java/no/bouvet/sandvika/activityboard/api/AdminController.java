@@ -104,10 +104,10 @@ public class AdminController
     }
 
     @RequestMapping(value = "/athlete/{id}/updateHistoricHandicap", method = RequestMethod.GET)
-    public void updateHistoricHandicapForAllAthletes(@PathVariable("id") int id)
+    public void updateHistoricHandicapForAthlete(@PathVariable("id") int id)
     {
         handicapCalculator.updateHandicapForAthleteTheLast300Days(id);
-        List<Activity> activities = activityRepository.findAll();
+        List<Activity> activities = activityRepository.findByAthleteId(id);
         for (Activity activity : activities)
         {
             activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
@@ -127,6 +127,35 @@ public class AdminController
     public void addBadge(@RequestBody Badge badge)
     {
         badgeRepository.save(badge);
+
+    }
+
+
+
+    @RequestMapping(value = "/badges/deleteAllBadgesFromAthletes", method = RequestMethod.DELETE)
+    public void deleteAllBadgesFromAthletes()
+    {
+        List<Badge> badges = badgeRepository.findAll();
+        badges.forEach(badge ->
+        {
+            badge.setActivities(null);
+            badgeRepository.save(badge);
+        });
+
+        List<Activity> activities = activityRepository.findAllByBadgesIsNotNull();
+        activities.forEach(activity ->
+        {
+            activity.setBadges(null);
+            activityRepository.save(activity);
+        });
+
+        List<Athlete> athletes = athleteRepository.findAllByBadgesIsNotNull();
+        athletes.forEach(athlete ->
+        {
+            athlete.setBadges(null);
+            athleteRepository.save(athlete);
+        });
+
     }
 
 

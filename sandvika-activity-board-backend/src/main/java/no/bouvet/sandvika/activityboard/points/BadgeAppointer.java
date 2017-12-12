@@ -30,16 +30,31 @@ public class BadgeAppointer
 
         for (Badge badge : allBadges)
         {
-            if (badge.getType().equalsIgnoreCase("distance") && activity.getDistanceInMeters() < badge.getDistanceCriteria())
+            if (eligibleForDistanceBadge(activity, badge) || eligibleForClimbBadge(activity, badge))
             {
-                awardedBadges.add(badge.getName());
-                badge.getActivities().add(activity);
-                badgeRepository.save(badge);
-                Athlete athlete = athleteRepository.findById(activity.getAthleteId());
-                athlete.addBadge(badge, activity);
-                athleteRepository.save(athlete);
+                appointBadge(activity, awardedBadges, badge);
             }
         }
         return awardedBadges;
+    }
+
+    private void appointBadge(Activity activity, List<String> awardedBadges, Badge badge)
+    {
+        awardedBadges.add(badge.getName());
+        badge.getActivities().add(activity);
+        badgeRepository.save(badge);
+        Athlete athlete = athleteRepository.findById(activity.getAthleteId());
+        athlete.addBadge(badge, activity);
+        athleteRepository.save(athlete);
+    }
+
+    private boolean eligibleForClimbBadge(Activity activity, Badge badge)
+    {
+        return badge.getType().equalsIgnoreCase("climb") && activity.getTotalElevationGaininMeters() > badge.getDistanceCriteria();
+    }
+
+    private boolean eligibleForDistanceBadge(Activity activity, Badge badge)
+    {
+        return badge.getType().equalsIgnoreCase("distance") && activity.getDistanceInMeters() > badge.getDistanceCriteria();
     }
 }
