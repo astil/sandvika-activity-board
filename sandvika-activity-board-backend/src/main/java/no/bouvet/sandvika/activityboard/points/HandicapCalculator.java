@@ -97,13 +97,13 @@ public class HandicapCalculator
 
     private double calculateHandicapForAthlete(Athlete athlete, Date dateDaysAgo)
     {
-        double activeHours = getActiveHoursByDaysAndDateAndAthlete(30, dateDaysAgo, athlete);
-        if (activeHours <= 4)
+        double activeHours = getActiveHoursByDaysAndDateAndAthlete(60, dateDaysAgo, athlete);
+        if (activeHours <= 1)
         {
             return 6;
         } else
         {
-            return Utils.scaledDouble(BASE_HOURS / (activeHours / 4), 3);
+            return Utils.scaledDouble(6 - (Math.log(activeHours)*3), 3);
         }
     }
 
@@ -120,13 +120,13 @@ public class HandicapCalculator
 
     private double calculateHandicapForAthlete(Athlete athlete)
     {
-        double activeHours = getActiveHoursByDaysAndAthlete(30, athlete);
-        if (activeHours <= 4)
+        double activeHours = getActiveHoursByDaysAndAthlete(60, athlete);
+        if (activeHours <= 1)
         {
             return 6;
         } else
         {
-            return Utils.scaledDouble(BASE_HOURS / (activeHours / 4), 3);
+            return Utils.scaledDouble(6 - (Math.log(activeHours)*3), 3);
         }
     }
 
