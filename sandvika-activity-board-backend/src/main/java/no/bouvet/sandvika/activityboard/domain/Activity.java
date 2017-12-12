@@ -324,7 +324,7 @@ public class Activity
         this.maxHeartrate = maxHeartrate;
     }
 
-    public Double getKiloJoules()
+    public double getKiloJoules()
     {
         return kilojoules;
     }

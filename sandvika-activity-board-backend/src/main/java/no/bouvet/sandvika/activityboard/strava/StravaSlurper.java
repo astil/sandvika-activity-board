@@ -145,7 +145,7 @@ public class StravaSlurper
 
     private StravaActivity[] getStravaActivities()
     {
-        return restTemplate.getForObject("https://www.strava.com/api/v3/clubs/259508/activities?page=1&per_page=2&access_token=43cef4065b62813502a456d39508702f3d74ad61", StravaActivity[].class);
+        return restTemplate.getForObject("https://www.strava.com/api/v3/clubs/259508/activities?page=1&per_page=200&access_token=43cef4065b62813502a456d39508702f3d74ad61", StravaActivity[].class);
     }
 }
 
