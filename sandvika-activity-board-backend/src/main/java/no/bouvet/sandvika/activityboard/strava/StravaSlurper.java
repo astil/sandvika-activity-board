@@ -12,13 +12,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import javastrava.api.v3.auth.TokenManager;
-import javastrava.api.v3.auth.model.Token;
-import javastrava.api.v3.auth.ref.AuthorisationScope;
-import javastrava.api.v3.rest.API;
-import javastrava.api.v3.rest.ClubAPI;
-import javastrava.api.v3.service.exception.BadRequestException;
-import javastrava.api.v3.service.exception.UnauthorizedException;
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.domain.StravaActivity;
@@ -32,12 +25,11 @@ import no.bouvet.sandvika.activityboard.utils.DateUtil;
 @Component
 public class StravaSlurper
 {
-    private static final int STRAVA_CLUB_ID = 259508;
-    public static String USERNAME = "sondrewe@gmail.com";
-    public static String PASSWORD = "passordForSandvika";
-    public static Integer STRAVA_APPLICATION_ID = 3034;
-    public static String STRAVA_CLIENT_SECRET = "506d1d0ed30af56b74a458a26419dd6ead8e910d";
+    private static final String BASE_PATH = "https://www.strava.com/api/v3/clubs/";
+    private static final String STRAVA_CLUB_ID = "259508";
+    public static String STRAVA_CLIENT_TOKEN = "43cef4065b62813502a456d39508702f3d74ad61";
     private static Logger log = LoggerFactory.getLogger(StravaSlurper.class);
+
 
     @Autowired
     RestTemplate restTemplate;
@@ -52,10 +44,14 @@ public class StravaSlurper
     HandicapCalculator handicapCalculator;
 
     @Scheduled(fixedRate = 1000 * 60 * 10)
-    public void updateActivities()
+    public void updateLatestActivities() {
+        updateActivities(1);
+    }
+
+    public void updateActivities(int pages)
     {
         log.info("Updating activities");
-        List<StravaActivity> stravaActivities = Arrays.asList(getStravaActivities());
+        List<StravaActivity> stravaActivities = getStravaActivities(STRAVA_CLUB_ID, pages);
         addMissingAthletes(stravaActivities);
 
         List<Activity> activities = new ArrayList<>();
@@ -88,7 +84,8 @@ public class StravaSlurper
         athleteRepository.save(athlete);
     }
 
-    private Activity createActivity(StravaActivity stravaActivity) {
+    private Activity createActivity(StravaActivity stravaActivity)
+    {
         Activity activity = new Activity();
         activity.setAthletefirstName(stravaActivity.getAthlete().getFirstname());
         activity.setAthleteLastName(stravaActivity.getAthlete().getLastname());
@@ -96,19 +93,21 @@ public class StravaSlurper
         activity.setType(stravaActivity.getType());
         activity.setId(stravaActivity.getId());
         activity.setName(stravaActivity.getName());
-        if (stravaActivity.getKilojoules() != null) {
+        if (stravaActivity.getKilojoules() != null)
+        {
             activity.setKiloJoules(stravaActivity.getKilojoules());
         }
-        // Må vente på ny versjon som tar med SufferScore
-        //if (stravaActivity.getSufferScore() != null)
-        //{
-        //    activity.setSufferScore(stravaActivity.getSufferScore());
-        //}
+        if (stravaActivity.getSufferScore() != null)
+        {
+            activity.setSufferScore(stravaActivity.getSufferScore());
+        }
         activity.setElapsedTimeInSeconds(stravaActivity.getElapsedTime());
-        if (stravaActivity.getAchievementCount() != null) {
+        if (stravaActivity.getAchievementCount() != null)
+        {
             activity.setAchievementCount(stravaActivity.getAchievementCount());
         }
-        if (stravaActivity.getTotalElevationGain() != null) {
+        if (stravaActivity.getTotalElevationGain() != null)
+        {
             activity.setTotalElevationGaininMeters(stravaActivity.getTotalElevationGain());
         }
         activity.setMovingTimeInSeconds(stravaActivity.getMovingTime());
@@ -120,32 +119,16 @@ public class StravaSlurper
         return activity;
     }
 
-    private ClubAPI getApi()
-    {
-        return API.instance(ClubAPI.class, getValidToken());
-    }
 
-    private Token getValidToken(final AuthorisationScope... scopes)
+    private List<StravaActivity> getStravaActivities(String clubId, int pages)
     {
-        Token token = TokenManager.instance().retrieveTokenWithExactScope(USERNAME, scopes);
-        if (token == null)
+        ArrayList<StravaActivity> activities = new ArrayList<>();
+        for (int i = 1; i <= pages; i++)
         {
-            try
-            {
-                token = StravaUtils.getStravaAccessToken(USERNAME, PASSWORD, scopes);
-                TokenManager.instance().storeToken(token);
-            } catch (BadRequestException | UnauthorizedException e)
-            {
-                return null;
-            }
+            activities.addAll(Arrays.asList(restTemplate.getForObject(BASE_PATH + clubId
+                + "/activities?page=" + i + "&per_page=200&access_token=" + STRAVA_CLIENT_TOKEN, StravaActivity[].class)));
         }
-        return token;
-    }
-
-
-    private StravaActivity[] getStravaActivities()
-    {
-        return restTemplate.getForObject("https://www.strava.com/api/v3/clubs/259508/activities?page=1&per_page=200&access_token=43cef4065b62813502a456d39508702f3d74ad61", StravaActivity[].class);
+        return activities;
     }
 }
 
