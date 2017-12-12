@@ -14,10 +14,10 @@ public class Activity
     private String athleteLastName;
     private String athletefirstName;
     private String description;
-    private Double distanceInMeters;
+    private double distanceInMeters;
     private int movingTimeInSeconds;
     private int elapsedTimeInSeconds;
-    private Double totalElevationGaininMeters;
+    private double totalElevationGaininMeters;
     private String type;
     private Date startDateLocal;
     private String timezone;
@@ -37,7 +37,7 @@ public class Activity
     private boolean hasHeartrate;
     private float averageHeartrate;
     private int maxHeartrate;
-    private Double kilojoules;
+    private double kilojoules;
     private int sufferScore;
     private double handicap;
     private Integer athleteId;
@@ -114,12 +114,12 @@ public class Activity
         this.description = description;
     }
 
-    public Double getDistanceInMeters()
+    public double getDistanceInMeters()
     {
         return distanceInMeters;
     }
 
-    public void setDistanceInMeters(Double distanceInMeters)
+    public void setDistanceInMeters(double distanceInMeters)
     {
         this.distanceInMeters = distanceInMeters;
     }
@@ -144,12 +144,12 @@ public class Activity
         this.elapsedTimeInSeconds = elapsedTimeInSeconds;
     }
 
-    public Double getTotalElevationGaininMeters()
+    public double getTotalElevationGaininMeters()
     {
         return totalElevationGaininMeters;
     }
 
-    public void setTotalElevationGaininMeters(Double totalElevationGaininMeters)
+    public void setTotalElevationGaininMeters(double totalElevationGaininMeters)
     {
         this.totalElevationGaininMeters = totalElevationGaininMeters;
     }
