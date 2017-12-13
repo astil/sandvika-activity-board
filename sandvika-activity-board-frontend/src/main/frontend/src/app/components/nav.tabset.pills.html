@@ -21,12 +21,17 @@
                             <th class="hidden-md-down">Km</th>
                             <th class="hidden-md-down">Tid</th>
                             <th class="hidden-md-down">Handicap</th>
-                            <th class="hidden-md-down">Endring</th>
+                            <th class="hidden-md-down"></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr *ngFor="let athlete of athletes; let i = index">
-                            <td>{{i+1}}</td>
+                            <td>
+                                <span *ngIf="i==0"><i class="fa fa-trophy fa-lg" style="color: gold"></i></span>
+                                <span *ngIf="i==1"><i class="fa fa-trophy fa-lg" style="color: silver"></i></span>
+                                <span *ngIf="i==2"><i class="fa fa-trophy fa-lg" style="color: goldenrod"></i></span>
+                                <span *ngIf="i > 2">{{i+1}}</span>
+                            </td>
                             <td>
                                 <ngbd-modal-component [athlete]="athlete"></ngbd-modal-component>
                             </td>
@@ -40,7 +45,14 @@
                             </td>
                             <td class="hidden-md-down">{{athlete.minutes | minToHms}}</td>
                             <td class="hidden-md-down">{{athlete.handicap | number : '1.0-1'}}</td>
-                            <td class="hidden-md-down">{{athlete.change | number : '1.0-1'}}</td>
+                            <td class="hidden-md-down" style="text-align: center">
+                                <!--<i class="fa fa-minus" style="color: #878787" aria-hidden="true" *ngIf="athlete.change == 0"></i>-->
+
+                                <i class="fa fa-angle-up fa-lg" style="color: #239327" aria-hidden="true" *ngIf="athlete.change > 0 && athlete.change < 2"></i>
+                                <i class="fa fa-angle-double-up fa-lg" style="color: #239327" aria-hidden="true" *ngIf="athlete.change >= 2"></i>
+                                <i class="fa fa-angle-down fa-lg" style="color: red" aria-hidden="true" *ngIf="athlete.change < 0 && athlete.change > -2"></i>
+                                <i class="fa fa-angle-double-down fa-lg" style="color: red" aria-hidden="true" *ngIf="athlete.change <= -2"></i>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
