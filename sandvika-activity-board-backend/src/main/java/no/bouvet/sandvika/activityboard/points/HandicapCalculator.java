@@ -27,11 +27,14 @@ public class HandicapCalculator
     private static final int SECONDS_IN_HOUR = 3600;
     private static final int BASE_HOURS = 6;
     private static Logger log = LoggerFactory.getLogger(HandicapCalculator.class);
-    @Autowired
-    private AthleteRepository athleteRepository;
 
-    @Autowired
-    private ActivityRepository activityRepository;
+    private final AthleteRepository athleteRepository;
+    private final ActivityRepository activityRepository;
+
+    public HandicapCalculator(AthleteRepository athleteRepository, ActivityRepository activityRepository) {
+        this.activityRepository = activityRepository;
+        this.athleteRepository = athleteRepository;
+    }
 
     @Scheduled(cron = "0 0 0 * * *")
     public void updateHandicapForAllAthletes()
@@ -95,7 +98,7 @@ public class HandicapCalculator
 
     }
 
-    private double calculateHandicapForAthlete(Athlete athlete, Date dateDaysAgo)
+    protected double calculateHandicapForAthlete(Athlete athlete, Date dateDaysAgo)
     {
         double activeHours = getActiveHoursByDaysAndDateAndAthlete(60, dateDaysAgo, athlete);
         if (activeHours <= 1)
@@ -103,7 +106,7 @@ public class HandicapCalculator
             return 6;
         } else
         {
-            return Utils.scaledDouble(6 - (Math.log(activeHours)*3), 3);
+            return Utils.scaledDouble(((Math.log10(activeHours))*3), 3);
         }
     }
 
@@ -126,7 +129,7 @@ public class HandicapCalculator
             return 6;
         } else
         {
-            return Utils.scaledDouble(6 - (Math.log(activeHours)*3), 3);
+            return Utils.scaledDouble(6 - (Math.log10(activeHours)*3), 3);
         }
     }
 
