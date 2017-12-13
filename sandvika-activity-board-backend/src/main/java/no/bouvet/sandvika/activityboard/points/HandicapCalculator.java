@@ -9,7 +9,6 @@ import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -52,8 +51,15 @@ public class HandicapCalculator
 
     public void updateHandicapForAllAthletesTheLast300Days()
     {
-        deleteHandicapsForAllAthletsTheLast300Days();
+        deleteHandicapsForAllAthlets();
         IntStream.range(0, 300).forEach(i ->
+            updateHandicapForAllAthletesForDate(DateUtil.getDateDaysAgo(i)));
+    }
+
+    public void updateHistoricalHandicapForAllAthletes()
+    {
+        deleteHandicapsForAllAthlets();
+        IntStream.range(0, 9999).forEach(i ->
             updateHandicapForAllAthletesForDate(DateUtil.getDateDaysAgo(i)));
     }
 
@@ -69,11 +75,11 @@ public class HandicapCalculator
         }
     }
 
-    private void deleteHandicapsForAllAthletsTheLast300Days()
+    private void deleteHandicapsForAllAthlets()
     {
         List<Athlete> athletes = athleteRepository.findAll();
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, -300);
+        calendar.add(Calendar.DAY_OF_YEAR, -9999);
         for (Athlete athlete : athletes)
         {
             athlete.setHandicapList(athlete.getHandicapList()

@@ -89,7 +89,7 @@ public class AdminController
     @RequestMapping(value = "/athlete/all/updateHistoricHandicap", method = RequestMethod.GET)
     public void updateHistoricHandicapForAllAthletes()
     {
-        handicapCalculator.updateHandicapForAllAthletesTheLast300Days();
+        handicapCalculator.updateHistoricalHandicapForAllAthletes();
         List<Activity> activities = activityRepository.findAll();
         for (Activity activity : activities)
         {
