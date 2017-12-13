@@ -106,7 +106,7 @@ public class HandicapCalculator
             return 6;
         } else
         {
-            return Utils.scaledDouble(((Math.log10(activeHours))*3), 3);
+            return Utils.scaledDouble(6 - ((Math.log10(activeHours))*3), 3);
         }
     }
 
