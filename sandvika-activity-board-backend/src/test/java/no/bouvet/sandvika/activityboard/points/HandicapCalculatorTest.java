@@ -26,7 +26,7 @@ public class HandicapCalculatorTest
     private void createActivityList()
     {
         Activity activity = new Activity();
-        activity.setMovingTimeInSeconds(60*60 * 60);
+        activity.setMovingTimeInSeconds(60*60*16);
         activityList.add(activity);
     }
 
