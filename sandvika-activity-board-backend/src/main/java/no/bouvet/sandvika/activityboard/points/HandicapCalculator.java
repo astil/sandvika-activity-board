@@ -117,7 +117,7 @@ public class HandicapCalculator
 
         double hc = 0;
 
-        if (rawHc > 10)
+        if (rawHc > 10 || activeHours == 0)
         {
             hc = 10;
         } else if (rawHc < 0.5)
