@@ -79,7 +79,7 @@ public class HandicapCalculator
     {
         List<Athlete> athletes = athleteRepository.findAll();
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, -9999);
+        calendar.add(Calendar.YEAR, -2);
         for (Athlete athlete : athletes)
         {
             athlete.setHandicapList(athlete.getHandicapList()
@@ -174,5 +174,12 @@ public class HandicapCalculator
             .filter(h -> h.getTimestamp().before(calendar.getTime()))
             .collect(Collectors.toList()));
         athleteRepository.save(athlete);
+    }
+
+    public void updateHandicapForAthlete(int athleteId)
+    {
+        deleteHandicapsForAthleteTheLast300Days(athleteId);
+        IntStream.range(0, 999).forEach(i ->
+            updateHandicapForAthleteForDate(athleteId, DateUtil.getDateDaysAgo(i)));
     }
 }

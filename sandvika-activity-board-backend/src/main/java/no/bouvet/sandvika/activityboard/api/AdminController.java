@@ -102,8 +102,8 @@ public class AdminController
     @RequestMapping(value = "/athlete/{id}/updateHistoricHandicap", method = RequestMethod.GET)
     public void updateHistoricHandicapForAllAthletes(@PathVariable("id") int id)
     {
-        handicapCalculator.updateHandicapForAthleteTheLast300Days(id);
-        List<Activity> activities = activityRepository.findAll();
+        handicapCalculator.updateHandicapForAthlete(id);
+        List<Activity> activities = activityRepository.findByAthleteId(id);
         for (Activity activity : activities)
         {
             activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
