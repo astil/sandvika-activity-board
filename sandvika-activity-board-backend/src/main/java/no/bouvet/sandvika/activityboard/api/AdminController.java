@@ -3,6 +3,8 @@ package no.bouvet.sandvika.activityboard.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,7 @@ import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
 
 @RestController
+@EnableAsync
 public class AdminController
 {
     private static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AdminController.class);
@@ -86,6 +89,7 @@ public class AdminController
         activityRepository.save(activity);
     }
 
+    @Async
     @RequestMapping(value = "/athlete/all/updateHistoricHandicap/{days}", method = RequestMethod.GET)
     public void updateHistoricHandicapForAllAthletes(@PathVariable("days") int days)
     {
