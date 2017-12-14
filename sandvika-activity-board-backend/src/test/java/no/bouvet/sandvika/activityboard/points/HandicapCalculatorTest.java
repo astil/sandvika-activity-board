@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -27,7 +26,7 @@ public class HandicapCalculatorTest
     private void createActivityList()
     {
         Activity activity = new Activity();
-        activity.setMovingTimeInSeconds(60*60 * 100);
+        activity.setMovingTimeInSeconds(60*60 * 60);
         activityList.add(activity);
     }
 
