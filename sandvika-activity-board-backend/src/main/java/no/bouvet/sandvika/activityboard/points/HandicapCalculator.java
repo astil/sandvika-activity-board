@@ -30,7 +30,8 @@ public class HandicapCalculator
     private final AthleteRepository athleteRepository;
     private final ActivityRepository activityRepository;
 
-    public HandicapCalculator(AthleteRepository athleteRepository, ActivityRepository activityRepository) {
+    public HandicapCalculator(AthleteRepository athleteRepository, ActivityRepository activityRepository)
+    {
         this.activityRepository = activityRepository;
         this.athleteRepository = athleteRepository;
     }
@@ -107,13 +108,27 @@ public class HandicapCalculator
     protected double calculateHandicapForAthlete(Athlete athlete, Date dateDaysAgo)
     {
         double activeHours = getActiveHoursByDaysAndDateAndAthlete(60, dateDaysAgo, athlete);
-        if (activeHours <= 1)
+        return calculateHandicap(activeHours);
+    }
+
+    private double calculateHandicap(double activeHours)
+    {
+        double rawHc = Utils.scaledDouble(3.5 - ((Math.log10(activeHours / 30) * 10)), 3);
+
+        double hc = 0;
+
+        if (rawHc > 10)
         {
-            return 6;
+            hc = 10;
+        } else if (rawHc < 0.5)
+        {
+            hc = 0.5;
         } else
         {
-            return Utils.scaledDouble(3.5 - ((Math.log10(activeHours/30)*10)), 3);
+            hc = rawHc;
         }
+
+        return hc;
     }
 
     private double getActiveHoursByDaysAndDateAndAthlete(int days, Date dateDaysAgo, Athlete athlete)
@@ -130,13 +145,7 @@ public class HandicapCalculator
     private double calculateHandicapForAthlete(Athlete athlete)
     {
         double activeHours = getActiveHoursByDaysAndAthlete(60, athlete);
-        if (activeHours <= 1)
-        {
-            return 6;
-        } else
-        {
-            return Utils.scaledDouble(3.5 - ((Math.log10(activeHours/30)*10)), 3);
-        }
+        return calculateHandicap(activeHours);
     }
 
     private double getActiveHoursByDaysAndAthlete(int days, Athlete athlete)
