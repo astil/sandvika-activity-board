@@ -56,10 +56,10 @@ public class HandicapCalculator
             updateHandicapForAllAthletesForDate(DateUtil.getDateDaysAgo(i)));
     }
 
-    public void updateHistoricalHandicapForAllAthletes()
+    public void updateHistoricalHandicapForAllAthletes(int days)
     {
         deleteHandicapsForAllAthlets();
-        IntStream.range(0, 9999).forEach(i ->
+        IntStream.range(0, days).forEach(i ->
             updateHandicapForAllAthletesForDate(DateUtil.getDateDaysAgo(i)));
     }
 

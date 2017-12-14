@@ -31,7 +31,7 @@ public class AdminController
     HandicapCalculator handicapCalculator;
 
     @RequestMapping(value = "/reload", method = RequestMethod.GET)
-    public void reloadUsersAndPoint()
+    public void reloadUsersAndPoints()
     {
         athleteRepository.deleteAll();
 
@@ -58,7 +58,7 @@ public class AdminController
                 }
             }
         }
-        updateHistoricHandicapForAllAthletes();
+        updateHistoricHandicapForAllAthletes(400);
     }
 
     private void saveAthlete(Activity activity)
@@ -86,10 +86,10 @@ public class AdminController
         activityRepository.save(activity);
     }
 
-    @RequestMapping(value = "/athlete/all/updateHistoricHandicap", method = RequestMethod.GET)
-    public void updateHistoricHandicapForAllAthletes()
+    @RequestMapping(value = "/athlete/all/updateHistoricHandicap/{days}", method = RequestMethod.GET)
+    public void updateHistoricHandicapForAllAthletes(@PathVariable("days") int days)
     {
-        handicapCalculator.updateHistoricalHandicapForAllAthletes();
+        handicapCalculator.updateHistoricalHandicapForAllAthletes(days);
         List<Activity> activities = activityRepository.findAll();
         for (Activity activity : activities)
         {
@@ -100,7 +100,7 @@ public class AdminController
     }
 
     @RequestMapping(value = "/athlete/{id}/updateHistoricHandicap", method = RequestMethod.GET)
-    public void updateHistoricHandicapForAllAthletes(@PathVariable("id") int id)
+    public void updateHistoricHandicapForAthlete(@PathVariable("id") int id)
     {
         handicapCalculator.updateHandicapForAthlete(id);
         List<Activity> activities = activityRepository.findByAthleteId(id);
