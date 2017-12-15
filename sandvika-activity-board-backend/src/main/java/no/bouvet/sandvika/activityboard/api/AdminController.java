@@ -127,10 +127,13 @@ public class AdminController
     public void addBadge(@RequestBody Badge badge)
     {
         badgeRepository.save(badge);
-
     }
 
-
+    @RequestMapping(value = "/badges/", method = RequestMethod.GET)
+    public List<Badge> listAllBadges()
+    {
+        return badgeRepository.findAll();
+    }
 
     @RequestMapping(value = "/badges/deleteAllBadgesFromAthletes", method = RequestMethod.DELETE)
     public void deleteAllBadgesFromAthletes()
