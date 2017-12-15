@@ -76,10 +76,10 @@ public class AdminController
 
 
     //    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/activities/refresh", method = RequestMethod.GET)
-    public void refreshActivities()
+    @RequestMapping(value = "/activities/refresh/{pages}", method = RequestMethod.GET)
+    public void refreshActivities(@PathVariable("pages") int pages)
     {
-        stravaSlurper.updateActivities();
+        stravaSlurper.updateActivities(pages);
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT)

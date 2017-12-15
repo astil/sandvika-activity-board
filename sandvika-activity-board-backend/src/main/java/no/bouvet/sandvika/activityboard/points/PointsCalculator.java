@@ -39,7 +39,7 @@ public final class PointsCalculator
         }
     }
 
-    private static double getPointsForElevation(float totalElevationGaininMeters, ActivityType activityType)
+    private static double getPointsForElevation(Double totalElevationGaininMeters, ActivityType activityType)
     {
         return totalElevationGaininMeters * ELEVATIOIN_METER_VALUE;
     }

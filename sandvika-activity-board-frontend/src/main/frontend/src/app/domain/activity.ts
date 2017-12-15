@@ -26,7 +26,7 @@ export class Activity {
     hasHeartrate: boolean ;
     averageHeartrate: Number ;
     maxHeartrate: Number ;
-    calories: Number ;
+    kiloJoules: Number ;
     sufferScore: Number ;
     handicap: Number ;
 }

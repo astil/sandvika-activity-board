@@ -2,7 +2,7 @@ export class Statistics {
     periodType: String;
     startDate: Date;
     meters: Number;
-    calories: Number;
+    kiloJoules: Number;
     minutes: Number;
     activities: Number;
     achievements: Number;
