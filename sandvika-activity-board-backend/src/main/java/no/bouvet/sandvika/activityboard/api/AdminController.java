@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.domain.Badge;
+import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.points.PointsCalculator;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.repository.BadgeRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
+import no.bouvet.sandvika.activityboard.utils.DateUtil;
 
 @RestController
 public class AdminController
@@ -33,6 +35,9 @@ public class AdminController
     StravaSlurper stravaSlurper;
     @Autowired
     HandicapCalculator handicapCalculator;
+
+    @Autowired
+    BadgeAppointer badgeAppointer;
 
     @RequestMapping(value = "/reload", method = RequestMethod.GET)
     public void reloadUsersAndPoint()
@@ -123,16 +128,27 @@ public class AdminController
     }
 
 
-    @RequestMapping(value = "/badges/", method = RequestMethod.POST)
+    @RequestMapping(value = "/badges", method = RequestMethod.POST)
     public void addBadge(@RequestBody Badge badge)
     {
         badgeRepository.save(badge);
     }
 
-    @RequestMapping(value = "/badges/", method = RequestMethod.GET)
+    @RequestMapping(value = "/badges", method = RequestMethod.GET)
     public List<Badge> listAllBadges()
     {
         return badgeRepository.findAll();
+    }
+
+    @RequestMapping(value = "/badges/appointHistoricalBadges/{days}", method = RequestMethod.GET)
+    public void listAllBadges(@PathVariable("days") int days)
+    {
+        List<Activity> activities = activityRepository.findByStartDateLocalAfter(DateUtil.getDateDaysAgo(days));
+        activities.forEach(activity ->
+        {
+            activity.setBadges(badgeAppointer.getBadgesForActivity(activity));
+            activityRepository.save(activity);
+        });
     }
 
     @RequestMapping(value = "/badges/deleteAllBadgesFromAthletes", method = RequestMethod.DELETE)

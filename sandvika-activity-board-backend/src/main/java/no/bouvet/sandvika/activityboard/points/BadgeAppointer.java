@@ -1,5 +1,9 @@
 package no.bouvet.sandvika.activityboard.points;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,8 +14,8 @@ import org.springframework.stereotype.Component;
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.domain.Badge;
-import no.bouvet.sandvika.activityboard.repository.BadgeRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
+import no.bouvet.sandvika.activityboard.repository.BadgeRepository;
 
 @Component
 public class BadgeAppointer
@@ -30,7 +34,7 @@ public class BadgeAppointer
 
         for (Badge badge : allBadges)
         {
-            if (eligibleForDistanceBadge(activity, badge) || eligibleForClimbBadge(activity, badge))
+            if (eligibleForDistanceBadge(activity, badge) || eligibleForClimbBadge(activity, badge) || eligibleForTimeBadge(activity, badge))
             {
                 appointBadge(activity, awardedBadges, badge);
             }
@@ -46,6 +50,24 @@ public class BadgeAppointer
         Athlete athlete = athleteRepository.findById(activity.getAthleteId());
         athlete.addBadge(badge, activity);
         athleteRepository.save(athlete);
+    }
+
+    private boolean eligibleForTimeBadge(Activity activity, Badge badge)
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        if (badge.getType().equalsIgnoreCase("time"))
+        {
+            LocalTime timeCriteria = LocalTime.parse(badge.getTimeCriteria(), formatter);
+
+            if (badge.getBeforeOrAfter().equalsIgnoreCase("before") && timeCriteria.isAfter(LocalDateTime.ofInstant(activity.getStartDateLocal().toInstant(), ZoneId.systemDefault()).toLocalTime()))
+            {
+                return true;
+            } else if (badge.getBeforeOrAfter().equalsIgnoreCase("after") && timeCriteria.isBefore(LocalDateTime.ofInstant(activity.getStartDateLocal().toInstant(), ZoneId.systemDefault()).toLocalTime()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean eligibleForClimbBadge(Activity activity, Badge badge)
