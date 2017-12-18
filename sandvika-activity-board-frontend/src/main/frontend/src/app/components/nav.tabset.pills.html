@@ -9,8 +9,8 @@
                     <a class="btn btn-default" *ngIf="tab.pageNumber > 0" (click)="changeContent(tab, 'prev')"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</a>
                     <a class="btn btn-default disabled" *ngIf="tab.pageNumber <= 0" aria-disabled="true"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</a>
 
-                    <a *ngIf="tab.code === 'week'" class="btn btn-default disabled">Uke {{tab.pageNumber}}</a>
-                    <a *ngIf="tab.code === 'month'" class="btn btn-default disabled">{{tab.pageNumber | numToMonth}}</a>
+                    <a *ngIf="tab.code === 'week'" class="btn btn-default disabled lg">Uke {{tab.pageNumber}}</a>
+                    <a *ngIf="tab.code === 'month'" class="btn btn-default disabled lg">{{tab.pageNumber | numToMonth}}</a>
 
                     <a class="btn btn-default" *ngIf="tab.pageNumber < tab.maxPage" (click)="changeContent(tab, 'next')">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></a>
                     <a class="btn btn-default disabled" *ngIf="tab.pageNumber >= tab.maxPage" aria-disabled="true">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></a>

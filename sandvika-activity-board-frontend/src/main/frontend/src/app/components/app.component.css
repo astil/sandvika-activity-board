@@ -120,6 +120,7 @@ stats-data-component {
 }
 
 .vl {
+    display: none;
     position: absolute;
     top: 30px;
     left: 262px;
@@ -129,15 +130,15 @@ stats-data-component {
     height: 30px;
 }
 
-.pagination {
-    border-left: 1px solid #ddd;
+.pagination .btn-group {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
 }
 
-.pagination .btn-group {
-    position: absolute;
-    z-index: 10;
-    top: 25px;
-    left: 270px;
+.pagination .btn-group .lg {
+    font-size: 2em;
+    margin: -20px 0 0 0
 }
 
 @media (min-width: 768px) {
@@ -155,15 +156,15 @@ stats-data-component {
     }
 
     latest-activities-component {
-        width: 32.5%;
+        width: 100%;
     }
 
     top-activities-component {
-        width: 32.5%;
+        width: 49.5%;
     }
 
     stats-data-component {
-        width: 32.5%;
+        width: 49.5%;
     }
 
     .modal-dialog {
@@ -176,6 +177,25 @@ stats-data-component {
         top: 10px;
         right: 20px;
     }
+
+    .vl {
+        display: block;
+        top: 23px;
+    }
+
+    .pagination .btn-group .lg {
+        font-size: inherit;
+        margin: 0
+    }
+
+    .pagination .btn-group {
+        width: auto;
+        display: inherit;
+        position: absolute;
+        z-index: 10;
+        top: 18px;
+        left: 270px;
+    }
 }
 
 
@@ -187,11 +207,20 @@ stats-data-component {
     .strava-brand img {
         width: 20%;
     }
+
+    .vl {
+        display: block;
+        top: 25px;
+    }
+
+    .pagination .btn-group {
+        top: 22px;
+    }
 }
 
 @media (min-width: 1600px) {
     .container {
-        width: 70%;
+        width: 80%;
     }
 
     .vertical-wrapper {
@@ -214,5 +243,14 @@ stats-data-component {
 
     stats-data-component {
         width: 100%;
+    }
+
+    .vl {
+        display: block;
+        top: 30px;
+    }
+
+    .pagination .btn-group {
+        top: 25px;
     }
 }
