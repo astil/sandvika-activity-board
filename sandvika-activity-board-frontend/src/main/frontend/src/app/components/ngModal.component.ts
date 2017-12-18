@@ -28,7 +28,7 @@ import {Athlete} from "../domain/athlete";
                         <th class="hidden-md-down">Totaltid</th>
                         <th class="hidden-md-down">Høydemeter</th>
                         <th class="hidden-md-down">SufferScore</th>
-                        <th class="hidden-md-down">Handicap</th>
+                        <th>Handicap</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,7 +42,7 @@ import {Athlete} from "../domain/athlete";
                         <td class="hidden-md-down">{{activity.elapsedTimeInSeconds | convertToHours}}</td>
                         <td class="hidden-md-down">{{activity.totalElevationGaininMeters}}</td>
                         <td class="hidden-md-down">{{activity.sufferScore}}</td>  
-                        <td class="hidden-md-down">{{activity.handicap | number : '1.0-1'}}</td>  
+                        <td>{{activity.handicap | number : '1.0-1'}}</td>  
                     </tr>
                 </tbody>
             </table>

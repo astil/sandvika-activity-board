@@ -119,6 +119,27 @@ stats-data-component {
     flex-wrap: wrap;
 }
 
+.vl {
+    position: absolute;
+    top: 30px;
+    left: 262px;
+    border-left: 1px solid #ddd;
+    z-index: 11;
+    width: 1px;
+    height: 30px;
+}
+
+.pagination {
+    border-left: 1px solid #ddd;
+}
+
+.pagination .btn-group {
+    position: absolute;
+    z-index: 10;
+    top: 25px;
+    left: 270px;
+}
+
 @media (min-width: 768px) {
     .container {
         padding: 1%;
@@ -126,7 +147,6 @@ stats-data-component {
         width: 100%;
     }
 }
-
 
 @media (min-width: 992px) {
     .container {

@@ -52,3 +52,23 @@ export class ConvertMinToHhT implements PipeTransform {
         return h > 0 ? h + "t" : "0";
     }
 }
+
+@Pipe({name: 'numToMonth'})
+export class ConvertNumberToMonth implements PipeTransform {
+
+    transform(value: number): string {
+        var monthNames = [ 'Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni',
+            'Juli', 'August', 'September', 'Oktober', 'November', 'Desember' ];
+        return monthNames[value];
+    }
+}
+
+@Pipe({name: 'numToMonthMini'})
+export class ConvertNumberToMonthMinimal implements PipeTransform {
+
+    transform(value: number): string {
+        var monthNames = [ 'jan', 'feb', 'mars', 'april', 'mai', 'juni',
+            'juli', 'aug', 'sep', 'okt', 'nov', 'des' ];
+        return monthNames[value];
+    }
+}

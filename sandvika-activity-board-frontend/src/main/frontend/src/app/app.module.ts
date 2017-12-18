@@ -8,7 +8,7 @@ import {AppComponent} from './components/app.component';
 import {AppRestService} from "./service/app.rest.service";
 import {NgbdModalComponent, NgbdModalContent} from "./components/ngModal.component";
 import {MeterToKilometerPipe} from "./pipes/meterToKmPipe";
-import {TimeConverterPipe, ConvertMinToHhMmSs, ConvertMinToHhT} from "./pipes/timeConverterPipe";
+import {TimeConverterPipe, ConvertMinToHhMmSs, ConvertMinToHhT, ConvertNumberToMonth, ConvertNumberToMonthMinimal} from "./pipes/timeConverterPipe";
 import {OrderBy} from "./pipes/customOrderBy";
 import {NgbdTabsetPills} from "./components/nav.tabset.pills";
 import {StatsDataComponent} from "./components/stats.data.component";
@@ -26,6 +26,8 @@ import {TopActivities} from "./components/top.activities.component";
         TopActivities,
         MeterToKilometerPipe,
         TimeConverterPipe,
+        ConvertNumberToMonth,
+        ConvertNumberToMonthMinimal,
         OrderBy,
         ConvertMinToHhMmSs,
         ConvertMinToHhT
