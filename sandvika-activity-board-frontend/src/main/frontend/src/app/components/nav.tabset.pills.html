@@ -4,27 +4,32 @@
 
             <div class="nav-wrapper">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-outline-primary btn-block" *ngIf="tab.code !== 'all' && tab.pageNumber > 0" (click)="changeContent(tab, 'prev')"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</button>
-                    <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.code !== 'all' && tab.pageNumber <= 0" aria-disabled="true"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</button>
-
-                    <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.code === 'week'">Uke {{tab.pageNumber}}</button>
-                    <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.code === 'month'">{{tab.pageNumber | numToMonth}}</button>
-
-                    <button type="button" class="btn btn-outline-primary btn-block" *ngIf="tab.pageNumber < tab.maxPage" (click)="changeContent(tab, 'next')">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></button>
-                    <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.pageNumber >= tab.maxPage" aria-disabled="true">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></button>
-
                     <div ngbDropdown role="group" class="btn-group">
                         <button class="btn btn-outline-primary btn-block" id="dropdownConfig" ngbDropdownToggle>Filter </button>
                         <div ngbDropdownMenu aria-labelledby="dropdownConfig">
-                            <button class="dropdown-item" *ngFor="let activityType of activityTypes" (click)="filter(tab, activityType)">{{activityType}}</button>
+                            <button class="dropdown-item" *ngFor="let activityType of activityTypes" (click)="filter(tab, activityType)">{{activityType.decode}}</button>
                         </div>
                     </div>
+                    <button type="button" class="btn btn-outline-primary btn-block" *ngIf="tab.code !== 'all' && tab.pageNumber > 0" (click)="changeContent(tab, 'prev')"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</button>
+                    <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.code !== 'all' && tab.pageNumber <= 0" aria-disabled="true"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</button>
+                    <button type="button" class="btn btn-outline-primary btn-block" *ngIf="tab.pageNumber < tab.maxPage" (click)="changeContent(tab, 'next')">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.pageNumber >= tab.maxPage" aria-disabled="true">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                </div>
+                <div class="d-none d-sm-block status-header">
+                    <h2 *ngIf="tab.code === 'all'">{{tab.activityType.decode}}</h2>
+                    <h2 *ngIf="tab.code === 'month'">{{tab.pageNumber | numToMonth}} - {{tab.activityType.decode}}</h2>
+                    <h2 *ngIf="tab.code === 'week'">Uke {{tab.pageNumber}} - {{tab.activityType.decode}}</h2>
                 </div>
             </div>
 
             <div class="flex-wrapper">
                 <div class="vertical-wrapper">
-                    <latest-activities-component></latest-activities-component>
+                    <div class="d-block d-sm-none w-100">
+                        <h2 *ngIf="tab.code === 'all'" style="text-align: center; font-family: 'Roboto', sans-serif;">{{tab.activityType.decode}}</h2>
+                        <h2 *ngIf="tab.code === 'month'" style="text-align: center; font-family: 'Roboto', sans-serif;">{{tab.pageNumber | numToMonth}} - {{tab.activityType.decode}}</h2>
+                        <h2 *ngIf="tab.code === 'week'" style="text-align: center; font-family: 'Roboto', sans-serif;">Uke {{tab.pageNumber}} - {{tab.activityType.decode}}</h2>
+                    </div>
+                    <latest-activities-component [activities]="latestActivities"></latest-activities-component>
                     <stats-data-component [tab]="tab" [thisWeekStats]="thisWeekStats" title=""></stats-data-component>
                     <top-activities-component [tab]="tab" [activities]="activities"></top-activities-component>
                 </div>

@@ -38,12 +38,22 @@ th {
     align-items: flex-start;
 }
 
-.nav-wrapper {
-    margin-bottom: 5px;
+/*.nav-wrapper {*/
+/*margin-bottom: 5px;*/
+/*display: flex;*/
+/*width: 50%;*/
+/*}*/
+
+.nav-wrapper > div {
+    width: 100%;
 }
 
-.nav-wrapper .btn-group {
+.nav-wrapper > div .btn-group {
     width: 100%;
+}
+
+.dropdown-menu {
+    min-width: 23rem;
 }
 
 .strava-brand {
@@ -89,7 +99,7 @@ stats-data-component {
 }
 
 .latest-activities .card {
-  width: 100%;
+    width: 100%;
 }
 
 .card {
@@ -132,11 +142,31 @@ stats-data-component {
     justify-content: space-around;
 }
 
+.status-header > h2 {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+}
+
+@media (min-width: 375px) {
+    .dropdown-menu {
+        min-width: 23rem;
+    }
+}
+
+@media (min-width: 414px) {
+    .dropdown-menu {
+        min-width: 25.4rem;
+    }
+}
+
 @media (min-width: 768px) {
     .container {
         padding: 1%;
         margin: 0 auto;
         width: 100%;
+    }
+    .dropdown-menu {
+        min-width: 10rem;
     }
 }
 
@@ -144,6 +174,17 @@ stats-data-component {
     .container {
         width: 100%;
         margin: 20px auto;
+    }
+
+    .nav-wrapper {
+        margin-bottom: 5px;
+        display: flex;
+        width: 50%;
+    }
+
+    .nav-wrapper > div {
+        margin-right: 5%;
+        width: auto;
     }
 
     latest-activities-component {
@@ -169,7 +210,6 @@ stats-data-component {
         right: 20px;
     }
 }
-
 
 @media (min-width: 1400px) {
     .container {

@@ -6,8 +6,8 @@ import {NgbDropdownConfig} from "@ng-bootstrap/ng-bootstrap";
 import {TabContent} from "../domain/TabContent";
 import {DateUtilsServiceService} from "../service/date-utils-service.service";
 import {Statistics} from "../domain/Statistics";
-import {Observable} from "rxjs/Observable";
 import {Activity} from "../domain/activity";
+import {ActivityType} from "../domain/ActivityType";
 
 @Component({
     selector: 'ngbd-tabset-pills',
@@ -22,7 +22,22 @@ export class NgbdTabsetPills implements OnInit {
     private pillTab: TabContent[] = [new TabContent("all", "Totalt", "competition"), new TabContent("month", "Måned", "month"), new TabContent("week", "Uke", "week")];
 
     private activities: Activity[];
-    private activityTypes: String[] = ["All","Run", "Ride", "Swim", "NordicSki", "Rowing", "Walk", "Hike", "VirtualRide", "Workout", "WeightTraining", "Kayaking", "RollerSki", "Yoga", "EBikeRide"];
+    private latestActivities: Activity[];
+    private activityTypes: ActivityType[] = [new ActivityType("All", "Alle"),
+        new ActivityType("Run", "Løping"),
+        new ActivityType("Ride", "Sykling"),
+        new ActivityType("Swim", "Svømming"),
+        new ActivityType("NordicSki", "Langrenn"),
+        new ActivityType("Rowing", "Roing"),
+        new ActivityType("Walk", "Gåing"),
+        new ActivityType("Hike", "Hike"),
+        new ActivityType("Workout", "Workout"),
+        new ActivityType("WeightTraining", "Styrke"),
+        new ActivityType("Kayaking", "Kayaking"),
+        new ActivityType("RollerSki", "Rulleski"),
+        new ActivityType("Yoga", "Yoga"),
+        new ActivityType("EBikeRide", "El-sykkel")];
+
     private thisWeekStats: Statistics;
     private errorMessage: any;
 
@@ -48,17 +63,26 @@ export class NgbdTabsetPills implements OnInit {
             error => this.errorMessage = <any>error
         );
 
-        this.appRestService.getLeaderBoardTotalPoints(this.pillTab[0].activityType)
+        this.appRestService.getLeaderBoardTotalPoints(this.pillTab[0].activityType.code)
             .subscribe(
                 athlete => this.athletes = athlete,
                 error => this.errorMessage = <any>error);
+
+        this.appRestService.getLatestActivities(this.pillTab[0].activityType.code, 5).subscribe(
+            activities => this.processLatestResult(activities),
+            error => this.errorMessage = <any>error
+        );
     }
 
     public beforeChange($event: NgbTabChangeEvent) {
-        let tab:TabContent = this.pillTab.find(value => value.code === $event.nextId);
+        let tab: TabContent = this.pillTab.find(value => value.code === $event.nextId);
 
         this.changeContent(tab, "none");
     };
+
+    processLatestResult(result): void {
+        this.latestActivities = result
+    }
 
     processTopResult(result): void {
         this.activities = result
@@ -68,7 +92,7 @@ export class NgbdTabsetPills implements OnInit {
         this.thisWeekStats = result
     }
 
-    private filter(tab: TabContent, activityType:String) {
+    private filter(tab: TabContent, activityType: ActivityType) {
         tab.activityType = activityType;
         this.changeContent(tab, "na")
     }
@@ -90,21 +114,26 @@ export class NgbdTabsetPills implements OnInit {
             error => this.errorMessage = <any>error
         );
 
+        this.appRestService.getLatestActivities(tab.activityType.code, 5).subscribe(
+            activities => this.processLatestResult(activities),
+            error => this.errorMessage = <any>error
+        );
+
         switch (tab.code) {
             case "all" :
-                this.appRestService.getLeaderBoardTotalPoints(tab.activityType)
+                this.appRestService.getLeaderBoardTotalPoints(tab.activityType.code)
                     .subscribe(
                         athlete => this.athletes = athlete,
                         error => this.errorMessage = <any>error);
                 break;
             case "month" :
-                this.appRestService.getLeaderboardPoints(tab.activityType, "month", tab.pageNumber, tab.year)
+                this.appRestService.getLeaderboardPoints(tab.activityType.code, "month", tab.pageNumber, tab.year)
                     .subscribe(
                         athlete => this.athletes = athlete,
                         error => this.errorMessage = <any>error);
                 break;
             case "week" :
-                this.appRestService.getLeaderboardPoints(tab.activityType, "week", tab.pageNumber, tab.year)
+                this.appRestService.getLeaderboardPoints(tab.activityType.code, "week", tab.pageNumber, tab.year)
                     .subscribe(
                         athlete => this.athletes = athlete,
                         error => this.errorMessage = <any>error);

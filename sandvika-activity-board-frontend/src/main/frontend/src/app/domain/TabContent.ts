@@ -1,3 +1,5 @@
+import {ActivityType} from "./ActivityType";
+
 export class TabContent {
     code: String;
     decode: String;
@@ -5,13 +7,13 @@ export class TabContent {
     pageNumber: number;
     maxPage: number;
     year: number;
-    activityType: String;
+    activityType: ActivityType;
 
     constructor(code: String, decode: String, altDecode: String) {
         this.code = code;
         this.decode = decode;
         this.altDecode = altDecode;
-        this.activityType  = "all";
+        this.activityType  = new ActivityType("all", "Alle");
         this.year = new Date().getFullYear();
     }
 }
