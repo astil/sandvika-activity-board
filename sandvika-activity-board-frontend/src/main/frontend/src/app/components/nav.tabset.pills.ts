@@ -2,6 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {AppRestService} from "../service/app.rest.service";
 import {Athlete} from "../domain/athlete";
 import {NgbTabChangeEvent} from "@ng-bootstrap/ng-bootstrap";
+import {NgbDropdownConfig} from "@ng-bootstrap/ng-bootstrap";
 import {TabContent} from "../domain/TabContent";
 import {DateUtilsServiceService} from "../service/date-utils-service.service";
 import {Statistics} from "../domain/Statistics";
@@ -12,7 +13,7 @@ import {Activity} from "../domain/activity";
     selector: 'ngbd-tabset-pills',
     templateUrl: './nav.tabset.pills.html',
     styleUrls: ['app.component.css'],
-    providers: [AppRestService, DateUtilsServiceService]
+    providers: [AppRestService, DateUtilsServiceService, NgbDropdownConfig]
 })
 export class NgbdTabsetPills implements OnInit {
     private pageWeek: number;
@@ -21,6 +22,7 @@ export class NgbdTabsetPills implements OnInit {
     private pillTab: TabContent[] = [new TabContent("all", "Totalt", "competition"), new TabContent("month", "Måned", "month"), new TabContent("week", "Uke", "week")];
 
     private activities: Activity[];
+    private activityTypes: String[] = ["All","Run", "Ride", "Swim", "NordicSki", "Rowing", "Walk", "Hike", "VirtualRide", "Workout", "WeightTraining", "Kayaking", "RollerSki", "Yoga", "EBikeRide"];
     private thisWeekStats: Statistics;
     private errorMessage: any;
 
@@ -46,7 +48,7 @@ export class NgbdTabsetPills implements OnInit {
             error => this.errorMessage = <any>error
         );
 
-        this.appRestService.getLeaderBoardTotalPoints()
+        this.appRestService.getLeaderBoardTotalPoints(this.pillTab[0].activityType)
             .subscribe(
                 athlete => this.athletes = athlete,
                 error => this.errorMessage = <any>error);
@@ -64,6 +66,11 @@ export class NgbdTabsetPills implements OnInit {
 
     processStatsResult(result): void {
         this.thisWeekStats = result
+    }
+
+    private filter(tab: TabContent, activityType:String) {
+        tab.activityType = activityType;
+        this.changeContent(tab, "na")
     }
 
     private changeContent(tab: TabContent, state) {
@@ -85,19 +92,19 @@ export class NgbdTabsetPills implements OnInit {
 
         switch (tab.code) {
             case "all" :
-                this.appRestService.getLeaderBoardTotalPoints()
+                this.appRestService.getLeaderBoardTotalPoints(tab.activityType)
                     .subscribe(
                         athlete => this.athletes = athlete,
                         error => this.errorMessage = <any>error);
                 break;
             case "month" :
-                this.appRestService.getLeaderboardPoints("all", "month", tab.pageNumber, tab.year)
+                this.appRestService.getLeaderboardPoints(tab.activityType, "month", tab.pageNumber, tab.year)
                     .subscribe(
                         athlete => this.athletes = athlete,
                         error => this.errorMessage = <any>error);
                 break;
             case "week" :
-                this.appRestService.getLeaderboardPoints("all", "week", tab.pageNumber, tab.year)
+                this.appRestService.getLeaderboardPoints(tab.activityType, "week", tab.pageNumber, tab.year)
                     .subscribe(
                         athlete => this.athletes = athlete,
                         error => this.errorMessage = <any>error);

@@ -2,34 +2,25 @@
     <ngb-tab *ngFor="let tab of pillTab" title="{{tab.decode}}" id="{{tab.code}}">
         <ng-template ngbTabContent>
 
-            <div class="vl" *ngIf="tab.code !== 'all'"></div>
-
-            <div *ngIf="tab.code !== 'all'" class="pagination">
+            <div class="nav-wrapper">
                 <div class="btn-group">
-                    <a class="btn btn-default" *ngIf="tab.pageNumber > 0" (click)="changeContent(tab, 'prev')"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</a>
-                    <a class="btn btn-default disabled" *ngIf="tab.pageNumber <= 0" aria-disabled="true"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</a>
+                    <button type="button" class="btn btn-outline-primary btn-block" *ngIf="tab.code !== 'all' && tab.pageNumber > 0" (click)="changeContent(tab, 'prev')"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</button>
+                    <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.code !== 'all' && tab.pageNumber <= 0" aria-disabled="true"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</button>
 
-                    <a *ngIf="tab.code === 'week'" class="btn btn-default disabled lg">Uke {{tab.pageNumber}}</a>
-                    <a *ngIf="tab.code === 'month'" class="btn btn-default disabled lg">{{tab.pageNumber | numToMonth}}</a>
+                    <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.code === 'week'">Uke {{tab.pageNumber}}</button>
+                    <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.code === 'month'">{{tab.pageNumber | numToMonth}}</button>
 
-                    <a class="btn btn-default" *ngIf="tab.pageNumber < tab.maxPage" (click)="changeContent(tab, 'next')">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                    <a class="btn btn-default disabled" *ngIf="tab.pageNumber >= tab.maxPage" aria-disabled="true">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                    <button type="button" class="btn btn-outline-primary btn-block" *ngIf="tab.pageNumber < tab.maxPage" (click)="changeContent(tab, 'next')">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.pageNumber >= tab.maxPage" aria-disabled="true">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></button>
+
+                    <div ngbDropdown role="group" class="btn-group">
+                        <button class="btn btn-outline-primary btn-block" id="dropdownConfig" ngbDropdownToggle>Filter </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownConfig">
+                            <button class="dropdown-item" *ngFor="let activityType of activityTypes" (click)="filter(tab, activityType)">{{activityType}}</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <!--<div class="dropdown">-->
-                <!--<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">-->
-                    <!--Dropdown-->
-                    <!--<span class="caret"></span>-->
-                <!--</button>-->
-                <!--<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">-->
-                    <!--<li><a href="#">Action</a></li>-->
-                    <!--<li><a href="#">Another action</a></li>-->
-                    <!--<li><a href="#">Something else here</a></li>-->
-                    <!--<li role="separator" class="divider"></li>-->
-                    <!--<li><a href="#">Separated link</a></li>-->
-                <!--</ul>-->
-            <!--</div>-->
 
             <div class="flex-wrapper">
                 <div class="vertical-wrapper">

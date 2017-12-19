@@ -38,6 +38,14 @@ th {
     align-items: flex-start;
 }
 
+.nav-wrapper {
+    margin-bottom: 5px;
+}
+
+.nav-wrapper .btn-group {
+    width: 100%;
+}
+
 .strava-brand {
     width: 100%;
 }
@@ -66,13 +74,6 @@ h1.card-text {
     text-align: center;
     font-size: 2em;
 }
-
-/*ngbd-tabset-pills {*/
-/*border: 1px solid #ddd;*/
-/*-webkit-border-radius: 5px;*/
-/*-moz-border-radius: 5px;*/
-/*border-radius: 5px;*/
-/*}*/
 
 stats-data-component {
     width: 100%;
@@ -125,26 +126,10 @@ stats-data-component {
     flex-wrap: wrap;
 }
 
-.vl {
-    display: none;
-    position: absolute;
-    top: 30px;
-    left: 262px;
-    border-left: 1px solid #ddd;
-    z-index: 11;
-    width: 1px;
-    height: 30px;
-}
-
 .pagination .btn-group {
     width: 100%;
     display: flex;
     justify-content: space-around;
-}
-
-.pagination .btn-group .lg {
-    font-size: 2em;
-    margin: -20px 0 0 0
 }
 
 @media (min-width: 768px) {
@@ -183,25 +168,6 @@ stats-data-component {
         top: 10px;
         right: 20px;
     }
-
-    .vl {
-        display: block;
-        top: 23px;
-    }
-
-    .pagination .btn-group .lg {
-        font-size: inherit;
-        margin: 0
-    }
-
-    .pagination .btn-group {
-        width: auto;
-        display: inherit;
-        position: absolute;
-        z-index: 10;
-        top: 18px;
-        left: 270px;
-    }
 }
 
 
@@ -213,15 +179,6 @@ stats-data-component {
 
     .strava-brand img {
         width: 20%;
-    }
-
-    .vl {
-        display: block;
-        top: 10px;
-    }
-
-    .pagination .btn-group {
-        top: 5px;
     }
 
     .bouvet-brand img {
@@ -258,12 +215,9 @@ stats-data-component {
         width: 100%;
     }
 
-    .vl {
-        display: block;
-        top: 11px;
-    }
-
-    .pagination .btn-group {
+    .nav-wrapper {
+        position: absolute;
         top: 7px;
+        left: 250px;
     }
 }
