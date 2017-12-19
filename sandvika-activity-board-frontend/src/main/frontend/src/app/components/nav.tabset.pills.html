@@ -1,6 +1,6 @@
 <ngb-tabset type="pills" (tabChange)="beforeChange($event)">
     <ngb-tab *ngFor="let tab of pillTab" title="{{tab.decode}}" id="{{tab.code}}">
-        <template ngbTabContent>
+        <ng-template ngbTabContent>
 
             <div class="vl" *ngIf="tab.code !== 'all'"></div>
 
@@ -16,6 +16,20 @@
                     <a class="btn btn-default disabled" *ngIf="tab.pageNumber >= tab.maxPage" aria-disabled="true">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></a>
                 </div>
             </div>
+
+            <!--<div class="dropdown">-->
+                <!--<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">-->
+                    <!--Dropdown-->
+                    <!--<span class="caret"></span>-->
+                <!--</button>-->
+                <!--<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">-->
+                    <!--<li><a href="#">Action</a></li>-->
+                    <!--<li><a href="#">Another action</a></li>-->
+                    <!--<li><a href="#">Something else here</a></li>-->
+                    <!--<li role="separator" class="divider"></li>-->
+                    <!--<li><a href="#">Separated link</a></li>-->
+                <!--</ul>-->
+            <!--</div>-->
 
             <div class="flex-wrapper">
                 <div class="vertical-wrapper">
@@ -73,6 +87,6 @@
                     </table>
                 </div>
             </div>
-        </template>
+        </ng-template>
     </ngb-tab>
 </ngb-tabset>

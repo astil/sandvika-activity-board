@@ -1,5 +1,7 @@
 .container {
     width: 100%;
+    max-width: 100%;
+    position: relative;
     border: none;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -8,6 +10,10 @@
     padding: 1%;
     margin: 0;
     overflow: hidden;
+}
+
+.mini-cards .card .card-block .card-text {
+    padding: 5%;
 }
 
 .card-block {
@@ -202,6 +208,7 @@ stats-data-component {
 @media (min-width: 1400px) {
     .container {
         width: 90%;
+        padding: 0;
     }
 
     .strava-brand img {
@@ -210,17 +217,23 @@ stats-data-component {
 
     .vl {
         display: block;
-        top: 25px;
+        top: 10px;
     }
 
     .pagination .btn-group {
-        top: 22px;
+        top: 5px;
+    }
+
+    .bouvet-brand img {
+        top: 5px;
+        right: 0;
     }
 }
 
 @media (min-width: 1600px) {
     .container {
         width: 80%;
+        padding: 0;
     }
 
     .vertical-wrapper {
@@ -247,10 +260,10 @@ stats-data-component {
 
     .vl {
         display: block;
-        top: 30px;
+        top: 11px;
     }
 
     .pagination .btn-group {
-        top: 25px;
+        top: 7px;
     }
 }
