@@ -13,7 +13,7 @@ import {TabContent} from "../domain/TabContent";
 
 @Injectable()
 export class AppRestService {
-    // private restUrl = 'http://localhost:8005/';  // URL to web api
+    // private restUrl = 'http://localhost:8080/';  // URL to web api
     private restUrl = '';  // URL to web api
 
     constructor(private http: Http) {
@@ -25,8 +25,8 @@ export class AppRestService {
             .catch(this.handleError);
     }
 
-    getLeaderBoardTotalPoints(): Observable<Athlete[]> {
-        return this.http.get(this.restUrl + "leaderboard/all/competition/")
+    getLeaderBoardTotalPoints(activityType: String): Observable<Athlete[]> {
+        return this.http.get(this.restUrl + "leaderboard/" + activityType + "/competition/")
             .map(this.extractData)
             .catch(this.handleError);
     }
@@ -37,13 +37,13 @@ export class AppRestService {
             .catch(this.handleError);
     }
 
-    getAllStats(tab:TabContent): Observable<Statistics> {
+    getAllStats(tab: TabContent): Observable<Statistics> {
         if (tab.altDecode === 'competition') {
-            return this.http.get(this.restUrl + "activities/all/stats/" + tab.altDecode)
+            return this.http.get(this.restUrl + "activities/" + tab.activityType + "/stats/" + tab.altDecode)
                 .map(this.extractData)
                 .catch(this.handleError);
         } else {
-            return this.http.get(this.restUrl + "activities/all/stats/" + tab.altDecode + "/" + tab.pageNumber + "/" + tab.year)
+            return this.http.get(this.restUrl + "activities/" + tab.activityType + "/stats/" + tab.altDecode + "/" + tab.pageNumber + "/" + tab.year)
                 .map(this.extractData)
                 .catch(this.handleError);
         }
@@ -61,13 +61,13 @@ export class AppRestService {
             .catch(this.handleError);
     }
 
-    getTopActivities(tab:TabContent): Observable<Activity[]> {
+    getTopActivities(tab: TabContent): Observable<Activity[]> {
         if (tab.altDecode === 'competition') {
-            return this.http.get(this.restUrl + "activities/all/top/5/" + tab.altDecode)
+            return this.http.get(this.restUrl + "activities/" + tab.activityType + "/top/5/" + tab.altDecode)
                 .map(this.extractData)
                 .catch(this.handleError);
         } else {
-            return this.http.get(this.restUrl + "activities/all/top/5/" + tab.altDecode + "/" + tab.pageNumber + "/" + tab.year)
+            return this.http.get(this.restUrl + "activities/" + tab.activityType + "/top/5/" + tab.altDecode + "/" + tab.pageNumber + "/" + tab.year)
                 .map(this.extractData)
                 .catch(this.handleError);
         }
