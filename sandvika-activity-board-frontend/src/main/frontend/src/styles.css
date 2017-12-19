@@ -10,8 +10,6 @@
     /*!*background-size: 8%, 30%;*!*/
     /*background-size: 100%;*/
 /*}*/
-@import '~bootstrap/dist/css/bootstrap.min.css';
-
 @media (max-width: 1000px) {
     body {
         background: none;
