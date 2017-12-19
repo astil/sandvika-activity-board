@@ -66,12 +66,30 @@ a:focus, a:hover, .btn-outline-primary:hover, .btn-outline-primary:active {
 
 .modal-dialog {
     max-width: 100%;
+    margin: 0 auto;
+}
+
+.modal-body {
+    padding: 0;
+}
+
+.table td, .table th {
+    font-size: 0.75em;
 }
 
 @media (min-width: 768px) {
     .nav-item {
         width: auto;
     }
+
+    .table td, .table th {
+        font-size: 1em;
+    }
+
+    .modal-body {
+        padding: 10px;
+    }
+
 }
 
 
