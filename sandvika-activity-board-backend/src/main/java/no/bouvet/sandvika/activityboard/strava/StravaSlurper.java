@@ -90,7 +90,7 @@ public class StravaSlurper
         activity.setAthletefirstName(stravaActivity.getAthlete().getFirstname());
         activity.setAthleteLastName(stravaActivity.getAthlete().getLastname());
         activity.setAthleteId(stravaActivity.getAthlete().getId());
-        activity.setType(stravaActivity.getType());
+        activity.setType(stravaActivity.getType().toLowerCase());
         activity.setId(stravaActivity.getId());
         activity.setName(stravaActivity.getName());
         if (stravaActivity.getKilojoules() != null)
