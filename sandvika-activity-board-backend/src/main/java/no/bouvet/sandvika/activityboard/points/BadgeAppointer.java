@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ import no.bouvet.sandvika.activityboard.repository.BadgeRepository;
 @Component
 public class BadgeAppointer
 {
+    private static Logger log = org.slf4j.LoggerFactory.getLogger(BadgeAppointer.class);
     @Autowired
     BadgeRepository badgeRepository;
 
@@ -28,14 +30,15 @@ public class BadgeAppointer
 
     public List<String> getBadgesForActivity(Activity activity)
     {
+        log.info("Checking activity " + activity.getName() + " for badges.");
         List<Badge> allBadges = badgeRepository.findBadgeByActivityTypeIn(Arrays.asList(activity.getType(), "all"));
-
         List<String> awardedBadges = new ArrayList<>();
 
         for (Badge badge : allBadges)
         {
             if (eligibleForDistanceBadge(activity, badge) || eligibleForClimbBadge(activity, badge) || eligibleForTimeBadge(activity, badge))
             {
+                log.info("Appointing badge " + badge.getName() + " to " + activity.getName());
                 appointBadge(activity, awardedBadges, badge);
             }
         }

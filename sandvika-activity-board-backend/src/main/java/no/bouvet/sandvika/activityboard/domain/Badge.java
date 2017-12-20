@@ -10,11 +10,33 @@ public class Badge
     @Id
     private String name;
     private String type;
+    private String uri;
     private String activityType;
     private int distanceCriteria;
     private String timeCriteria;
     private String beforeOrAfter;
+    private int points;
     private List<Activity> activities;
+
+    public String getUri()
+    {
+        return uri;
+    }
+
+    public void setUri(String uri)
+    {
+        this.uri = uri;
+    }
+
+    public int getPoints()
+    {
+        return points;
+    }
+
+    public void setPoints(int points)
+    {
+        this.points = points;
+    }
 
     public String getName()
     {

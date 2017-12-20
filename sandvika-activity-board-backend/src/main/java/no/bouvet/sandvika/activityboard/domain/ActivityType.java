@@ -176,21 +176,21 @@ public enum ActivityType
 
     private static class Constants
     {
-        public static final String NORDIC_SKIING_NAME = "NordicSki";
-        public static final String BACKCOUNTRY_SKI_NAME = "BackcountrySki";
-        public static final String RUN_NAME = "Run";
-        public static final String RIDE_NAME = "Ride";
-        public static final String SWIM_NAME = "Swim";
-        public static final String ROWING_NAME = "Rowing";
-        public static final String WALK_NAME = "Walk";
-        public static final String HIKE_NAME = "Hike";
-        public static final String VIRTUAL_RIDE_NAME = "VirtualRide";
-        public static final String WORKOUT_NAME = "Workout";
-        public static final String WEIGHT_TRAINING_NAME = "WeightTraining";
-        public static final String KAYAKING_NAME = "Kayaking";
-        public static final String ROLLER_SKI_NAME = "RollerSki";
-        public static final String YOGA_NAME = "Yoga";
-        public static final String E_BIKE_RIDE_NAME = "EBikeRide";
+        public static final String NORDIC_SKIING_NAME = "nordicski";
+        public static final String BACKCOUNTRY_SKI_NAME = "backcountryski";
+        public static final String RUN_NAME = "run";
+        public static final String RIDE_NAME = "ride";
+        public static final String SWIM_NAME = "swim";
+        public static final String ROWING_NAME = "rowing";
+        public static final String WALK_NAME = "walk";
+        public static final String HIKE_NAME = "hike";
+        public static final String VIRTUAL_RIDE_NAME = "virtualride";
+        public static final String WORKOUT_NAME = "workout";
+        public static final String WEIGHT_TRAINING_NAME = "weighttraining";
+        public static final String KAYAKING_NAME = "kayaking";
+        public static final String ROLLER_SKI_NAME = "rollerski";
+        public static final String YOGA_NAME = "yoga";
+        public static final String E_BIKE_RIDE_NAME = "ebikeride";
 
         public static final double ROWING_COEFFISIENT_KM = 1;
         public static final double KAYAKING_COEFFISIENT_KM = 1;

@@ -143,7 +143,9 @@ public class AdminController
     @RequestMapping(value = "/badges/appointHistoricalBadges/{days}", method = RequestMethod.GET)
     public void listAllBadges(@PathVariable("days") int days)
     {
+        log.info("Appointing badges for the last " + days + " days.");
         List<Activity> activities = activityRepository.findByStartDateLocalAfter(DateUtil.getDateDaysAgo(days));
+        log.info("Found " + activities.size() + " activities to check for badges.");
         activities.forEach(activity ->
         {
             activity.setBadges(badgeAppointer.getBadgesForActivity(activity));

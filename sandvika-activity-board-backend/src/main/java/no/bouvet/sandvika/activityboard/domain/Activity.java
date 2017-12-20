@@ -173,7 +173,7 @@ public class Activity
 
     public void setType(String type)
     {
-        this.type = type;
+        this.type = type.toLowerCase();
     }
 
     public Date getStartDateLocal()
