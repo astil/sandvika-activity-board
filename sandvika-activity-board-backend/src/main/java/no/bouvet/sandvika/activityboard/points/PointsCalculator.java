@@ -1,10 +1,16 @@
 package no.bouvet.sandvika.activityboard.points;
 
+import no.bouvet.sandvika.activityboard.domain.Badge;
+import no.bouvet.sandvika.activityboard.repository.BadgeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.ActivityType;
 import no.bouvet.sandvika.activityboard.utils.Utils;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * This is a static class used for points calculation.
@@ -17,10 +23,12 @@ public final class PointsCalculator
     static final double ELEVATIOIN_METER_VALUE = 0.3;
     static final int SECONDS_IN_MINUTE = 60;
 
+    @Autowired
+    private static BadgeRepository badgeRepository;
+
     private PointsCalculator()
     {
     }
-
 
     public static double getPointsForActivity(Activity activity, double handicap)
     {
@@ -34,9 +42,19 @@ public final class PointsCalculator
             double durationPoints = getPointsForDuration(activity.getMovingTimeInSeconds() / SECONDS_IN_MINUTE, activityType);
             double distancePoints = getPointsForDistance(activity.getDistanceInMeters() / 1000, activityType);
             double elevationPoints = getPointsForElevation(activity.getTotalElevationGaininMeters(), activityType);
+            double badgePoints = getPointsForBadges(activity.getBadges());
             // Deler på 2 for å forhindre inflasjon i poeng
-            return Utils.scaledDouble((durationPoints + distancePoints + achievementPoints + elevationPoints) * handicap) / 2;
+            return Utils.scaledDouble((durationPoints + distancePoints + achievementPoints + elevationPoints + badgePoints) * handicap) / 2;
         }
+    }
+
+    private static double getPointsForBadges(Set<String> badges) {
+        double points = 0;
+        for (String badgeName : badges) {
+            Badge badge = badgeRepository.findByName(badgeName);
+            points += badge.getPoints();
+        }
+        return points;
     }
 
     private static double getPointsForElevation(Double totalElevationGaininMeters, ActivityType activityType)

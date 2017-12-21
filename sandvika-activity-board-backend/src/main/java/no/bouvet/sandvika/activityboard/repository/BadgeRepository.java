@@ -1,6 +1,7 @@
 package no.bouvet.sandvika.activityboard.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -12,7 +13,7 @@ public interface BadgeRepository extends MongoRepository<Badge, String>
 {
     Badge findByName(String name);
 
-    List<Badge> findBadgeByActivityTypeIn(List<String> activityTypes);
+    Set<Badge> findBadgeByActivityTypeIn(List<String> activityTypes);
 
     void deleteByName(String name);
 

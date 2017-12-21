@@ -118,9 +118,9 @@ public class StravaSlurper
         activity.setMovingTimeInSeconds(stravaActivity.getMovingTime());
         activity.setDistanceInMeters(stravaActivity.getDistance());
         activity.setStartDateLocal(DateUtil.getDateFromLocalDateTimeString(stravaActivity.getStartDateLocal()));
-        activity.setPoints(PointsCalculator.getPointsForActivity(activity, handicapCalculator.getHandicapForActivity(activity)));
         activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
         activity.setBadges(badgeAppointer.getBadgesForActivity(activity));
+        activity.setPoints(PointsCalculator.getPointsForActivity(activity, handicapCalculator.getHandicapForActivity(activity)));
         log.debug("Created activity: " + activity.toString());
         return activity;
     }
