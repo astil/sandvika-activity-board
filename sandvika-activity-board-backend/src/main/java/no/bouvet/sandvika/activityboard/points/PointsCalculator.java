@@ -23,9 +23,6 @@ public final class PointsCalculator
     static final double ELEVATIOIN_METER_VALUE = 0.3;
     static final int SECONDS_IN_MINUTE = 60;
 
-    @Autowired
-    private static BadgeRepository badgeRepository;
-
     private PointsCalculator()
     {
     }
@@ -48,10 +45,9 @@ public final class PointsCalculator
         }
     }
 
-    private static double getPointsForBadges(Set<String> badges) {
+    private static double getPointsForBadges(Set<Badge> badges) {
         double points = 0;
-        for (String badgeName : badges) {
-            Badge badge = badgeRepository.findByName(badgeName);
+        for (Badge badge : badges) {
             points += badge.getPoints();
         }
         return points;

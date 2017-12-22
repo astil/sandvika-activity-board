@@ -1,7 +1,6 @@
 package no.bouvet.sandvika.activityboard.domain;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 import org.springframework.data.annotation.Id;
 
@@ -16,7 +15,7 @@ public class Badge
     private String timeCriteria;
     private String beforeOrAfter;
     private int points;
-    private List<Activity> activities;
+    private Set<Activity> activities;
 
     public String getUri()
     {
@@ -98,40 +97,46 @@ public class Badge
         this.beforeOrAfter = beforeOrAfter;
     }
 
-    public List<Activity> getActivities()
+    public Set<Activity> getActivities()
     {
         if (activities == null)
         {
-            activities = new ArrayList<Activity>();
+            activities = new HashSet<>();
         }
         return activities;
     }
 
-    public void setActivities(List<Activity> activities)
+    public void setActivities(Set<Activity> activities)
     {
         this.activities = activities;
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass())
-        {
-            return false;
-        }
-
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Badge badge = (Badge) o;
-
-        return name != null ? name.equals(badge.name) : badge.name == null;
+        return Objects.equals(name, badge.name);
     }
 
     @Override
-    public int hashCode()
-    {
-        return name != null ? name.hashCode() : 0;
+    public int hashCode() {
+
+        return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return "Badge{" +
+                "name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", uri='" + uri + '\'' +
+                ", activityType='" + activityType + '\'' +
+                ", distanceCriteria=" + distanceCriteria +
+                ", timeCriteria='" + timeCriteria + '\'' +
+                ", beforeOrAfter='" + beforeOrAfter + '\'' +
+                ", points=" + points +
+                ", activities=" + activities +
+                '}';
     }
 }

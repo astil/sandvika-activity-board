@@ -25,10 +25,9 @@ public class BadgeAppointer {
     @Autowired
     AthleteRepository athleteRepository;
 
-    public Set<String> getBadgesForActivity(Activity activity) {
-        log.info("Checking activity " + activity.getName() + " for badges.");
+    public Set<Badge> getBadgesForActivity(Activity activity) {
         Set<Badge> allBadges = badgeRepository.findBadgeByActivityTypeIn(Arrays.asList(activity.getType(), "all"));
-        Set<String> awardedBadges = new HashSet<>();
+        Set<Badge> awardedBadges = new HashSet<>();
 
         for (Badge badge : allBadges) {
             if (eligibleForDistanceBadge(activity, badge) || eligibleForClimbBadge(activity, badge) || eligibleForTimeBadge(activity, badge)) {
@@ -39,12 +38,14 @@ public class BadgeAppointer {
         return awardedBadges;
     }
 
-    private void appointBadge(Activity activity, Set<String> awardedBadges, Badge badge) {
-        awardedBadges.add(badge.getName());
+    private void appointBadge(Activity activity, Set<Badge> awardedBadges, Badge badge) {
+        awardedBadges.add(badge);
         badge.getActivities().add(activity);
+        log.info("Saving Badge " + badge.toString());
         badgeRepository.save(badge);
         Athlete athlete = athleteRepository.findById(activity.getAthleteId());
         athlete.addBadge(badge, activity);
+        log.info("Saving Athlete " + athlete.toString());
         athleteRepository.save(athlete);
     }
 
@@ -67,11 +68,11 @@ public class BadgeAppointer {
     }
 
     private boolean eligibleForClimbBadge(Activity activity, Badge badge) {
-        return badgeTypeIsClimb(badge) && activity.getTotalElevationGaininMeters() > badge.getDistanceCriteria();
+        return badgeTypeIsClimb(badge) && activity.getTotalElevationGaininMeters() >= badge.getDistanceCriteria();
     }
 
     private boolean eligibleForDistanceBadge(Activity activity, Badge badge) {
-        return badgeTypeIsDistance(badge) && activity.getDistanceInMeters() > badge.getDistanceCriteria();
+        return badgeTypeIsDistance(badge) && activity.getDistanceInMeters() >= badge.getDistanceCriteria();
     }
 
     private boolean badgeTypeIsTime(Badge badge) {
