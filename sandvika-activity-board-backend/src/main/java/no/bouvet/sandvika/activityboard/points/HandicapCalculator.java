@@ -113,7 +113,7 @@ public class HandicapCalculator
 
     private double calculateHandicap(double activeHours)
     {
-        double rawHc = Utils.scaledDouble(5.5 - ((Math.log10(activeHours - 2) * 3.2)), 3);
+        double rawHc = Utils.scaledDouble(3.5 - ((Math.log10(activeHours - 1.6) * 2)), 3);
 
         double hc = 0;
 
