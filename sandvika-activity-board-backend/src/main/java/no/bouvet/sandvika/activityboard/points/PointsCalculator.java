@@ -52,10 +52,8 @@ public final class PointsCalculator
         }
         return points;
     }
-
-    private static double getPointsForElevation(Double totalElevationGaininMeters, ActivityType activityType)
-    {
-        return totalElevationGaininMeters * ELEVATIOIN_METER_VALUE;
+    private static double getPointsForElevation(Double totalElevationGaininMeters, ActivityType activityType) {
+        return totalElevationGaininMeters * ELEVATIOIN_METER_VALUE * activityType.elevationCoefficient();
     }
 
     private static double getPointsForDistance(double distanceInKilometers, ActivityType activityType)
