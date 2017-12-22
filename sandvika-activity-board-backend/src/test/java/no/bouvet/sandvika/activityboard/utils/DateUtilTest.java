@@ -22,6 +22,12 @@ public class DateUtilTest
     }
 
     @Test
+    public void getDateDaysAgo() throws Exception {
+        Date d = DateUtil.getDateDaysAgo(9999);
+        System.out.println(d);
+    }
+
+    @Test
     public void dateFromString() throws ParseException
     {
         Date d = DateUtil.getDateFromLocalDateTimeString("2017-12-12T06:14:58Z");

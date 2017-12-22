@@ -35,7 +35,7 @@ public final class PointsCalculator {
     }
 
     private static double getPointsForElevation(Double totalElevationGaininMeters, ActivityType activityType) {
-        return totalElevationGaininMeters * ELEVATIOIN_METER_VALUE;
+        return totalElevationGaininMeters * ELEVATIOIN_METER_VALUE * activityType.elevationCoefficient();
     }
 
     private static double getPointsForDistance(double distanceInKilometers, ActivityType activityType) {

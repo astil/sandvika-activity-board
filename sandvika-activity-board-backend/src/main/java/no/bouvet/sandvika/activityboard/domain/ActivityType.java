@@ -173,6 +173,44 @@ public enum ActivityType
                 return 1;
         }
     }
+    public double elevationCoefficient()
+    {
+        switch (this)
+        {
+            case NORDIC_SKIING:
+                return Constants.NORDIC_SKIIING_COEFFISIENT_ELE;
+            case BACKCOUNTRY_SKI:
+                return Constants.BACKCOUNTRY_SKI_COEFFISIENT_ELE;
+            case RIDE:
+                return Constants.RIDE_COEFFISIENT_ELE;
+            case RUN:
+                return Constants.RUN_COEFFISIENT_ELE;
+            case SWIM:
+                return Constants.SWIM_COEFFISIENT_ELE;
+            case ROWING:
+                return Constants.ROWING_COEFFISIENT_ELE;
+            case VIRTUAL_RIDE:
+                return Constants.VIRTUAL_RIDE_COEFFISIENT_ELE;
+            case HIKE:
+                return Constants.HIKE_COEFFISIENT_ELE;
+            case WALK:
+                return Constants.WALK_COEFFISIENT_ELE;
+            case WORKOUT:
+                return Constants.WORKOUT_COEFFISIENT_ELE;
+            case WEIGHT_TRAINING:
+                return Constants.WEIGHT_TRAINING_COEFFISIENT_ELE;
+            case KAYAKING:
+                return Constants.KAYAKING_COEFFISIENT_ELE;
+            case ROLLER_SKI:
+                return Constants.ROLLER_SKI_COEFFISIENT_ELE;
+            case YOGA:
+                return Constants.YOGA_COEFFISIENT_ELE;
+            case E_BIKE_RIDE:
+                return Constants.E_BIKE_RIDE_COEFFISIENT_ELE;
+            default:
+                return 1;
+        }
+    }
 
     private static class Constants
     {
@@ -212,7 +250,7 @@ public enum ActivityType
         public static final double KAYAKING_COEFFISIENT_MIN = 1;
         public static final double NORDIC_SKIIING_COEFFISIENT_MIN = 1;
         public static final double BACKCOUNTRY_SKI_COEFFISIENT_MIN = 0.3;
-        public static final double RIDE_COEFFISIENT_MIN = 1;
+        public static final double RIDE_COEFFISIENT_MIN = 0.5;
         public static final double VIRTUAL_RIDE_COEFFISIENT_MIN = RIDE_COEFFISIENT_MIN;
         public static final double RUN_COEFFISIENT_MIN = 1;
         public static final double SWIM_COEFFISIENT_MIN = 1;
@@ -223,6 +261,22 @@ public enum ActivityType
         public static final double ROLLER_SKI_COEFFISIENT_MIN = 1;
         public static final double YOGA_COEFFISIENT_MIN = 1;
         public static final double E_BIKE_RIDE_COEFFISIENT_MIN = 0.3;
+
+        public static final double ROWING_COEFFISIENT_ELE = 1;
+        public static final double KAYAKING_COEFFISIENT_ELE = 1;
+        public static final double NORDIC_SKIIING_COEFFISIENT_ELE = 1;
+        public static final double BACKCOUNTRY_SKI_COEFFISIENT_ELE = 0.3;
+        public static final double RIDE_COEFFISIENT_ELE = 0.5;
+        public static final double VIRTUAL_RIDE_COEFFISIENT_ELE = RIDE_COEFFISIENT_ELE;
+        public static final double RUN_COEFFISIENT_ELE = 1;
+        public static final double SWIM_COEFFISIENT_ELE = 1;
+        public static final double HIKE_COEFFISIENT_ELE = 0.2;
+        public static final double WALK_COEFFISIENT_ELE = 0.2;
+        public static final double WORKOUT_COEFFISIENT_ELE = 1;
+        public static final double WEIGHT_TRAINING_COEFFISIENT_ELE = 1;
+        public static final double ROLLER_SKI_COEFFISIENT_ELE = 1;
+        public static final double YOGA_COEFFISIENT_ELE = 1;
+        public static final double E_BIKE_RIDE_COEFFISIENT_ELE = 0.3;
 
     }
 }

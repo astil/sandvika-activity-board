@@ -3,6 +3,8 @@ package no.bouvet.sandvika.activityboard.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,7 @@ import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
 
 @RestController
+@EnableAsync
 public class AdminController
 {
     private static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AdminController.class);
@@ -31,7 +34,7 @@ public class AdminController
     HandicapCalculator handicapCalculator;
 
     @RequestMapping(value = "/reload", method = RequestMethod.GET)
-    public void reloadUsersAndPoint()
+    public void reloadUsersAndPoints()
     {
         athleteRepository.deleteAll();
 
@@ -58,7 +61,7 @@ public class AdminController
                 }
             }
         }
-        updateHistoricHandicapForAllAthletes();
+        updateHistoricHandicapForAllAthletes(400);
     }
 
     private void saveAthlete(Activity activity)
@@ -86,10 +89,11 @@ public class AdminController
         activityRepository.save(activity);
     }
 
-    @RequestMapping(value = "/athlete/all/updateHistoricHandicap", method = RequestMethod.GET)
-    public void updateHistoricHandicapForAllAthletes()
+    @Async
+    @RequestMapping(value = "/athlete/all/updateHistoricHandicap/{days}", method = RequestMethod.GET)
+    public void updateHistoricHandicapForAllAthletes(@PathVariable("days") int days)
     {
-        handicapCalculator.updateHandicapForAllAthletesTheLast300Days();
+        handicapCalculator.updateHistoricalHandicapForAllAthletes(days);
         List<Activity> activities = activityRepository.findAll();
         for (Activity activity : activities)
         {
@@ -100,10 +104,10 @@ public class AdminController
     }
 
     @RequestMapping(value = "/athlete/{id}/updateHistoricHandicap", method = RequestMethod.GET)
-    public void updateHistoricHandicapForAllAthletes(@PathVariable("id") int id)
+    public void updateHistoricHandicapForAthlete(@PathVariable("id") int id)
     {
-        handicapCalculator.updateHandicapForAthleteTheLast300Days(id);
-        List<Activity> activities = activityRepository.findAll();
+        handicapCalculator.updateHandicapForAthlete(id);
+        List<Activity> activities = activityRepository.findByAthleteId(id);
         for (Activity activity : activities)
         {
             activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
