@@ -23,8 +23,7 @@ import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
 
 @Component
-public class StravaSlurper
-{
+public class StravaSlurper {
     private static final String BASE_PATH = "https://www.strava.com/api/v3/clubs/";
     private static final String STRAVA_CLUB_ID = "259508";
     public static String STRAVA_CLIENT_TOKEN = "43cef4065b62813502a456d39508702f3d74ad61";
@@ -48,33 +47,30 @@ public class StravaSlurper
         updateActivities(1);
     }
 
-    public void updateActivities(int pages)
-    {
+    public void updateActivities(int pages) {
         log.info("Updating activities");
         List<StravaActivity> stravaActivities = getStravaActivities(STRAVA_CLUB_ID, pages);
         addMissingAthletes(stravaActivities);
 
         List<Activity> activities = new ArrayList<>();
         stravaActivities.forEach(stravaActivity ->
-            activities.add(createActivity(stravaActivity)));
+                activities.add(createActivity(stravaActivity)));
 
         activityRepository.save(activities
-            .stream()
-            .filter(activity -> activity.getPoints() > 0)
-            .collect(Collectors.toList()));
+                .stream()
+                .filter(activity -> activity.getPoints() > 0)
+                .collect(Collectors.toList()));
     }
 
-    private void addMissingAthletes(List<StravaActivity> activities)
-    {
+    private void addMissingAthletes(List<StravaActivity> activities) {
         activities
-            .stream()
-            .map(StravaActivity::getAthlete)
-            .filter(a -> !athleteRepository.exists(a.getId()))
-            .forEach(this::saveAthlete);
+                .stream()
+                .map(StravaActivity::getAthlete)
+                .filter(a -> !athleteRepository.exists(a.getId()))
+                .forEach(this::saveAthlete);
     }
 
-    public void saveAthlete(StravaAthlete stravaAthlete)
-    {
+    public void saveAthlete(StravaAthlete stravaAthlete) {
         Athlete athlete = new Athlete();
         athlete.setLastName(stravaAthlete.getLastname());
         athlete.setFirstName(stravaAthlete.getFirstname());
@@ -84,8 +80,7 @@ public class StravaSlurper
         athleteRepository.save(athlete);
     }
 
-    private Activity createActivity(StravaActivity stravaActivity)
-    {
+    private Activity createActivity(StravaActivity stravaActivity) {
         Activity activity = new Activity();
         activity.setAthletefirstName(stravaActivity.getAthlete().getFirstname());
         activity.setAthleteLastName(stravaActivity.getAthlete().getLastname());
@@ -93,21 +88,17 @@ public class StravaSlurper
         activity.setType(stravaActivity.getType());
         activity.setId(stravaActivity.getId());
         activity.setName(stravaActivity.getName());
-        if (stravaActivity.getKilojoules() != null)
-        {
+        if (stravaActivity.getKilojoules() != null) {
             activity.setKiloJoules(stravaActivity.getKilojoules());
         }
-        if (stravaActivity.getSufferScore() != null)
-        {
+        if (stravaActivity.getSufferScore() != null) {
             activity.setSufferScore(stravaActivity.getSufferScore());
         }
         activity.setElapsedTimeInSeconds(stravaActivity.getElapsedTime());
-        if (stravaActivity.getAchievementCount() != null)
-        {
+        if (stravaActivity.getAchievementCount() != null) {
             activity.setAchievementCount(stravaActivity.getAchievementCount());
         }
-        if (stravaActivity.getTotalElevationGain() != null)
-        {
+        if (stravaActivity.getTotalElevationGain() != null) {
             activity.setTotalElevationGaininMeters(stravaActivity.getTotalElevationGain());
         }
         activity.setMovingTimeInSeconds(stravaActivity.getMovingTime());
@@ -120,15 +111,20 @@ public class StravaSlurper
     }
 
 
-    private List<StravaActivity> getStravaActivities(String clubId, int pages)
-    {
+    private List<StravaActivity> getStravaActivities(String clubId, int pages) {
         ArrayList<StravaActivity> activities = new ArrayList<>();
-        for (int i = 1; i <= pages; i++)
-        {
-            activities.addAll(Arrays.asList(restTemplate.getForObject(BASE_PATH + clubId
-                + "/activities?page=" + i + "&per_page=200&access_token=" + STRAVA_CLIENT_TOKEN, StravaActivity[].class)));
+        for (int i = 1; i <= pages; i++) {
+            log.info("Getting activities from Strava. Page " + i);
+            activities.addAll((getActivitiesFromStrava(clubId, i)));
         }
+        log.info("Got " + activities.size() + " activities from Strava");
         return activities;
+    }
+
+    private List<StravaActivity> getActivitiesFromStrava(String clubId, int page) {
+        StravaActivity[] activitiesFromStrava = restTemplate.getForObject(BASE_PATH + clubId
+                + "/activities?page=" + page + "&per_page=200&access_token=" + STRAVA_CLIENT_TOKEN, StravaActivity[].class);
+        return Arrays.asList(activitiesFromStrava);
     }
 }
 
