@@ -1,6 +1,8 @@
 package no.bouvet.sandvika.activityboard.domain;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
@@ -41,6 +43,7 @@ public class Activity
     private int sufferScore;
     private double handicap;
     private Integer athleteId;
+    private Set<Badge> badges;
 
 
     public Activity()
@@ -72,6 +75,16 @@ public class Activity
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public Set<Badge> getBadges()
+    {
+        return badges;
+    }
+
+    public void setBadges(Set<Badge> badges)
+    {
+        this.badges = badges;
     }
 
     public int getId()
@@ -161,7 +174,7 @@ public class Activity
 
     public void setType(String type)
     {
-        this.type = type;
+        this.type = type.toLowerCase();
     }
 
     public Date getStartDateLocal()

@@ -16,6 +16,7 @@ import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.domain.StravaActivity;
 import no.bouvet.sandvika.activityboard.domain.StravaAthlete;
+import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.points.PointsCalculator;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
@@ -42,8 +43,12 @@ public class StravaSlurper {
     @Autowired
     HandicapCalculator handicapCalculator;
 
+    @Autowired
+    BadgeAppointer badgeAppointer;
+
     @Scheduled(fixedRate = 1000 * 60 * 10)
-    public void updateLatestActivities() {
+    public void updateLatestActivities()
+    {
         updateActivities(1);
     }
 
@@ -104,12 +109,12 @@ public class StravaSlurper {
         activity.setMovingTimeInSeconds(stravaActivity.getMovingTime());
         activity.setDistanceInMeters(stravaActivity.getDistance());
         activity.setStartDateLocal(DateUtil.getDateFromLocalDateTimeString(stravaActivity.getStartDateLocal()));
-        activity.setPoints(PointsCalculator.getPointsForActivity(activity, handicapCalculator.getHandicapForActivity(activity)));
         activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
+        activity.setBadges(badgeAppointer.getBadgesForActivity(activity));
+        activity.setPoints(PointsCalculator.getPointsForActivity(activity, handicapCalculator.getHandicapForActivity(activity)));
         log.debug("Created activity: " + activity.toString());
         return activity;
     }
-
 
     private List<StravaActivity> getStravaActivities(String clubId, int pages) {
         ArrayList<StravaActivity> activities = new ArrayList<>();
