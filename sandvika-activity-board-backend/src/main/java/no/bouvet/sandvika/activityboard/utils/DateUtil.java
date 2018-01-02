@@ -142,7 +142,7 @@ public class DateUtil
         return cal.getTime();
     }
 
-    private static Date firstDayOfWeek(int week, int year)
+    protected static Date firstDayOfWeek(int week, int year)
     {
         Calendar cal = Calendar.getInstance();
         cal.setFirstDayOfWeek(Calendar.MONDAY);

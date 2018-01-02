@@ -15,6 +15,13 @@ public class DateUtilTest
     }
 
     @Test
+    public void firstDayOfWeekByWeeknumber() throws Exception
+    {
+        Date d = DateUtil.firstDayOfWeek(12,2017);
+        System.out.println(d);
+    }
+
+    @Test
     public void lastDayOfWeek() throws Exception
     {
         Date d = DateUtil.lastDayOfWeek(1);
