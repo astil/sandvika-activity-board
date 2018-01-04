@@ -1,51 +1,88 @@
 <ngb-tabset type="pills" (tabChange)="beforeChange($event)">
     <ngb-tab *ngFor="let tab of pillTab" title="{{tab.decode}}" id="{{tab.code}}">
-        <template ngbTabContent>
+        <ng-template ngbTabContent>
+
+            <div class="nav-wrapper">
+                <div class="btn-group">
+                    <div ngbDropdown role="group" class="btn-group">
+                        <button class="btn btn-outline-primary btn-block" id="dropdownConfig" ngbDropdownToggle>Filter </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownConfig">
+                            <button class="dropdown-item" *ngFor="let activityType of activityTypes" (click)="filter(tab, activityType)">{{activityType.decode}}</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary btn-block" *ngIf="tab.code !== 'all' && tab.pageNumber > 1" (click)="changeContent(tab, 'prev')"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</button>
+                    <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.code !== 'all' && tab.pageNumber <= 1" aria-disabled="true"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</button>
+                    <button type="button" class="btn btn-outline-primary btn-block" *ngIf="tab.pageNumber < tab.maxPage" (click)="changeContent(tab, 'next')">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.pageNumber >= tab.maxPage" aria-disabled="true">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                </div>
+                <div class="d-none d-sm-block status-header">
+                    <h2 *ngIf="tab.code === 'all'">{{tab.activityType.decode}}</h2>
+                    <h2 *ngIf="tab.code === 'month'">{{tab.pageNumber | numToMonth}} - {{tab.activityType.decode}}</h2>
+                    <h2 *ngIf="tab.code === 'week'">Uke {{tab.pageNumber}} - {{tab.activityType.decode}}</h2>
+                </div>
+            </div>
 
             <div class="flex-wrapper">
                 <div class="vertical-wrapper">
-                    <latest-activities-component></latest-activities-component>
-                    <stats-data-component periodType="{{tab.altDecode}}" title=""></stats-data-component>
-                    <top-activities-component periodType="{{tab.altDecode}}" numberOfActivities="5"></top-activities-component>
+                    <div class="d-block d-sm-none w-100">
+                        <h2 *ngIf="tab.code === 'all'" style="text-align: center; font-family: 'Roboto', sans-serif;">{{tab.activityType.decode}}</h2>
+                        <h2 *ngIf="tab.code === 'month'" style="text-align: center; font-family: 'Roboto', sans-serif;">{{tab.pageNumber | numToMonth}} - {{tab.activityType.decode}}</h2>
+                        <h2 *ngIf="tab.code === 'week'" style="text-align: center; font-family: 'Roboto', sans-serif;">Uke {{tab.pageNumber}} - {{tab.activityType.decode}}</h2>
+                    </div>
+                    <latest-activities-component [activities]="latestActivities"></latest-activities-component>
+                    <stats-data-component [tab]="tab" [thisWeekStats]="thisWeekStats" title=""></stats-data-component>
+                    <top-activities-component [tab]="tab" [activities]="activities"></top-activities-component>
                 </div>
 
                 <div class="table-wrapper">
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Navn</th>
-                            <th>Poeng</th>
-                            <th class="hidden-md-down">Siste</th>
-                            <th class="hidden-md-down">Antall</th>
-                            <th class="hidden-md-down">Km</th>
-                            <th class="hidden-md-down">Tid</th>
-                            <th class="hidden-md-down">Handicap</th>
-                            <th class="hidden-md-down">Endring</th>
+                            <th class="d-md-table-cell">#</th>
+                            <th class="d-md-table-cell">Navn</th>
+                            <th class="d-md-table-cell">Poeng</th>
+                            <th class="d-none d-md-table-cell">Siste</th>
+                            <th class="d-none d-md-table-cell">Antall</th>
+                            <th class="d-none d-md-table-cell">Km</th>
+                            <th class="d-none d-md-table-cell">Tid</th>
+                            <th class="d-md-table-cell">HC</th>
+                            <th class="d-none d-md-table-cell"></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr *ngFor="let athlete of athletes; let i = index">
-                            <td>{{i+1}}</td>
-                            <td>
+                            <td class="d-md-table-cell">
+                                <span *ngIf="i==0"><i class="fa fa-trophy fa-lg" style="color: gold"></i></span>
+                                <span *ngIf="i==1"><i class="fa fa-trophy fa-lg" style="color: silver"></i></span>
+                                <span *ngIf="i==2"><i class="fa fa-trophy fa-lg" style="color: goldenrod"></i></span>
+                                <span *ngIf="i > 2">{{i+1}}</span>
+                            </td>
+                            <td class="d-md-table-cell">
                                 <ngbd-modal-component [athlete]="athlete"></ngbd-modal-component>
                             </td>
-                            <td>{{athlete.points | number : '1.0-1'}}</td>
-                            <td class="hidden-md-down">{{athlete.lastActivityDate | date:
+                            <td class="d-md-table-cell">{{athlete.points | number : '1.0-1'}}</td>
+                            <td class="d-none d-md-table-cell">{{athlete.lastActivityDate | date:
                                 'dd/MM/yyyy'}}
                             </td>
-                            <td class="hidden-md-down">{{athlete.numberOfActivities}}</td>
-                            <td class="hidden-md-down">{{athlete.kilometers | number : '1.0-1'}}
+                            <td class="d-none d-md-table-cell">{{athlete.numberOfActivities}}</td>
+                            <td class="d-none d-md-table-cell">{{athlete.kilometers | number : '1.0-1'}}
                                 km
                             </td>
-                            <td class="hidden-md-down">{{athlete.minutes | minToHms}}</td>
-                            <td class="hidden-md-down">{{athlete.handicap | number : '1.0-1'}}</td>
-                            <td class="hidden-md-down">{{athlete.change | number : '1.0-1'}}</td>
+                            <td class="d-none d-md-table-cell">{{athlete.minutes | minToHms}}</td>
+                            <td class="d-md-table-cell">{{athlete.handicap | number : '1.0-1'}}</td>
+                            <td class="d-none d-md-table-cell" style="text-align: center">
+                                <!--<i class="fa fa-minus" style="color: #878787" aria-hidden="true" *ngIf="athlete.change == 0"></i>-->
+
+                                <i class="fa fa-angle-up fa-lg" style="color: #239327" aria-hidden="true" *ngIf="athlete.change > 0 && athlete.change < 2"></i>
+                                <i class="fa fa-angle-double-up fa-lg" style="color: #239327" aria-hidden="true" *ngIf="athlete.change >= 2"></i>
+                                <i class="fa fa-angle-down fa-lg" style="color: red" aria-hidden="true" *ngIf="athlete.change < 0 && athlete.change > -2"></i>
+                                <i class="fa fa-angle-double-down fa-lg" style="color: red" aria-hidden="true" *ngIf="athlete.change <= -2"></i>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-        </template>
+        </ng-template>
     </ngb-tab>
 </ngb-tabset>

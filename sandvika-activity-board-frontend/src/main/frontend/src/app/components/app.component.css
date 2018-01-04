@@ -1,5 +1,7 @@
 .container {
     width: 100%;
+    max-width: 100%;
+    position: relative;
     border: none;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -8,6 +10,10 @@
     padding: 1%;
     margin: 0;
     overflow: hidden;
+}
+
+.mini-cards .card .card-block .card-text {
+    padding: 5%;
 }
 
 .card-block {
@@ -30,6 +36,24 @@ th {
     flex-wrap: wrap;
     overflow: hidden;
     align-items: flex-start;
+}
+
+/*.nav-wrapper {*/
+/*margin-bottom: 5px;*/
+/*display: flex;*/
+/*width: 50%;*/
+/*}*/
+
+.nav-wrapper > div {
+    width: 100%;
+}
+
+.nav-wrapper > div .btn-group {
+    width: 100%;
+}
+
+.dropdown-menu {
+    min-width: 23rem;
 }
 
 .strava-brand {
@@ -61,13 +85,6 @@ h1.card-text {
     font-size: 2em;
 }
 
-/*ngbd-tabset-pills {*/
-/*border: 1px solid #ddd;*/
-/*-webkit-border-radius: 5px;*/
-/*-moz-border-radius: 5px;*/
-/*border-radius: 5px;*/
-/*}*/
-
 stats-data-component {
     width: 100%;
 }
@@ -82,7 +99,7 @@ stats-data-component {
 }
 
 .latest-activities .card {
-  width: 100%;
+    width: 100%;
 }
 
 .card {
@@ -119,14 +136,39 @@ stats-data-component {
     flex-wrap: wrap;
 }
 
+.pagination .btn-group {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.status-header > h2 {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+}
+
+@media (min-width: 375px) {
+    .dropdown-menu {
+        min-width: 23rem;
+    }
+}
+
+@media (min-width: 414px) {
+    .dropdown-menu {
+        min-width: 25.4rem;
+    }
+}
+
 @media (min-width: 768px) {
     .container {
         padding: 1%;
         margin: 0 auto;
         width: 100%;
     }
+    .dropdown-menu {
+        min-width: 10rem;
+    }
 }
-
 
 @media (min-width: 992px) {
     .container {
@@ -134,16 +176,27 @@ stats-data-component {
         margin: 20px auto;
     }
 
+    .nav-wrapper {
+        margin-bottom: 5px;
+        display: flex;
+        width: 50%;
+    }
+
+    .nav-wrapper > div {
+        margin-right: 5%;
+        width: auto;
+    }
+
     latest-activities-component {
-        width: 32.5%;
+        width: 100%;
     }
 
     top-activities-component {
-        width: 32.5%;
+        width: 49.5%;
     }
 
     stats-data-component {
-        width: 32.5%;
+        width: 49.5%;
     }
 
     .modal-dialog {
@@ -158,20 +211,26 @@ stats-data-component {
     }
 }
 
-
 @media (min-width: 1400px) {
     .container {
         width: 90%;
+        padding: 0;
     }
 
     .strava-brand img {
         width: 20%;
     }
+
+    .bouvet-brand img {
+        top: 5px;
+        right: 0;
+    }
 }
 
 @media (min-width: 1600px) {
     .container {
-        width: 70%;
+        width: 80%;
+        padding: 0;
     }
 
     .vertical-wrapper {
@@ -194,5 +253,11 @@ stats-data-component {
 
     stats-data-component {
         width: 100%;
+    }
+
+    .nav-wrapper {
+        position: absolute;
+        top: 7px;
+        left: 250px;
     }
 }

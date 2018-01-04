@@ -16,33 +16,33 @@ import {Athlete} from "../domain/athlete";
     </div>
     <div class="modal-body">
         <div class="panel panel-default">
-            <table class="table table-striped">
+            <table class="table table-striped table-condensed">
                 <thead>
                     <tr>
-                        <th class="hidden-sm-down">Dato</th>
-                        <th>Navn</th>
-                        <th>Type</th>
-                        <th>Poeng</th>
-                        <th class="hidden-sm-down">Distanse</th>
-                        <th class="hidden-sm-down">Tid i bevegelse</th>
-                        <th class="hidden-md-down">Totaltid</th>
-                        <th class="hidden-md-down">Høydemeter</th>
-                        <th class="hidden-md-down">SufferScore</th>
-                        <th class="hidden-md-down">Handicap</th>
+                        <th class="d-none d-md-table-cell">Dato</th>
+                        <th class="d-md-table-cell">Navn</th>
+                        <th class="d-md-table-cell">Type</th>
+                        <th class="d-md-table-cell">Poeng</th>
+                        <th class="d-none d-md-table-cell">Distanse</th>
+                        <th class="d-none d-md-table-cell">Tid i bevegelse</th>
+                        <th class="d-none d-md-table-cell">Totaltid</th>
+                        <th class="d-none d-md-table-cell">Høydemeter</th>
+                        <th class="d-none d-md-table-cell">SufferScore</th>
+                        <th class="d-md-table-cell">HC</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let activity of activities | orderBy:'-startDateLocal'">
-                        <td class="hidden-sm-down">{{activity.startDateLocal | date: 'dd/MM/yyyy'}}</td>
-                        <td><a href="https://www.strava.com/activities/{{activity.id}}">{{activity.name}}</a></td>
-                        <td>{{activity.type}}</td>
-                        <td>{{activity.points | number : '1.0-1'}}</td>
-                        <td class="hidden-sm-down">{{activity.distanceInMeters | meterToKm}} km</td>
-                        <td class="hidden-sm-down">{{activity.movingTimeInSeconds | convertToHours}}</td>
-                        <td class="hidden-md-down">{{activity.elapsedTimeInSeconds | convertToHours}}</td>
-                        <td class="hidden-md-down">{{activity.totalElevationGaininMeters}}</td>
-                        <td class="hidden-md-down">{{activity.sufferScore}}</td>  
-                        <td class="hidden-md-down">{{activity.handicap | number : '1.0-1'}}</td>  
+                        <td class="d-none d-md-table-cell">{{activity.startDateLocal | date: 'dd/MM/yyyy'}}</td>
+                        <td class="d-md-table-cell"><a href="https://www.strava.com/activities/{{activity.id}}">{{activity.name}}</a></td>
+                        <td class="d-md-table-cell">{{activity.type}}</td>
+                        <td class="d-md-table-cell">{{activity.points | number : '1.0-1'}}</td>
+                        <td class="d-none d-md-table-cell">{{activity.distanceInMeters | meterToKm}} km</td>
+                        <td class="d-none d-md-table-cell">{{activity.movingTimeInSeconds | convertToHours}}</td>
+                        <td class="d-none d-md-table-cell">{{activity.elapsedTimeInSeconds | convertToHours}}</td>
+                        <td class="d-none d-md-table-cell">{{activity.totalElevationGaininMeters}}</td>
+                        <td class="d-none d-md-table-cell">{{activity.sufferScore}}</td>  
+                        <td class="d-md-table-cell">{{activity.handicap | number : '1.0-1'}}</td>  
                     </tr>
                 </tbody>
             </table>
@@ -64,7 +64,8 @@ export class NgbdModalContent {
     selector: 'ngbd-modal-component',
     template: '<a href="#" (click)="open()">{{athlete.athleteFirstName}} {{athlete.athleteLastName}}</a>',
     providers: [AppRestService],
-    inputs: ['athlete']
+    inputs: ['athlete'],
+    styleUrls: ['app.component.css']
 })
 export class NgbdModalComponent implements OnInit {
     private activities: Activity[];

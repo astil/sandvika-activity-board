@@ -1,15 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-/*body {*/
-    /*!*background: url(assets/logo.svg) 3% 3% no-repeat,*!*/
-                /*!*url(assets/kystlinje.svg) top left no-repeat;*!*/
 
-
-    /*background: url(assets/kystlinje.svg) top left no-repeat;*/
-
-    /*background-attachment: fixed;*/
-    /*!*background-size: 8%, 30%;*!*/
-    /*background-size: 100%;*/
-/*}*/
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~font-awesome/css/font-awesome.css';
 
 @media (max-width: 1000px) {
     body {
@@ -26,11 +18,15 @@
     width: 100%;
 }
 
-.nav-pills .nav-item.show .nav-link, .nav-pills .nav-link.active {
+.nav-pills .nav-item.show .nav-link, .nav-pills .nav-link.active, .btn-outline-primary {
     color: #000;
-    cursor: default;
+    cursor: pointer;
     background-color: #fff;
     border: 1px solid #dddddd;
+}
+
+.btn-block+.btn-block {
+    margin-top: 0;
 }
 
 a {
@@ -38,19 +34,55 @@ a {
     text-decoration: none;
 }
 
-a:focus, a:hover {
+.btn-outline-primary:not([disabled]):not(.disabled).active, .btn-outline-primary:not([disabled]):not(.disabled):active, .show>.btn-outline-primary.dropdown-toggle{
+    color: #000;
+    background-color: transparent;
+    border-color: #dddddd;
+    box-shadow: 0 0 0 0.2rem rgba(201, 201, 201, 0.5);
+}
+
+a:focus, a:hover, .btn-outline-primary:hover, .btn-outline-primary:active {
     color: #5c5c5c;
-    text-decoration: underline;
+    text-decoration: none;
+    background-color: transparent;
+    border-color: #dddddd;
+}
+
+.btn-outline-primary.focus, .btn-outline-primary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(201, 201, 201, 0.5);
+}
+
+.btn-outline-primary.disabled, .btn-outline-primary:disabled {
+    color: #767676;
+    background-color: transparent;
 }
 
 .modal-dialog {
     max-width: 100%;
+    margin: 0 auto;
+}
+
+.modal-body {
+    padding: 0;
+}
+
+.table td, .table th {
+    font-size: 0.75em;
 }
 
 @media (min-width: 768px) {
     .nav-item {
         width: auto;
     }
+
+    .table td, .table th {
+        font-size: 1em;
+    }
+
+    .modal-body {
+        padding: 10px;
+    }
+
 }
 
 

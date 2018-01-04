@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, Input, OnInit} from "@angular/core";
 import {AppRestService} from "../service/app.rest.service";
 import {Activity} from "../domain/activity";
 
@@ -9,20 +9,12 @@ import {Activity} from "../domain/activity";
     styleUrls: ['app.component.css']
 })
 export class LatestActivities implements OnInit {
-    private activities: Activity[];
-    private errorMessage: any;
+    @Input() activities: Activity[];
 
     constructor(private appRestService: AppRestService) {
     }
 
     ngOnInit(): void {
-        this.appRestService.getLatestActivities(5).subscribe(
-            activities => this.processResult(activities),
-            error => this.errorMessage = <any>error
-        );
-    }
 
-    processResult(result): void {
-        this.activities = result
     }
 }
