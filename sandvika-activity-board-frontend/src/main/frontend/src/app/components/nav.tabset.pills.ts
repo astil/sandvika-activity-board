@@ -43,7 +43,7 @@ export class NgbdTabsetPills implements OnInit {
 
     constructor(private appRestService: AppRestService) {
         this.pageWeek = DateUtilsServiceService.getWeekNumber(new Date());
-        this.pageMonth = new Date().getMonth();
+        this.pageMonth = new Date().getMonth() + 1;
 
         this.pillTab[1].pageNumber = this.pageMonth;
         this.pillTab[2].pageNumber = this.pageWeek;

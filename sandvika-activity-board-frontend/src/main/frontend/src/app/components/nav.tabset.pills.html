@@ -10,8 +10,8 @@
                             <button class="dropdown-item" *ngFor="let activityType of activityTypes" (click)="filter(tab, activityType)">{{activityType.decode}}</button>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-outline-primary btn-block" *ngIf="tab.code !== 'all' && tab.pageNumber > 0" (click)="changeContent(tab, 'prev')"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</button>
-                    <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.code !== 'all' && tab.pageNumber <= 0" aria-disabled="true"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</button>
+                    <button type="button" class="btn btn-outline-primary btn-block" *ngIf="tab.code !== 'all' && tab.pageNumber > 1" (click)="changeContent(tab, 'prev')"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</button>
+                    <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.code !== 'all' && tab.pageNumber <= 1" aria-disabled="true"><i class="fa fa-angle-left" aria-hidden="true"></i> Forrige</button>
                     <button type="button" class="btn btn-outline-primary btn-block" *ngIf="tab.pageNumber < tab.maxPage" (click)="changeContent(tab, 'next')">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></button>
                     <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.pageNumber >= tab.maxPage" aria-disabled="true">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></button>
                 </div>

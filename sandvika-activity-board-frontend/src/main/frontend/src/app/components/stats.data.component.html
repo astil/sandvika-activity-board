@@ -2,9 +2,9 @@
 
     <div class="card">
         <div class="card-block">
-            <h2 *ngIf="tab.code === 'all'" class="card-text" style="font-family: 'Roboto', sans-serif;">Totalt</h2>
-            <h2 *ngIf="tab.code === 'month'" class="card-text" style="font-family: 'Roboto', sans-serif;">Totalt i {{tab.pageNumber | numToMonth}}</h2>
-            <h2 *ngIf="tab.code === 'week'" class="card-text" style="font-family: 'Roboto', sans-serif;">Totalt i uke {{tab.pageNumber}}</h2>
+            <h2 *ngIf="tab.code === 'all'" class="card-text" style="font-family: 'Roboto', sans-serif;">{{tab.activityType.decode==='Alle'?'Totalt':tab.activityType.decode}}</h2>
+            <h2 *ngIf="tab.code === 'month'" class="card-text" style="font-family: 'Roboto', sans-serif;">{{tab.activityType.decode==='Alle'?'Totalt':tab.activityType.decode}} i {{tab.pageNumber | numToMonth}}</h2>
+            <h2 *ngIf="tab.code === 'week'" class="card-text" style="font-family: 'Roboto', sans-serif;">{{tab.activityType.decode==='Alle'?'Totalt':tab.activityType.decode}} i uke {{tab.pageNumber}}</h2>
         </div>
     </div>
 
