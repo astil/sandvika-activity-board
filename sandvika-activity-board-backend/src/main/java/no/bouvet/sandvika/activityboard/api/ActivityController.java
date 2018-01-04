@@ -42,7 +42,7 @@ public class ActivityController
                                                         @PathVariable("periodType") String periodType)
     {
         Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
-        return getActivitiesForPeriodByActivityType(activityType, period);
+        return getActivitiesForPeriodByActivityType(activityType.toLowerCase(), period);
     }
 
     @RequestMapping(value = "/activities/{activityType}/{periodType}/{periodNumber}/{year}", method = RequestMethod.GET)
@@ -52,7 +52,7 @@ public class ActivityController
                                                  @PathVariable("year") int year)
     {
         Period period = DateUtil.getPeriod(PeriodType.valueOf(periodType.toUpperCase()), periodNumber, year);
-        return getActivitiesForPeriodByActivityType(activityType, period);
+        return getActivitiesForPeriodByActivityType(activityType.toLowerCase(), period);
     }
 
     //    @CrossOrigin(origins = "*")
@@ -61,7 +61,7 @@ public class ActivityController
                                                                  @PathVariable("periodType") String periodType)
     {
         Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
-        List<LeaderboardEntry> currentLeaderboard = getLeaderboardEntries(getActivitiesForPeriodByActivityType(activityType, period));
+        List<LeaderboardEntry> currentLeaderboard = getLeaderboardEntries(getActivitiesForPeriodByActivityType(activityType.toLowerCase(), period));
         Period comparingPeriod;
         if (periodType.equalsIgnoreCase("week"))
         {
@@ -135,7 +135,7 @@ public class ActivityController
                                                           @PathVariable("periodNumber") int periodNumber,
                                                           @PathVariable("year") int year)
     {
-        return getLeaderboardEntries(getActivities(activityType, periodType, periodNumber, year));
+        return getLeaderboardEntries(getActivities(activityType.toLowerCase(), periodType, periodNumber, year));
     }
 
     private List<Activity> getActivities(String activityType,
@@ -158,7 +158,7 @@ public class ActivityController
     {
 
         Period period = DateUtil.getPeriod(PeriodType.valueOf(periodType.toUpperCase()), periodNumber, year);
-        return getActivitiesForPeriodByActivityType(activityType, period)
+        return getActivitiesForPeriodByActivityType(activityType.toLowerCase(), period)
             .stream()
             .sorted(Comparator.comparingDouble(Activity::getPoints).reversed())
             .limit(limit)
@@ -173,7 +173,7 @@ public class ActivityController
     {
 
         Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
-        return getActivitiesForPeriodByActivityType(activityType, period)
+        return getActivitiesForPeriodByActivityType(activityType.toLowerCase(), period)
             .stream()
             .sorted(Comparator.comparingDouble(Activity::getPoints).reversed())
             .limit(limit)
@@ -184,7 +184,7 @@ public class ActivityController
     public Statistics getStatisticsForCurrentPeriodByActivityType(@PathVariable("activityType") String activityType,
                                                                   @PathVariable("periodType") String periodType)
     {
-        return createStatsForCurrentPeriod(activityType, periodType);
+        return createStatsForCurrentPeriod(activityType.toLowerCase(), periodType);
     }
 
     //    @CrossOrigin(origins = "*")
@@ -194,7 +194,7 @@ public class ActivityController
                                                            @PathVariable("periodNumber") int periodNumber,
                                                            @PathVariable("year") int year)
     {
-        return createStatsForHistoricPeriod(activityType, periodType, periodNumber, year);
+        return createStatsForHistoricPeriod(activityType.toLowerCase(), periodType, periodNumber, year);
     }
 
     @RequestMapping(value = "/activities/{activityType}/latest/{numberOfActivities}", method = RequestMethod.GET)
@@ -207,7 +207,7 @@ public class ActivityController
             activityList = getActivities(numberOfActivities);
         } else
         {
-            activityList = getActivitiesByActivityType(activityType, numberOfActivities);
+            activityList = getActivitiesByActivityType(activityType.toLowerCase(), numberOfActivities);
         }
         return activityList;
     }

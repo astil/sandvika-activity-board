@@ -9,7 +9,6 @@ import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -27,11 +26,15 @@ public class HandicapCalculator
     private static final int SECONDS_IN_HOUR = 3600;
     private static final int BASE_HOURS = 6;
     private static Logger log = LoggerFactory.getLogger(HandicapCalculator.class);
-    @Autowired
-    private AthleteRepository athleteRepository;
 
-    @Autowired
-    private ActivityRepository activityRepository;
+    private final AthleteRepository athleteRepository;
+    private final ActivityRepository activityRepository;
+
+    public HandicapCalculator(AthleteRepository athleteRepository, ActivityRepository activityRepository)
+    {
+        this.activityRepository = activityRepository;
+        this.athleteRepository = athleteRepository;
+    }
 
     @Scheduled(cron = "0 0 0 * * *")
     public void updateHandicapForAllAthletes()
@@ -49,8 +52,15 @@ public class HandicapCalculator
 
     public void updateHandicapForAllAthletesTheLast300Days()
     {
-        deleteHandicapsForAllAthletsTheLast300Days();
+        deleteHandicapsForAllAthlets();
         IntStream.range(0, 300).forEach(i ->
+            updateHandicapForAllAthletesForDate(DateUtil.getDateDaysAgo(i)));
+    }
+
+    public void updateHistoricalHandicapForAllAthletes(int days)
+    {
+        deleteHandicapsForAllAthlets();
+        IntStream.range(0, days).forEach(i ->
             updateHandicapForAllAthletesForDate(DateUtil.getDateDaysAgo(i)));
     }
 
@@ -66,11 +76,11 @@ public class HandicapCalculator
         }
     }
 
-    private void deleteHandicapsForAllAthletsTheLast300Days()
+    private void deleteHandicapsForAllAthlets()
     {
         List<Athlete> athletes = athleteRepository.findAll();
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, -300);
+        calendar.add(Calendar.YEAR, -2);
         for (Athlete athlete : athletes)
         {
             athlete.setHandicapList(athlete.getHandicapList()
@@ -95,16 +105,30 @@ public class HandicapCalculator
 
     }
 
-    private double calculateHandicapForAthlete(Athlete athlete, Date dateDaysAgo)
+    protected double calculateHandicapForAthlete(Athlete athlete, Date dateDaysAgo)
     {
         double activeHours = getActiveHoursByDaysAndDateAndAthlete(30, dateDaysAgo, athlete);
-        if (activeHours <= 4)
+        return calculateHandicap(activeHours);
+    }
+
+    private double calculateHandicap(double activeHours)
+    {
+        double rawHc = Utils.scaledDouble(20*Math.pow(activeHours, -1), 3);
+
+        double hc = 0;
+
+        if (rawHc > 10 || rawHc == 0)
         {
-            return 6;
+            hc = 10;
+        } else if (rawHc < 0.5)
+        {
+            hc = 0.5;
         } else
         {
-            return Utils.scaledDouble(BASE_HOURS / (activeHours / 4), 3);
+            hc = rawHc;
         }
+
+        return hc;
     }
 
     private double getActiveHoursByDaysAndDateAndAthlete(int days, Date dateDaysAgo, Athlete athlete)
@@ -120,14 +144,8 @@ public class HandicapCalculator
 
     private double calculateHandicapForAthlete(Athlete athlete)
     {
-        double activeHours = getActiveHoursByDaysAndAthlete(30, athlete);
-        if (activeHours <= 4)
-        {
-            return 6;
-        } else
-        {
-            return Utils.scaledDouble(BASE_HOURS / (activeHours / 4), 3);
-        }
+        double activeHours = getActiveHoursByDaysAndAthlete(60, athlete);
+        return calculateHandicap(activeHours);
     }
 
     private double getActiveHoursByDaysAndAthlete(int days, Athlete athlete)
@@ -165,5 +183,12 @@ public class HandicapCalculator
             .filter(h -> h.getTimestamp().before(calendar.getTime()))
             .collect(Collectors.toList()));
         athleteRepository.save(athlete);
+    }
+
+    public void updateHandicapForAthlete(int athleteId)
+    {
+        deleteHandicapsForAthleteTheLast300Days(athleteId);
+        IntStream.range(0, 999).forEach(i ->
+            updateHandicapForAthleteForDate(athleteId, DateUtil.getDateDaysAgo(i)));
     }
 }

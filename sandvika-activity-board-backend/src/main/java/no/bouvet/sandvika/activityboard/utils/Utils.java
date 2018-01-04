@@ -7,7 +7,12 @@ public class Utils
 {
     public static double scaledDouble(double aDouble, int scale)
     {
-        return BigDecimal.valueOf(aDouble).setScale(scale, RoundingMode.HALF_UP).doubleValue();
+        try
+        {
+            return BigDecimal.valueOf(aDouble).setScale(scale, RoundingMode.HALF_UP).doubleValue();
+        } catch (NumberFormatException nfe) {
+            return 0;
+        }
     }
 
     public static double scaledDouble(double aDouble)

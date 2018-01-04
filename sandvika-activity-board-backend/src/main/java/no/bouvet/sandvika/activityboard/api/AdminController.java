@@ -3,6 +3,8 @@ package no.bouvet.sandvika.activityboard.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,18 +13,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
+import no.bouvet.sandvika.activityboard.domain.Badge;
+import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.points.PointsCalculator;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
+import no.bouvet.sandvika.activityboard.repository.BadgeRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
+import no.bouvet.sandvika.activityboard.utils.DateUtil;
 
 @RestController
+@EnableAsync
 public class AdminController
 {
     private static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AdminController.class);
     @Autowired
     ActivityRepository activityRepository;
+    @Autowired
+    BadgeRepository badgeRepository;
     @Autowired
     AthleteRepository athleteRepository;
     @Autowired
@@ -30,8 +39,11 @@ public class AdminController
     @Autowired
     HandicapCalculator handicapCalculator;
 
+    @Autowired
+    BadgeAppointer badgeAppointer;
+
     @RequestMapping(value = "/reload", method = RequestMethod.GET)
-    public void reloadUsersAndPoint()
+    public void reloadUsersAndPoints()
     {
         athleteRepository.deleteAll();
 
@@ -58,7 +70,7 @@ public class AdminController
                 }
             }
         }
-        updateHistoricHandicapForAllAthletes();
+        updateHistoricHandicapForAllAthletes(400);
     }
 
     private void saveAthlete(Activity activity)
@@ -86,10 +98,11 @@ public class AdminController
         activityRepository.save(activity);
     }
 
-    @RequestMapping(value = "/athlete/all/updateHistoricHandicap", method = RequestMethod.GET)
-    public void updateHistoricHandicapForAllAthletes()
+    @Async
+    @RequestMapping(value = "/athlete/all/updateHistoricHandicap/{days}", method = RequestMethod.GET)
+    public void updateHistoricHandicapForAllAthletes(@PathVariable("days") int days)
     {
-        handicapCalculator.updateHandicapForAllAthletesTheLast300Days();
+        handicapCalculator.updateHistoricalHandicapForAllAthletes(days);
         List<Activity> activities = activityRepository.findAll();
         for (Activity activity : activities)
         {
@@ -100,10 +113,10 @@ public class AdminController
     }
 
     @RequestMapping(value = "/athlete/{id}/updateHistoricHandicap", method = RequestMethod.GET)
-    public void updateHistoricHandicapForAllAthletes(@PathVariable("id") int id)
+    public void updateHistoricHandicapForAthlete(@PathVariable("id") int id)
     {
-        handicapCalculator.updateHandicapForAthleteTheLast300Days(id);
-        List<Activity> activities = activityRepository.findAll();
+        handicapCalculator.updateHandicapForAthlete(id);
+        List<Activity> activities = activityRepository.findByAthleteId(id);
         for (Activity activity : activities)
         {
             activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
@@ -117,5 +130,58 @@ public class AdminController
     {
         activityRepository.delete(id);
     }
+
+
+    @RequestMapping(value = "/badges", method = RequestMethod.POST)
+    public void addBadge(@RequestBody Badge badge)
+    {
+        badgeRepository.save(badge);
+    }
+
+    @RequestMapping(value = "/badges", method = RequestMethod.GET)
+    public List<Badge> listAllBadges()
+    {
+        return badgeRepository.findAll();
+    }
+
+    @RequestMapping(value = "/badges/appointHistoricalBadges/{days}", method = RequestMethod.GET)
+    public void listAllBadges(@PathVariable("days") int days)
+    {
+        log.info("Appointing badges for the last " + days + " days.");
+        List<Activity> activities = activityRepository.findByStartDateLocalAfter(DateUtil.getDateDaysAgo(days));
+        log.info("Found " + activities.size() + " activities to check for badges.");
+        activities.forEach(activity ->
+        {
+            activity.setBadges(badgeAppointer.getBadgesForActivity(activity));
+            activityRepository.save(activity);
+        });
+    }
+
+    @RequestMapping(value = "/badges/deleteAllBadgesFromAthletes", method = RequestMethod.DELETE)
+    public void deleteAllBadgesFromAthletes()
+    {
+        List<Badge> badges = badgeRepository.findAll();
+        badges.forEach(badge ->
+        {
+            badge.setActivities(null);
+            badgeRepository.save(badge);
+        });
+
+        List<Activity> activities = activityRepository.findAllByBadgesIsNotNull();
+        activities.forEach(activity ->
+        {
+            activity.setBadges(null);
+            activityRepository.save(activity);
+        });
+
+        List<Athlete> athletes = athleteRepository.findAllByBadgesIsNotNull();
+        athletes.forEach(athlete ->
+        {
+            athlete.setBadges(null);
+            athleteRepository.save(athlete);
+        });
+
+    }
+
 
 }

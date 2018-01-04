@@ -12,6 +12,8 @@ import no.bouvet.sandvika.activityboard.domain.Activity;
 @RepositoryRestResource(collectionResourceRel = "activity", path = "activity")
 public interface ActivityRepository extends MongoRepository<Activity, Integer>
 {
+    public List<Activity> findAllByBadgesIsNotNull();
+
     public List<Activity> findByAthleteId(int id);
 
     public List<Activity> findByStartDateLocalAfter(Date startDate);
