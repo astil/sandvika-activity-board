@@ -1,15 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
-/*body {*/
-    /*!*background: url(assets/logo.svg) 3% 3% no-repeat,*!*/
-                /*!*url(assets/kystlinje.svg) top left no-repeat;*!*/
 
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~font-awesome/css/font-awesome.css';
 
-    /*background: url(assets/kystlinje.svg) top left no-repeat;*/
-
-    /*background-attachment: fixed;*/
-    /*!*background-size: 8%, 30%;*!*/
-    /*background-size: 100%;*/
-/*}*/
 @media (max-width: 1000px) {
     body {
         background: none;
