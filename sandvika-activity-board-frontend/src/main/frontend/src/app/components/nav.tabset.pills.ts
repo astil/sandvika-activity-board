@@ -36,6 +36,7 @@ export class NgbdTabsetPills implements OnInit {
         new ActivityType("Kayaking", "Kayaking"),
         new ActivityType("RollerSki", "Rulleski"),
         new ActivityType("Yoga", "Yoga"),
+        new ActivityType("IceSKATE", "Skøyter"),
         new ActivityType("EBikeRide", "El-sykkel")];
 
     private thisWeekStats: Statistics;
