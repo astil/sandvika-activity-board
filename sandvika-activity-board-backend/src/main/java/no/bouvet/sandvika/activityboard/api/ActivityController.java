@@ -71,7 +71,7 @@ public class ActivityController
             comparingPeriod = DateUtil.getPeriodFromMonthStartToDate(DateUtil.getDateDaysAgo(7));
         } else
         {
-            comparingPeriod = DateUtil.getPeriodFromCompetitionStartToDate(DateUtil.firstDayOfCurrentMonth());
+            comparingPeriod = DateUtil.getPeriodFromCompetitionStartToDate(DateUtil.getDateDaysAgo(7));
         }
         List<LeaderboardEntry> comparingLeaderboard = getLeaderboardEntries(getActivitiesForPeriodByActivityType("all", comparingPeriod));
 
