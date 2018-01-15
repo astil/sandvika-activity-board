@@ -144,7 +144,7 @@ public class HandicapCalculator
 
     private double calculateHandicapForAthlete(Athlete athlete)
     {
-        double activeHours = getActiveHoursByDaysAndAthlete(60, athlete);
+        double activeHours = getActiveHoursByDaysAndAthlete(30, athlete);
         return calculateHandicap(activeHours);
     }
 
