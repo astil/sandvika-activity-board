@@ -320,7 +320,7 @@ public class ActivityController
         {
             return 1;
         }
-        return athlete.getHandicapList().get(0).getHandicap();
+        return athlete.getHandicapForDate(new Date());
     }
 
 }
