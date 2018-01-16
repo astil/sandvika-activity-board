@@ -282,7 +282,7 @@ public class ActivityController
                 entry.setAthleteFirstName(activity.getAthletefirstName());
                 entry.setNumberOfActivities(1);
 
-                entry.setHandicap(getHandicap(activity.getAthleteId(), getLastActivityDate(activityList)));
+                entry.setHandicap(getCurrentHandicap(activity.getAthleteId()));
                 entry.setKilometers(activity.getDistanceInMeters() / 1000);
                 entry.setMinutes(activity.getMovingTimeInSeconds() / 60);
                 entry.setLastActivityDate(activity.getStartDateLocal());
@@ -314,32 +314,13 @@ public class ActivityController
         return sortedEntries;
     }
 
-    private double getHandicap(int athleteId, Date lastActivityDate)
-    {
+    private double getCurrentHandicap(int athleteId) {
         Athlete athlete = athleteRepository.findById(athleteId);
         if (athlete == null)
         {
             return 1;
         }
-        return athlete.getHandicapForDate(lastActivityDate);
+        return athlete.getHandicapList().get(0).getHandicap();
     }
-
-    private Date getLastActivityDate(List<Activity> activityList)
-    {
-        return activityList.stream().map(Activity::getStartDateLocal).max(Comparator.naturalOrder()).get();
-    }
-
-    private double getHandicapForActivity(Activity activity)
-    {
-        Athlete athlete = athleteRepository.findById(activity.getAthleteId());
-        if (athlete == null || athlete.getHandicapList().isEmpty())
-        {
-            return 1;
-        } else
-        {
-            return athlete.getHandicapForDate(activity.getStartDateLocal());
-        }
-    }
-
 
 }
