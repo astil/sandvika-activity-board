@@ -22,7 +22,7 @@ deploy:
     organization: sandvika-strava-board
     space: development
     routes:
-      -route: dev-sandvika-strava-board.cfapps.io
+      - route: dev-sandvika-strava-board.cfapps.io
     on:
       all_branches: true
 notifications:
