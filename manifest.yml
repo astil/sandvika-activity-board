@@ -1,4 +1,0 @@
-applications:
-- name: sandvika-strava-board
-  memory: 1024M
-  path: ./sandvika-activity-board-frontend/target/sandvika-activity-board-frontend-0.0.1-SNAPSHOT.jar
