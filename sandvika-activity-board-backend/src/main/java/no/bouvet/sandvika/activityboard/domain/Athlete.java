@@ -85,11 +85,10 @@ public class Athlete {
 
     public double getHandicapForDate(Date startDateLocal) {
         OptionalDouble handicap = handicapList.stream()
-                .filter(h -> h.getTimestamp().equals(startDateLocal))
+                .filter(h -> h.getTimestamp().before(startDateLocal))
                 .sorted(Comparator.comparing(Handicap::getTimestamp).reversed())
                 .mapToDouble(Handicap::getHandicap)
                 .findFirst();
-
 
         if (!handicap.isPresent()) {
             handicap = handicapList.stream()
