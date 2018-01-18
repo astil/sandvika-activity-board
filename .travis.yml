@@ -21,6 +21,8 @@ deploy:
       secure: nn5kEqE6SQEP9w+hKEA1a8u+WYOGiFp6U6rLzCuk6D+ygowEpSCBb92DV6vQw2qlM0sYd8Ptaoq9AI5z0C4oLNyOWOrt27CA5jFuP17L4Tq2SGuEhZXCI9PwMSsUCmkgMLsoB4ROwxSWwENHaNeM4xZ7IcfhGBmY9aWAny7yf1xVj1Fl/pkt2mrLDNga/gReAFGec2Amw84ZzdE7qOPbj1A4pIY576W44ApjI1C/PkPnTfkghXOrtmHIctBay+z3l7LKx5oneY4ROUFrxOnjMfmNrymGyW/d7AT/XTIY5DJZTKPF3PNvkh+agOaE6H5Mw+f3XKmrzMEqR9dbLIh8xYUP5Zhe6qCo3y1siixJRAxffIqDa6gFbxk7oerfiYmxplEGFjmwUT2XdWa3dByx9/v87LRsCAPnoEkaMA57L3o21DzsFqu9NQqqV6xLg7jGUwI9dBZeY7jp/z7DmHdklBqpMbq7KOHNVvoQoseQN9vU7FEEOvtiEtqp8+uq24JaUt4PiJ9BRoHY/ChxJIuwaVZmj/kpcq6HoSMB7tviT35revNr8vdiujjrfayU4wSGhjXPuQlX8Bv87//jK8cS/ZJtvrr64BDNo3dcLUu9F68qcOURaBYTQzkALHh969KJDiKBef4LV9q+8ka0Lw3VV4+QIBMCcnOxPJP5z2nZfs8=
     organization: sandvika-strava-board
     space: development
+    routes:
+      - route: dev-sandvika-strava-board.cfapps.io
     on:
       all_branches: true
 notifications:

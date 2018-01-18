@@ -44,6 +44,8 @@ public class Athlete {
         if (this.handicapList == null) {
             this.handicapList = new ArrayList<>();
         }
+        handicapList.sort(Comparator.comparing(Handicap::getTimestamp).reversed());
+
         return handicapList;
     }
 
@@ -89,7 +91,6 @@ public class Athlete {
                 .sorted(Comparator.comparing(Handicap::getTimestamp).reversed())
                 .mapToDouble(Handicap::getHandicap)
                 .findFirst();
-
 
         if (!handicap.isPresent()) {
             handicap = handicapList.stream()
@@ -140,5 +141,9 @@ public class Athlete {
                 ", profile='" + profile + '\'' +
                 ", badges=" + badges +
                 '}';
+    }
+
+    public double getCurrentHandicap() {
+        return getHandicapForDate(new Date());
     }
 }

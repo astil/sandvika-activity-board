@@ -25,8 +25,7 @@ import no.bouvet.sandvika.activityboard.utils.DateUtil;
 
 @RestController
 @EnableAsync
-public class AdminController
-{
+public class AdminController {
     private static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AdminController.class);
     @Autowired
     ActivityRepository activityRepository;
@@ -43,28 +42,22 @@ public class AdminController
     BadgeAppointer badgeAppointer;
 
     @RequestMapping(value = "/reload", method = RequestMethod.GET)
-    public void reloadUsersAndPoints()
-    {
+    public void reloadUsersAndPoints() {
         athleteRepository.deleteAll();
 
         List<Activity> allActivities = activityRepository.findAll();
         allActivities
-            .stream()
-            .filter(a -> a.getAthleteId() != null && !athleteRepository.exists(a.getAthleteId()))
-            .forEach(this::saveAthlete);
+                .stream()
+                .filter(a -> a.getAthleteId() != null && !athleteRepository.exists(a.getAthleteId()))
+                .forEach(this::saveAthlete);
 
-        allActivities = activityRepository.findAll();
-        for (Activity activity : allActivities)
-        {
-            if (activity.getAthleteId() == null || activity.getAthleteId() == 0)
-            {
+        for (Activity activity : allActivities) {
+            if (activity.getAthleteId() == null || activity.getAthleteId() == 0) {
                 Athlete athlete = athleteRepository.findOneByLastNameAndFirstName(activity.getAthleteLastName(), activity.getAthletefirstName());
-                if (athlete != null)
-                {
+                if (athlete != null) {
                     activity.setAthleteId(athlete.getId());
                     activityRepository.save(activity);
-                } else
-                {
+                } else {
                     log.info("Activity missing athlteteId and no Athlete found: " + activity.toString());
 
                 }
@@ -73,8 +66,7 @@ public class AdminController
         updateHistoricHandicapForAllAthletes(400);
     }
 
-    private void saveAthlete(Activity activity)
-    {
+    private void saveAthlete(Activity activity) {
         Athlete athlete = new Athlete();
         athlete.setLastName(activity.getAthleteLastName());
         athlete.setFirstName(activity.getAthletefirstName());
@@ -85,14 +77,12 @@ public class AdminController
 
     //    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/refresh/{pages}", method = RequestMethod.GET)
-    public void refreshActivities(@PathVariable("pages") int pages)
-    {
+    public void refreshActivities(@PathVariable("pages") int pages) {
         stravaSlurper.updateActivities(pages);
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT)
-    public void addActivity(@PathVariable("id") int id, @RequestBody Activity activity)
-    {
+    public void addActivity(@PathVariable("id") int id, @RequestBody Activity activity) {
         activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
         activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
         activityRepository.save(activity);
@@ -100,12 +90,10 @@ public class AdminController
 
     @Async
     @RequestMapping(value = "/athlete/all/updateHistoricHandicap/{days}", method = RequestMethod.GET)
-    public void updateHistoricHandicapForAllAthletes(@PathVariable("days") int days)
-    {
+    public void updateHistoricHandicapForAllAthletes(@PathVariable("days") int days) {
         handicapCalculator.updateHistoricalHandicapForAllAthletes(days);
         List<Activity> activities = activityRepository.findAll();
-        for (Activity activity : activities)
-        {
+        for (Activity activity : activities) {
             activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
             activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
             activityRepository.save(activity);
@@ -113,12 +101,10 @@ public class AdminController
     }
 
     @RequestMapping(value = "/athlete/{id}/updateHistoricHandicap", method = RequestMethod.GET)
-    public void updateHistoricHandicapForAthlete(@PathVariable("id") int id)
-    {
+    public void updateHistoricHandicapForAthlete(@PathVariable("id") int id) {
         handicapCalculator.updateHandicapForAthlete(id);
         List<Activity> activities = activityRepository.findByAthleteId(id);
-        for (Activity activity : activities)
-        {
+        for (Activity activity : activities) {
             activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
             activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
             activityRepository.save(activity);
@@ -126,27 +112,28 @@ public class AdminController
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.DELETE)
-    public void deleteActivity(@PathVariable("id") int id)
-    {
+    public void deleteActivity(@PathVariable("id") int id) {
         activityRepository.delete(id);
     }
 
 
+    @RequestMapping(value = "/badges", method = RequestMethod.DELETE)
+    public void deleteAllBadges() {
+        badgeRepository.deleteAll();
+    }
+
     @RequestMapping(value = "/badges", method = RequestMethod.POST)
-    public void addBadge(@RequestBody Badge badge)
-    {
+    public void addBadge(@RequestBody Badge badge) {
         badgeRepository.save(badge);
     }
 
     @RequestMapping(value = "/badges", method = RequestMethod.GET)
-    public List<Badge> listAllBadges()
-    {
+    public List<Badge> listAllBadges() {
         return badgeRepository.findAll();
     }
 
     @RequestMapping(value = "/badges/appointHistoricalBadges/{days}", method = RequestMethod.GET)
-    public void listAllBadges(@PathVariable("days") int days)
-    {
+    public void listAllBadges(@PathVariable("days") int days) {
         log.info("Appointing badges for the last " + days + " days.");
         List<Activity> activities = activityRepository.findByStartDateLocalAfter(DateUtil.getDateDaysAgo(days));
         log.info("Found " + activities.size() + " activities to check for badges.");
@@ -158,8 +145,7 @@ public class AdminController
     }
 
     @RequestMapping(value = "/badges/deleteAllBadgesFromAthletes", method = RequestMethod.DELETE)
-    public void deleteAllBadgesFromAthletes()
-    {
+    public void deleteAllBadgesFromAthletes() {
         List<Badge> badges = badgeRepository.findAll();
         badges.forEach(badge ->
         {
