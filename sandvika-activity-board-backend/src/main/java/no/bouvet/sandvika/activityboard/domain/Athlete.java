@@ -44,7 +44,8 @@ public class Athlete {
         if (this.handicapList == null) {
             this.handicapList = new ArrayList<>();
         }
-        handicapList.sort(Comparator.comparing(Handicap::getTimestamp));
+        handicapList.sort(Comparator.comparing(Handicap::getTimestamp).reversed());
+
         return handicapList;
     }
 
