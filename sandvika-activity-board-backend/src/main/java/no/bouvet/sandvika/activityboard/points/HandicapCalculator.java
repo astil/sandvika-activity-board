@@ -87,12 +87,14 @@ public class HandicapCalculator {
 
     protected double calculateHandicapForAthleteOnDate(Athlete athlete, Date date) {
         double activeHours = activeHoursUtil.getActiveHoursByDaysAndDateAndAthlete(30, date, athlete);
+        log.info("*** HC for " + athlete.getLastName() + " on " + date + " ***");
+        log.info("\tActiveHours: " + activeHours);
         return calculateHandicap(activeHours);
     }
 
     private double calculateHandicap(double activeHours) {
         double rawHc = Utils.scaledDouble(20 * Math.pow(activeHours, -1), 3);
-
+        log.info("\tRawHC: " + rawHc);
         double hc = 0;
 
         if (rawHc > 10 || rawHc == 0) {
@@ -102,7 +104,7 @@ public class HandicapCalculator {
         } else {
             hc = rawHc;
         }
-
+        log.info("\tHC: " + hc);
         return hc;
     }
 

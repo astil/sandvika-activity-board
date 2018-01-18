@@ -14,7 +14,7 @@ public class ActiveHoursUtil {
 
     private final ActivityRepository activityRepository;
 
-    private static final int SECONDS_IN_HOUR = 3600;
+    private static final double SECONDS_IN_HOUR = 3600;
 
     public ActiveHoursUtil(ActivityRepository activityRepository) {
         this.activityRepository = activityRepository;
@@ -34,7 +34,7 @@ public class ActiveHoursUtil {
     public double getActiveHoursByDaysAndAthlete(int days, Athlete athlete)
     {
         List<Activity> activities = activityRepository.findByStartDateLocalBetweenAndAthleteId(DateUtil.getDateDaysAgo(days), new Date(), athlete.getId());
-        return activities.stream()
+        return  activities.stream()
                 .mapToInt(Activity::getMovingTimeInSeconds)
                 .sum() / SECONDS_IN_HOUR;
     }
