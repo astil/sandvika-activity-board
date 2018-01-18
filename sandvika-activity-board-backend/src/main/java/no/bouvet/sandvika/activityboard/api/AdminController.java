@@ -51,7 +51,6 @@ public class AdminController {
                 .filter(a -> a.getAthleteId() != null && !athleteRepository.exists(a.getAthleteId()))
                 .forEach(this::saveAthlete);
 
-        allActivities = activityRepository.findAll();
         for (Activity activity : allActivities) {
             if (activity.getAthleteId() == null || activity.getAthleteId() == 0) {
                 Athlete athlete = athleteRepository.findOneByLastNameAndFirstName(activity.getAthleteLastName(), activity.getAthletefirstName());
