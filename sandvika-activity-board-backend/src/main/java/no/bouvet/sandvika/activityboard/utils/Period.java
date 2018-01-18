@@ -2,28 +2,31 @@ package no.bouvet.sandvika.activityboard.utils;
 
 import java.util.Date;
 
-public class Period
-{
+public class Period {
     private Date start;
     private Date end;
 
-    public Date getStart()
-    {
+    public Date getStart() {
         return start;
     }
 
-    public void setStart(Date start)
-    {
+    public void setStart(Date start) {
         this.start = start;
     }
 
-    public Date getEnd()
-    {
+    public Date getEnd() {
         return end;
     }
 
-    public void setEnd(Date end)
-    {
+    public void setEnd(Date end) {
         this.end = end;
+    }
+
+    public int getDaysSinceStart() {
+        if (start == null) {
+            return 0;
+        } else {
+            return (int) Math.round((new Date().getTime() - start.getTime()) / (double) 86400000);
+        }
     }
 }

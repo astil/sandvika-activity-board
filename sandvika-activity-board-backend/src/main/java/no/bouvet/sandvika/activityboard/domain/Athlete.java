@@ -141,4 +141,8 @@ public class Athlete {
                 ", badges=" + badges +
                 '}';
     }
+
+    public double getCurrentHandicap() {
+        return getHandicapForDate(new Date());
+    }
 }
