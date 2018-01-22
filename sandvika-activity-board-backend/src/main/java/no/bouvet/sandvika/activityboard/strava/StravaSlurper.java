@@ -1,10 +1,13 @@
 package no.bouvet.sandvika.activityboard.strava;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import no.bouvet.sandvika.activityboard.domain.*;
+import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
+import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
+import no.bouvet.sandvika.activityboard.points.PointsCalculator;
+import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
+import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
+import no.bouvet.sandvika.activityboard.repository.ClubRepository;
+import no.bouvet.sandvika.activityboard.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,21 +15,15 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import no.bouvet.sandvika.activityboard.domain.Activity;
-import no.bouvet.sandvika.activityboard.domain.Athlete;
-import no.bouvet.sandvika.activityboard.domain.StravaActivity;
-import no.bouvet.sandvika.activityboard.domain.StravaAthlete;
-import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
-import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
-import no.bouvet.sandvika.activityboard.points.PointsCalculator;
-import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
-import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
-import no.bouvet.sandvika.activityboard.utils.DateUtil;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class StravaSlurper {
     private static final String BASE_PATH = "https://www.strava.com/api/v3/clubs/";
-    private static final String STRAVA_CLUB_ID = "259508";
+    private static final Integer[] STRAVA_CLUB_ID = {259508, 30127, 195207};
     public static String STRAVA_CLIENT_TOKEN = "43cef4065b62813502a456d39508702f3d74ad61";
     private static Logger log = LoggerFactory.getLogger(StravaSlurper.class);
 
@@ -41,31 +38,57 @@ public class StravaSlurper {
     AthleteRepository athleteRepository;
 
     @Autowired
+    ClubRepository clubRepository;
+
+    @Autowired
     HandicapCalculator handicapCalculator;
 
     @Autowired
     BadgeAppointer badgeAppointer;
 
     @Scheduled(fixedRate = 1000 * 60 * 10)
-    public void updateLatestActivities()
-    {
+    public void updateLatestActivities() {
         updateActivities(1);
     }
 
     public void updateActivities(int pages) {
         log.info("Updating activities");
-        List<StravaActivity> stravaActivities = getStravaActivities(STRAVA_CLUB_ID, pages);
-        addMissingAthletes(stravaActivities);
+        for (Integer clubId : STRAVA_CLUB_ID) {
+            updateClubMembers(clubId);
+            List<StravaActivity> stravaActivities = getStravaActivities(clubId.toString(), pages);
+            addMissingAthletes(stravaActivities);
 
-        List<Activity> activities = new ArrayList<>();
-        stravaActivities.forEach(stravaActivity ->
-                activities.add(createActivity(stravaActivity)));
+            List<Activity> activities = new ArrayList<>();
+            stravaActivities.forEach(stravaActivity ->
+                    activities.add(createActivity(stravaActivity)));
 
-        activityRepository.save(activities
-                .stream()
-                .filter(activity -> activity.getPoints() > 0)
-                .collect(Collectors.toList()));
+            activityRepository.save(activities
+                    .stream()
+                    .filter(activity -> activity.getPoints() > 0)
+                    .collect(Collectors.toList()));
+        }
     }
+
+    private void updateClubMembers(int clubId) {
+        List<StravaAthlete> stravaAthletes = getClubMembersFromStrava(clubId);
+        Club club = clubRepository.findById(clubId);
+        if (club != null) {
+            club.setMemberIds(stravaAthletes.stream().map(StravaAthlete::getId).collect(Collectors.toList()));
+            clubRepository.save(club);
+        } else {
+            createClub(clubId);
+        }
+    }
+
+    private void createClub(int clubId) {
+        StravaClub stavaClub = getClubFromStrava(clubId);
+        Club newClub = new Club();
+        newClub.setId(clubId);
+        newClub.setName(stavaClub.getName());
+        clubRepository.save(newClub);
+        updateClubMembers(clubId);
+    }
+
 
     private void addMissingAthletes(List<StravaActivity> activities) {
         activities
@@ -131,6 +154,19 @@ public class StravaSlurper {
                 + "/activities?page=" + page + "&per_page=200&access_token=" + STRAVA_CLIENT_TOKEN, StravaActivity[].class);
         return Arrays.asList(activitiesFromStrava);
     }
+
+    private List<StravaAthlete> getClubMembersFromStrava(Integer clubId) {
+        StravaAthlete[] clubMemberFromStrava = restTemplate.getForObject(BASE_PATH + clubId
+                + "/members?access_token=" + STRAVA_CLIENT_TOKEN, StravaAthlete[].class);
+        return Arrays.asList(clubMemberFromStrava);
+    }
+
+    private StravaClub getClubFromStrava(int clubId) {
+        StravaClub clubFromStrava = restTemplate.getForObject(BASE_PATH + clubId
+                + "?access_token=" + STRAVA_CLIENT_TOKEN, StravaClub.class);
+        return clubFromStrava;
+    }
+
 }
 
 
