@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 @Component
 public class StravaSlurper {
     private static final String BASE_PATH = "https://www.strava.com/api/v3/clubs/";
-    private static final Integer[] STRAVA_CLUB_ID = {259508, 30127, 195207};
     public static String STRAVA_CLIENT_TOKEN = "43cef4065b62813502a456d39508702f3d74ad61";
     private static Logger log = LoggerFactory.getLogger(StravaSlurper.class);
 
@@ -53,9 +52,9 @@ public class StravaSlurper {
 
     public void updateActivities(int pages) {
         log.info("Updating activities");
-        for (Integer clubId : STRAVA_CLUB_ID) {
-            updateClubMembers(clubId);
-            List<StravaActivity> stravaActivities = getStravaActivities(clubId.toString(), pages);
+        for (Club club : clubRepository.findAll()) {
+            updateClubMembers(club.getId());
+            List<StravaActivity> stravaActivities = getStravaActivities(club.getId().toString(), pages);
             addMissingAthletes(stravaActivities);
 
             List<Activity> activities = new ArrayList<>();

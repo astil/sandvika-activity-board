@@ -35,7 +35,7 @@ public class ActivityController {
     public List<Activity> getActivitiesForCurrentPeriod(@PathVariable("clubId") Integer clubId,
                                                         @PathVariable("activityType") String activityType,
                                                         @PathVariable("periodType") String periodType) {
-        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
+        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()), clubRepository.findById(clubId).getCompetitonStartDate());
         return getActivitiesForPeriodByActivityType(clubId, activityType.toLowerCase(), period);
     }
 
@@ -54,7 +54,7 @@ public class ActivityController {
     public List<LeaderboardEntry> getLeaderboardForCurrentPeriod(@PathVariable("clubId") Integer clubId,
                                                                  @PathVariable("activityType") String activityType,
                                                                  @PathVariable("periodType") String periodType) {
-        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
+        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()), clubRepository.findById(clubId).getCompetitonStartDate());
         List<LeaderboardEntry> currentLeaderboard = getLeaderboardEntries(getActivitiesForPeriodByActivityType(clubId, activityType.toLowerCase(), period));
         Period comparingPeriod;
         if (periodType.equalsIgnoreCase("week")) {
@@ -62,7 +62,7 @@ public class ActivityController {
         } else if (periodType.equalsIgnoreCase("month")) {
             comparingPeriod = DateUtil.getPeriodFromMonthStartToDate(DateUtil.getDateDaysAgo(7));
         } else {
-            comparingPeriod = DateUtil.getPeriodFromCompetitionStartToDate(DateUtil.getDateDaysAgo(7));
+            comparingPeriod = DateUtil.getPeriodBetweenDates(clubRepository.findById(clubId).getCompetitonStartDate(), DateUtil.getDateDaysAgo(7));
         }
         List<LeaderboardEntry> comparingLeaderboard = getLeaderboardEntries(getActivitiesForPeriodByActivityType(clubId,"all", comparingPeriod));
 
@@ -72,9 +72,9 @@ public class ActivityController {
     @RequestMapping(value = "/leaderboard/{clubId}/total/{date}", method = RequestMethod.GET)
     public List<LeaderboardEntry> getTotalLeaderboardOnDate(@PathVariable("clubId") Integer clubId,
                                                             @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
-        Period period = DateUtil.getPeriodFromCompetitionStartToDate(date);
+        Period period = DateUtil.getPeriodBetweenDates(clubRepository.findById(clubId).getCompetitonStartDate(), date);
         List<LeaderboardEntry> currentLeaderboard = getLeaderboardEntries(getActivitiesForPeriodByActivityType(clubId,"all", period));
-        Period comparingPeriod = DateUtil.getPeriodFromCompetitionStartToDate(DateUtil.firstDayOfCurrentMonth());
+        Period comparingPeriod = DateUtil.getPeriodBetweenDates(clubRepository.findById(clubId).getCompetitonStartDate(), DateUtil.firstDayOfCurrentMonth());
         List<LeaderboardEntry> comparingLeaderboard = getLeaderboardEntries(getActivitiesForPeriodByActivityType(clubId,"all", comparingPeriod));
 
         return addChangeToLeaderboard(currentLeaderboard, comparingLeaderboard);
@@ -159,7 +159,7 @@ public class ActivityController {
                                                            @PathVariable("activityType") String activityType,
                                                            @PathVariable("periodType") String periodType) {
 
-        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
+        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()), clubRepository.findById(clubId).getCompetitonStartDate());
         return getActivitiesForPeriodByActivityType(clubId, activityType.toLowerCase(), period)
                 .stream()
                 .sorted(Comparator.comparingDouble(Activity::getPoints).reversed())
@@ -210,7 +210,7 @@ public class ActivityController {
 
 
     private Statistics createStatsForCurrentPeriod(Integer clubId, String activityType, String periodType) {
-        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()));
+        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()), clubRepository.findById(clubId).getCompetitonStartDate());
 
         return getStatistics(clubId, activityType, periodType, period);
     }
