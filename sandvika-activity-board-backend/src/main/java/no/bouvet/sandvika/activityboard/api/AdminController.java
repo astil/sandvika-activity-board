@@ -170,7 +170,10 @@ public class AdminController {
 
     @RequestMapping(value = "/club", method = RequestMethod.POST)
     public void addClub(@RequestBody Club club) {
-        clubRepository.save(club);
+        if (club.getId() == null || club.getCompetitonStartDate() == null) {
+            throw(new IllegalArgumentException());
+        }
+        stravaSlurper.createClub(club);
     }
 
 

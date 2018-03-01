@@ -71,21 +71,15 @@ public class StravaSlurper {
     private void updateClubMembers(int clubId) {
         List<StravaAthlete> stravaAthletes = getClubMembersFromStrava(clubId);
         Club club = clubRepository.findById(clubId);
-        if (club != null) {
-            club.setMemberIds(stravaAthletes.stream().map(StravaAthlete::getId).collect(Collectors.toList()));
-            clubRepository.save(club);
-        } else {
-            createClub(clubId);
-        }
+        club.setMemberIds(stravaAthletes.stream().map(StravaAthlete::getId).collect(Collectors.toList()));
+        clubRepository.save(club);
     }
 
-    private void createClub(int clubId) {
-        StravaClub stavaClub = getClubFromStrava(clubId);
-        Club newClub = new Club();
-        newClub.setId(clubId);
-        newClub.setName(stavaClub.getName());
-        clubRepository.save(newClub);
-        updateClubMembers(clubId);
+    public void createClub(Club club) {
+        StravaClub stavaClub = getClubFromStrava(club.getId());
+        club.setName(stavaClub.getName());
+        clubRepository.save(club);
+        updateClubMembers(club.getId());
     }
 
 
