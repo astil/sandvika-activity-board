@@ -31,7 +31,7 @@ public class ActivityController {
     ClubRepository clubRepository;
 
     //    @CrossOrigin(origins = "*")
-    @RequestMapping(value = "/activities/{clubId}/{activityType}/{periodType}/", method = RequestMethod.GET)
+    @RequestMapping(value = "/activities/{clubId}/{activityType}/{periodType}", method = RequestMethod.GET)
     public List<Activity> getActivitiesForCurrentPeriod(@PathVariable("clubId") Integer clubId,
                                                         @PathVariable("activityType") String activityType,
                                                         @PathVariable("periodType") String periodType) {
