@@ -19,6 +19,7 @@ public class Athlete {
     private String firstName;
     private String profile;
     private Map<String, List<Activity>> badges;
+    private String token;
 
     public int getId() {
         return id;
@@ -129,6 +130,14 @@ public class Athlete {
         } else {
             badges.put(badge.getName(), Arrays.asList(activity));
         }
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override

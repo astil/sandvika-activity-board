@@ -1,9 +1,6 @@
 package no.bouvet.sandvika.activityboard.api;
 
-import no.bouvet.sandvika.activityboard.domain.Activity;
-import no.bouvet.sandvika.activityboard.domain.Athlete;
-import no.bouvet.sandvika.activityboard.domain.Badge;
-import no.bouvet.sandvika.activityboard.domain.Club;
+import no.bouvet.sandvika.activityboard.domain.*;
 import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.points.PointsCalculator;
@@ -108,6 +105,18 @@ public class AdminController {
             activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
             activityRepository.save(activity);
         }
+    }
+
+    @RequestMapping(value = "/athlete", method = RequestMethod.POST)
+    public void addAthlete(@RequestBody Athlete athlete) {
+        athleteRepository.save(athlete);
+    }
+
+    @RequestMapping(value = "/athlete/{id}", method = RequestMethod.PUT)
+    public void addToken(@PathVariable("id") int id, @RequestBody Token token) {
+        Athlete athlete = athleteRepository.findById(id);
+        athlete.setToken(token.getToken());
+        athleteRepository.save(athlete);
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.DELETE)
