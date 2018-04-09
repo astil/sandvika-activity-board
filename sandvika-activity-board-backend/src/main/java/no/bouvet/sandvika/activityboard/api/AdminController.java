@@ -37,30 +37,30 @@ public class AdminController {
     @Autowired
     BadgeAppointer badgeAppointer;
 
-    @RequestMapping(value = "/reload", method = RequestMethod.GET)
-    public void reloadUsersAndPoints() {
-        athleteRepository.deleteAll();
-
-        List<Activity> allActivities = activityRepository.findAll();
-        allActivities
-                .stream()
-                .filter(a -> a.getAthleteId() != null && !athleteRepository.exists(a.getAthleteId()))
-                .forEach(this::saveAthlete);
-
-        for (Activity activity : allActivities) {
-            if (activity.getAthleteId() == null || activity.getAthleteId() == 0) {
-                Athlete athlete = athleteRepository.findOneByLastNameAndFirstName(activity.getAthleteLastName(), activity.getAthletefirstName());
-                if (athlete != null) {
-                    activity.setAthleteId(athlete.getId());
-                    activityRepository.save(activity);
-                } else {
-                    log.info("Activity missing athlteteId and no Athlete found: " + activity.toString());
-
-                }
-            }
-        }
-        updateHistoricHandicapForAllAthletes(400);
-    }
+//    @RequestMapping(value = "/reload", method = RequestMethod.GET)
+//    public void reloadUsersAndPoints() {
+//        athleteRepository.deleteAll();
+//
+//        List<Activity> allActivities = activityRepository.findAll();
+//        allActivities
+//                .stream()
+//                .filter(a -> a.getAthleteId() != null && !athleteRepository.exists(a.getAthleteId()))
+//                .forEach(this::saveAthlete);
+//
+//        for (Activity activity : allActivities) {
+//            if (activity.getAthleteId() == null || activity.getAthleteId() == 0) {
+//                Athlete athlete = athleteRepository.findOneByLastNameAndFirstName(activity.getAthleteLastName(), activity.getAthletefirstName());
+//                if (athlete != null) {
+//                    activity.setAthleteId(athlete.getId());
+//                    activityRepository.save(activity);
+//                } else {
+//                    log.info("Activity missing athlteteId and no Athlete found: " + activity.toString());
+//
+//                }
+//            }
+//        }
+//        updateHistoricHandicapForAllAthletes(400);
+//    }
 
     private void saveAthlete(Activity activity) {
         Athlete athlete = new Athlete();
@@ -176,14 +176,4 @@ public class AdminController {
         });
 
     }
-
-    @RequestMapping(value = "/club", method = RequestMethod.POST)
-    public void addClub(@RequestBody Club club) {
-        if (club.getId() == null || club.getCompetitonStartDate() == null) {
-            throw(new IllegalArgumentException());
-        }
-        stravaSlurper.createClub(club);
-    }
-
-
 }

@@ -1,28 +1,20 @@
 package no.bouvet.sandvika.activityboard.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Club {
-    private Integer id;
-    private String name;
+    private String id;
     private List<Integer> memberIds;
-    private Date competitonStartDate;
+    private Date competitionStartDate;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String name) {
+        this.id = name;
     }
 
     public List<Integer> getMemberIds() {
@@ -33,11 +25,18 @@ public class Club {
         this.memberIds = memberIds;
     }
 
-    public Date getCompetitonStartDate() {
-        return competitonStartDate;
+    public Date getCompetitionStartDate() {
+        return competitionStartDate;
     }
 
-    public void setCompetitonStartDate(Date competitonStartDate) {
-        this.competitonStartDate = competitonStartDate;
+    public void setCompetitionStartDate(Date competitionStartDate) {
+        this.competitionStartDate = competitionStartDate;
+    }
+
+    public void addMember(Integer memberId) {
+        if (memberIds == null) {
+            memberIds = new ArrayList<>();
+        }
+        memberIds.add(memberId);
     }
 }

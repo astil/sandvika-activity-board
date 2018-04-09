@@ -1,6 +1,8 @@
 package no.bouvet.sandvika.activityboard.strava;
 
-import no.bouvet.sandvika.activityboard.domain.*;
+import no.bouvet.sandvika.activityboard.domain.Activity;
+import no.bouvet.sandvika.activityboard.domain.Athlete;
+import no.bouvet.sandvika.activityboard.domain.StravaActivity;
 import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.points.PointsCalculator;
@@ -22,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class StravaSlurper {
-    private static final String BASE_PATH = "https://www.strava.com/api/v3/clubs/";
+    private static final String BASE_PATH = "https://www.strava.com/api/v3/athlete/";
     public static String STRAVA_CLIENT_TOKEN = "43cef4065b62813502a456d39508702f3d74ad61";
     private static Logger log = LoggerFactory.getLogger(StravaSlurper.class);
 
@@ -52,60 +54,39 @@ public class StravaSlurper {
 
     public void updateActivities(int pages) {
         log.info("Updating activities");
-        for (Club club : clubRepository.findAll()) {
-            updateClubMembers(club.getId());
-            List<StravaActivity> stravaActivities = getStravaActivities(club.getId().toString(), pages);
-            addMissingAthletes(stravaActivities);
-
+        for (Athlete athlete : athleteRepository.findAllByTokenIsNotNull()) {
+            List<StravaActivity> stravaActivities = getActivitiesFromStrava(athlete, pages);
             List<Activity> activities = new ArrayList<>();
             stravaActivities.forEach(stravaActivity ->
-                    activities.add(createActivity(stravaActivity)));
-
+                    activities.add(createActivity(stravaActivity, athlete)));
             activityRepository.save(activities
                     .stream()
                     .filter(activity -> activity.getPoints() > 0)
                     .collect(Collectors.toList()));
         }
+
+//        for (Club club : clubRepository.findAll()) {
+//            updateClubMembers(club.getId());
+//            List<StravaActivity> stravaActivities = getStravaActivities(club.getId().toString(), pages);
+//            addMissingAthletes(stravaActivities);
+//
+//            List<Activity> activities = new ArrayList<>();
+//            stravaActivities.forEach(stravaActivity ->
+//                    activities.add(createActivity(stravaActivity)));
+//
+//            activityRepository.save(activities
+//                    .stream()
+//                    .filter(activity -> activity.getPoints() > 0)
+//                    .collect(Collectors.toList()));
+//        }
     }
 
-    private void updateClubMembers(int clubId) {
-        List<StravaAthlete> stravaAthletes = getClubMembersFromStrava(clubId);
-        Club club = clubRepository.findById(clubId);
-        club.setMemberIds(stravaAthletes.stream().map(StravaAthlete::getId).collect(Collectors.toList()));
-        clubRepository.save(club);
-    }
 
-    public void createClub(Club club) {
-        StravaClub stavaClub = getClubFromStrava(club.getId());
-        club.setName(stavaClub.getName());
-        clubRepository.save(club);
-        updateClubMembers(club.getId());
-    }
-
-
-    private void addMissingAthletes(List<StravaActivity> activities) {
-        activities
-                .stream()
-                .map(StravaActivity::getAthlete)
-                .filter(a -> !athleteRepository.exists(a.getId()))
-                .forEach(this::saveAthlete);
-    }
-
-    public void saveAthlete(StravaAthlete stravaAthlete) {
-        Athlete athlete = new Athlete();
-        athlete.setLastName(stravaAthlete.getLastname());
-        athlete.setFirstName(stravaAthlete.getFirstname());
-        athlete.setProfile(stravaAthlete.getProfile());
-        athlete.setId(stravaAthlete.getId());
-
-        athleteRepository.save(athlete);
-    }
-
-    private Activity createActivity(StravaActivity stravaActivity) {
+    private Activity createActivity(StravaActivity stravaActivity, Athlete athlete) {
         Activity activity = new Activity();
-        activity.setAthletefirstName(stravaActivity.getAthlete().getFirstname());
-        activity.setAthleteLastName(stravaActivity.getAthlete().getLastname());
-        activity.setAthleteId(stravaActivity.getAthlete().getId());
+        activity.setAthletefirstName(athlete.getFirstName());
+        activity.setAthleteLastName(athlete.getLastName());
+        activity.setAthleteId(athlete.getId());
         activity.setType(stravaActivity.getType());
         activity.setId(stravaActivity.getId());
         activity.setName(stravaActivity.getName());
@@ -132,33 +113,14 @@ public class StravaSlurper {
         return activity;
     }
 
-    private List<StravaActivity> getStravaActivities(String clubId, int pages) {
-        ArrayList<StravaActivity> activities = new ArrayList<>();
-        for (int i = 1; i <= pages; i++) {
-            log.info("Getting activities from Strava. Page " + i);
-            activities.addAll((getActivitiesFromStrava(clubId, i)));
-        }
-        log.info("Got " + activities.size() + " activities from Strava");
-        return activities;
-    }
-
-    private List<StravaActivity> getActivitiesFromStrava(String clubId, int page) {
-        StravaActivity[] activitiesFromStrava = restTemplate.getForObject(BASE_PATH + clubId
-                + "/activities?page=" + page + "&per_page=200&access_token=" + STRAVA_CLIENT_TOKEN, StravaActivity[].class);
+    private List<StravaActivity> getActivitiesFromStrava(Athlete athlete, int page) {
+        String url = BASE_PATH
+                + "/activities?page=" + page + "&per_page=200&access_token=" + athlete.getToken();
+        log.info(url);
+        StravaActivity[] activitiesFromStrava = restTemplate.getForObject(url, StravaActivity[].class);
         return Arrays.asList(activitiesFromStrava);
     }
 
-    private List<StravaAthlete> getClubMembersFromStrava(Integer clubId) {
-        StravaAthlete[] clubMemberFromStrava = restTemplate.getForObject(BASE_PATH + clubId
-                + "/members?access_token=" + STRAVA_CLIENT_TOKEN, StravaAthlete[].class);
-        return Arrays.asList(clubMemberFromStrava);
-    }
-
-    private StravaClub getClubFromStrava(int clubId) {
-        StravaClub clubFromStrava = restTemplate.getForObject(BASE_PATH + clubId
-                + "?access_token=" + STRAVA_CLIENT_TOKEN, StravaClub.class);
-        return clubFromStrava;
-    }
 
 }
 

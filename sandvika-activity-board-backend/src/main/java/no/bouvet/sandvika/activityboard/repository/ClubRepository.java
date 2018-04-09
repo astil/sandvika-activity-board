@@ -5,9 +5,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(collectionResourceRel = "club", path = "club")
-public interface ClubRepository extends MongoRepository<Club, Integer> {
-    Club findById(int id);
+public interface ClubRepository extends MongoRepository<Club, String> {
+    Club findById(String id);
 
-    void deleteById(int id);
+    void deleteById(String id);
 
 }
