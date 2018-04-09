@@ -1,6 +1,21 @@
 package no.bouvet.sandvika.activityboard.api;
 
-import no.bouvet.sandvika.activityboard.domain.*;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import no.bouvet.sandvika.activityboard.domain.Activity;
+import no.bouvet.sandvika.activityboard.domain.Athlete;
+import no.bouvet.sandvika.activityboard.domain.Badge;
+import no.bouvet.sandvika.activityboard.domain.Token;
 import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.points.PointsCalculator;
@@ -10,12 +25,6 @@ import no.bouvet.sandvika.activityboard.repository.BadgeRepository;
 import no.bouvet.sandvika.activityboard.repository.ClubRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @EnableAsync
@@ -113,10 +122,14 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/athlete/{id}", method = RequestMethod.PUT)
-    public void addToken(@PathVariable("id") int id, @RequestBody Token token) {
+    @ResponseBody
+    public String addToken(@PathVariable("id") int id, @RequestBody Token token) {
         Athlete athlete = athleteRepository.findById(id);
+        if (athlete == null)
+            return "Unknown user";
         athlete.setToken(token.getToken());
         athleteRepository.save(athlete);
+        return "Token added to user " + athlete.toString();
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.DELETE)
