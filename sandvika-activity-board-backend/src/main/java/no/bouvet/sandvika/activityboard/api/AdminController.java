@@ -1,27 +1,24 @@
 package no.bouvet.sandvika.activityboard.api;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.domain.Badge;
+import no.bouvet.sandvika.activityboard.domain.Club;
 import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.points.PointsCalculator;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.repository.BadgeRepository;
+import no.bouvet.sandvika.activityboard.repository.ClubRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @EnableAsync
@@ -33,6 +30,8 @@ public class AdminController {
     BadgeRepository badgeRepository;
     @Autowired
     AthleteRepository athleteRepository;
+    @Autowired
+    ClubRepository clubRepository;
     @Autowired
     StravaSlurper stravaSlurper;
     @Autowired
@@ -167,6 +166,14 @@ public class AdminController {
             athleteRepository.save(athlete);
         });
 
+    }
+
+    @RequestMapping(value = "/club", method = RequestMethod.POST)
+    public void addClub(@RequestBody Club club) {
+        if (club.getId() == null || club.getCompetitonStartDate() == null) {
+            throw(new IllegalArgumentException());
+        }
+        stravaSlurper.createClub(club);
     }
 
 

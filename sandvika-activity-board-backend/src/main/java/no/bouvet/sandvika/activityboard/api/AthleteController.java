@@ -70,9 +70,9 @@ public class AthleteController {
         athleteStats.setName(athlete.getFirstName() + " " + athlete.getLastName());
         athleteStats.setHc(athlete.getCurrentHandicap());
         athleteStats.setActiveHoursHcPeriod(activeHoursUtil.getActiveHoursByDaysAndAthlete(30, athlete));
-        athleteStats.setActiveHoursThisCompetition(activeHoursUtil.getActiveHoursByDaysAndAthlete(DateUtil.getCurrentPeriod(PeriodType.COMPETITION).getDaysSinceStart(), athlete));
-        athleteStats.setActiveHoursThisWeek(activeHoursUtil.getActiveHoursByDaysAndAthlete(DateUtil.getCurrentPeriod(PeriodType.WEEK).getDaysSinceStart(), athlete));
-        athleteStats.setActiveHoursThisMonth(activeHoursUtil.getActiveHoursByDaysAndAthlete(DateUtil.getCurrentPeriod(PeriodType.MONTH).getDaysSinceStart(), athlete));
+//        athleteStats.setActiveHoursThisCompetition(activeHoursUtil.getActiveHoursByDaysAndAthlete(DateUtil.getDaysSinceDate()).getDaysSinceStart(), athlete));
+//        athleteStats.setActiveHoursThisWeek(activeHoursUtil.getActiveHoursByDaysAndAthlete(DateUtil.getCurrentPeriod(PeriodType.WEEK, clubId).getDaysSinceStart(), athlete));
+//        athleteStats.setActiveHoursThisMonth(activeHoursUtil.getActiveHoursByDaysAndAthlete(DateUtil.getCurrentPeriod(PeriodType.MONTH, clubId).getDaysSinceStart(), athlete));
         return athleteStats;
     }
 
