@@ -3,6 +3,7 @@ package no.bouvet.sandvika.activityboard.strava;
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.domain.StravaActivity;
+import no.bouvet.sandvika.activityboard.domain.UpdateSummary;
 import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.points.PointsCalculator;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class StravaSlurper {
@@ -52,10 +54,13 @@ public class StravaSlurper {
         updateActivities(1);
     }
 
-    public void updateActivities(int pages) {
+    public UpdateSummary updateActivities(int pages) {
         log.info("Updating activities");
+        UpdateSummary updateSummary = new UpdateSummary();
         for (Athlete athlete : athleteRepository.findAllByTokenIsNotNull()) {
-            List<StravaActivity> stravaActivities = getActivitiesFromStrava(athlete, pages);
+            List<StravaActivity> stravaActivities = new ArrayList<>();
+
+            IntStream.rangeClosed(1, pages).forEach(i ->stravaActivities.addAll(getActivitiesFromStrava(athlete, i)));
             List<Activity> activities = new ArrayList<>();
             stravaActivities.forEach(stravaActivity ->
                     activities.add(createActivity(stravaActivity, athlete)));
@@ -63,22 +68,9 @@ public class StravaSlurper {
                     .stream()
                     .filter(activity -> activity.getPoints() > 0)
                     .collect(Collectors.toList()));
+            updateSummary.addNumberOfActivities(athlete.getLastName(), activities.size());
         }
-
-//        for (Club club : clubRepository.findAll()) {
-//            updateClubMembers(club.getId());
-//            List<StravaActivity> stravaActivities = getStravaActivities(club.getId().toString(), pages);
-//            addMissingAthletes(stravaActivities);
-//
-//            List<Activity> activities = new ArrayList<>();
-//            stravaActivities.forEach(stravaActivity ->
-//                    activities.add(createActivity(stravaActivity)));
-//
-//            activityRepository.save(activities
-//                    .stream()
-//                    .filter(activity -> activity.getPoints() > 0)
-//                    .collect(Collectors.toList()));
-//        }
+        return updateSummary;
     }
 
 

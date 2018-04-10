@@ -30,19 +30,16 @@ public class AthleteController {
     @Autowired
     ActiveHoursUtil activeHoursUtil;
 
-    //    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete/{id}/activities", method = RequestMethod.GET)
     public List<Activity> getUserActivities(@PathVariable("id") int id) {
         return activityRepository.findByAthleteId(id);
     }
 
-    //    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete", method = RequestMethod.GET)
     public List<Athlete> getAllAthletes() {
         return athleteRepository.findAll();
     }
 
-    //    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/athlete/{id}", method = RequestMethod.GET)
     public Athlete getAthlete(@PathVariable("id") int id) {
         return athleteRepository.findById(id);
@@ -70,9 +67,6 @@ public class AthleteController {
         athleteStats.setName(athlete.getFirstName() + " " + athlete.getLastName());
         athleteStats.setHc(athlete.getCurrentHandicap());
         athleteStats.setActiveHoursHcPeriod(activeHoursUtil.getActiveHoursByDaysAndAthlete(30, athlete));
-//        athleteStats.setActiveHoursThisCompetition(activeHoursUtil.getActiveHoursByDaysAndAthlete(DateUtil.getDaysSinceDate()).getDaysSinceStart(), athlete));
-//        athleteStats.setActiveHoursThisWeek(activeHoursUtil.getActiveHoursByDaysAndAthlete(DateUtil.getCurrentPeriod(PeriodType.WEEK, clubId).getDaysSinceStart(), athlete));
-//        athleteStats.setActiveHoursThisMonth(activeHoursUtil.getActiveHoursByDaysAndAthlete(DateUtil.getCurrentPeriod(PeriodType.MONTH, clubId).getDaysSinceStart(), athlete));
         return athleteStats;
     }
 
