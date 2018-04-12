@@ -46,7 +46,7 @@ public class AdminController {
     @RequestMapping(value = "/activities/refresh/{pages}", method = RequestMethod.GET)
     @ResponseBody
     public UpdateSummary refreshActivities(@PathVariable("pages") int pages) {
-        return stravaSlurper.updateActivities(pages);
+        return stravaSlurper.updateActivities(pages, 0);
 
     }
 

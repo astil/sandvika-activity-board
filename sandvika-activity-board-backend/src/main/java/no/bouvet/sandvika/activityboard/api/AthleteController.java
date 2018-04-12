@@ -5,6 +5,7 @@ import java.util.List;
 
 import no.bouvet.sandvika.activityboard.domain.AthleteStats;
 import no.bouvet.sandvika.activityboard.domain.PeriodType;
+import no.bouvet.sandvika.activityboard.repository.ClubRepository;
 import no.bouvet.sandvika.activityboard.utils.ActiveHoursUtil;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;

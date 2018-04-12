@@ -51,16 +51,16 @@ public class StravaSlurper {
 
     @Scheduled(fixedRate = 1000 * 60 * 10)
     public void updateLatestActivities() {
-        updateActivities(1);
+        updateActivities(1, DateUtil.getEpochDaysAgo(10));
     }
 
-    public UpdateSummary updateActivities(int pages) {
+    public UpdateSummary updateActivities(int pages, long after) {
         log.info("Updating activities");
         UpdateSummary updateSummary = new UpdateSummary();
         for (Athlete athlete : athleteRepository.findAllByTokenIsNotNull()) {
             List<StravaActivity> stravaActivities = new ArrayList<>();
 
-            IntStream.rangeClosed(1, pages).forEach(i ->stravaActivities.addAll(getActivitiesFromStrava(athlete, i)));
+            IntStream.rangeClosed(1, pages).forEach(i ->stravaActivities.addAll(getActivitiesFromStrava(athlete, i, after)));
             List<Activity> activities = new ArrayList<>();
             stravaActivities.forEach(stravaActivity ->
                     activities.add(createActivity(stravaActivity, athlete)));
@@ -105,9 +105,9 @@ public class StravaSlurper {
         return activity;
     }
 
-    private List<StravaActivity> getActivitiesFromStrava(Athlete athlete, int page) {
+    private List<StravaActivity> getActivitiesFromStrava(Athlete athlete, int page, long after) {
         String url = BASE_PATH
-                + "/activities?page=" + page + "&per_page=200&access_token=" + athlete.getToken();
+                + "/activities?after="+ (after == 0 ? "" : after) +"page=" + page + "&per_page=200&access_token=" + athlete.getToken();
         log.info(url);
         StravaActivity[] activitiesFromStrava = restTemplate.getForObject(url, StravaActivity[].class);
         return Arrays.asList(activitiesFromStrava);

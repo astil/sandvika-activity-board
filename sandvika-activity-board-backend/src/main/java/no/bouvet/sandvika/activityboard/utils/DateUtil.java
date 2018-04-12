@@ -227,4 +227,9 @@ public class DateUtil {
         period.setEnd(endDate);
         return period;
     }
+
+    public static long getEpochDaysAgo(int daysAgo) {
+        Date date = getDateDaysAgo(daysAgo);
+        return date.toInstant().getEpochSecond();
+    }
 }
