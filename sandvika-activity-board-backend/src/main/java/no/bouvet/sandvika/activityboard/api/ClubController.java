@@ -10,6 +10,8 @@ import no.bouvet.sandvika.activityboard.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ClubController
 {
@@ -46,6 +48,11 @@ public class ClubController
         Athlete athlete = athleteRepository.findById(athleteId);
         athlete.setClub(club.getId());
         athleteRepository.save(athlete);
+    }
+
+    @RequestMapping(value = "/club/athlete/{athleteId}", method = RequestMethod.GET)
+    public List<Club> getAthleteClubs(@PathVariable("athleteId") int athleteId) {
+        return clubRepository.findClubsByMemberIdsContains(athleteId);
     }
 
 }
