@@ -1,10 +1,20 @@
 <div class="container">
+    <div class="bouvet-brand"><img src="../../assets/logo.svg" *ngIf="isLoggedIn && athlete.club"></div>
 
-    <div class="bouvet-brand"><img src="../../assets/logo.svg"></div>
-    <div class="flex-wrapper">
+    <div class="flex-wrapper" *ngIf="isLoggedIn && athlete.club">
         <ngbd-tabset-pills></ngbd-tabset-pills>
     </div>
-    <div class="strava-brand"><img src="../../assets/api_logo_pwrdBy_strava_horiz_light.svg"></div>
+    <div class="strava-brand"><img src="../../assets/api_logo_pwrdBy_strava_horiz_light.svg" *ngIf="isLoggedIn && athlete.club"></div>
 
     <ng-template ngbModalContainer></ng-template>
+
+    <div class="log-in w-25 m-auto" *ngIf="!isLoggedIn || !athlete.club">
+        <div class="w-100 mb-4"><img src="../../assets/logo.svg"></div>
+
+        <a *ngIf="!isLoggedIn" class="btn btn-outline-strava btn-lg btn-block" href="https://www.strava.com/oauth/authorize?client_id=3034&redirect_uri={{redirectUrl}}&response_type=code">Logg inn med Str</a>
+
+        <h4 *ngIf="isLoggedIn && !athlete.club">Du er ikke medlem av en klubb, kontakt leaderboard ansvarlig for din klubb.</h4>
+
+        <div class="w-100"><img src="../../assets/api_logo_pwrdBy_strava_horiz_light.svg"></div>
+    </div>
 </div>

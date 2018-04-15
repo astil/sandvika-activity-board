@@ -1,9 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import {NgbModal, NgbActiveModal, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
+import {NgbActiveModal, NgbModal, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
 import {AppRestService} from "../service/app.rest.service";
 import {Activity} from "../domain/activity";
-import {Athlete} from "../domain/athlete";
+import {AuthCodeService} from "../service/auth-code.service";
+import {ModalAthlete} from "../domain/athlete";
 
 @Component({
     selector: 'ngbd-modal-content',
@@ -62,17 +63,20 @@ export class NgbdModalContent {
 
 @Component({
     selector: 'ngbd-modal-component',
-    template: '<a href="#" (click)="open()">{{athlete.athleteFirstName}} {{athlete.athleteLastName}}</a>',
+    template: '<a href="#" (click)="open()">{{selectedActivity.athleteFirstName}} {{selectedActivity.athleteLastName}}</a>',
     providers: [AppRestService],
-    inputs: ['athlete'],
+    inputs: ['selectedActivity'],
     styleUrls: ['app.component.css']
 })
 export class NgbdModalComponent implements OnInit {
+    @Input() selectedActivity: ModalAthlete;
+
     private activities: Activity[];
     private errorMessage: any;
-    private athlete: Athlete;
 
-    constructor(private modalService: NgbModal, private appRestService: AppRestService) {}
+    constructor(private modalService: NgbModal, private appRestService: AppRestService, private auth : AuthCodeService) {
+        //this.athlete = auth.athlete;
+    }
 
     open() {
         let options: NgbModalOptions = {
@@ -80,11 +84,13 @@ export class NgbdModalComponent implements OnInit {
         };
         const modalRef = this.modalService.open(NgbdModalContent, options);
         modalRef.componentInstance.activities = this.activities;
-        modalRef.componentInstance.athlete = this.athlete;
+        modalRef.componentInstance.athlete = this.selectedActivity;
     }
 
     ngOnInit(): void {
-        this.appRestService.getAthleteById(this.athlete.athleteId).subscribe(
+        console.log(this.selectedActivity);
+
+        this.appRestService.getAthleteById(this.selectedActivity.athleteId).subscribe(
             activity => this.activities = activity,
             error =>  this.errorMessage = <any>error);
     }

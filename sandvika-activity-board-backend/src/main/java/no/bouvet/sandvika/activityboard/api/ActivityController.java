@@ -8,6 +8,7 @@ import no.bouvet.sandvika.activityboard.utils.LeaderboardUtils;
 import no.bouvet.sandvika.activityboard.utils.StatsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +28,7 @@ public class ActivityController {
     @Autowired
     LeaderboardUtils leaderboardUtils;
 
+    //@CrossOrigin("*")
     @RequestMapping(value = "/activities/{clubName}/{activityType}/{periodType}", method = RequestMethod.GET)
     public List<Activity> getActivitiesForCurrentPeriod(@PathVariable("clubName") String clubName,
                                                         @PathVariable("activityType") String activityType,
@@ -35,6 +37,7 @@ public class ActivityController {
         return activityUtils.getActivitiesForCurrentPeriodByActivityType(clubName, activityType.toLowerCase(), periodType);
     }
 
+    //@CrossOrigin("*")
     @RequestMapping(value = "/activities/{clubName}/{activityType}/{periodType}/{periodNumber}/{year}", method = RequestMethod.GET)
     public List<Activity> getActivitiesForPeriod(@PathVariable("clubName") String clubName,
                                                  @PathVariable("activityType") String activityType,
@@ -44,6 +47,7 @@ public class ActivityController {
         return activityUtils.getActivitiesForPeriodByActivityType(clubName, activityType.toLowerCase(), periodType, periodNumber, year);
     }
 
+    //@CrossOrigin("*")
     @RequestMapping(value = "/leaderboard/{clubName}/{activityType}/{periodType}", method = RequestMethod.GET)
     public List<LeaderboardEntry> getLeaderboardForCurrentPeriod(@PathVariable("clubName") String clubName,
                                                                  @PathVariable("activityType") String activityType,
@@ -51,14 +55,14 @@ public class ActivityController {
         return leaderboardUtils.getLeaderboardEntries(clubName, activityType, periodType);
     }
 
-
+    //@CrossOrigin("*")
     @RequestMapping(value = "/leaderboard/{clubName}/total/{date}", method = RequestMethod.GET)
     public List<LeaderboardEntry> getTotalLeaderboardOnDate(@PathVariable("clubName") String clubName,
                                                             @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         return leaderboardUtils.getLeaderboardEntries(clubName, date);
     }
 
-
+    //@CrossOrigin("*")
     @RequestMapping(value = "/leaderboard/{clubName}/{activityType}/{periodType}/{periodNumber}/{year}", method = RequestMethod.GET)
     public List<LeaderboardEntry> getLeaderboardForPeriod(@PathVariable("clubName") String clubName,
                                                           @PathVariable("activityType") String activityType,
@@ -68,7 +72,7 @@ public class ActivityController {
         return leaderboardUtils.getLeaderboardEntries(activityUtils.getActivities(clubName, activityType.toLowerCase(), periodType, periodNumber, year));
     }
 
-
+    //@CrossOrigin("*")
     @RequestMapping(value = "/activities/{clubName}/{activityType}/top/{limit}/{periodType}/{periodNumber}/{year}", method = RequestMethod.GET)
     public List<Activity> getTopActivitiesForPeriod(@PathVariable("clubName") String clubName,
                                                     @PathVariable("limit") int limit,
@@ -80,7 +84,7 @@ public class ActivityController {
         return activityUtils.getTopActivities(clubName, limit, activityType, periodType, periodNumber, year);
     }
 
-
+    //@CrossOrigin("*")
     @RequestMapping(value = "/activities/{clubName}/{activityType}/top/{limit}/{periodType}", method = RequestMethod.GET)
     public List<Activity> getTopActivitiesForCurrentPeriod(@PathVariable("clubName") String clubName,
                                                            @PathVariable("limit") int limit,
@@ -90,6 +94,7 @@ public class ActivityController {
         return activityUtils.getTopActivitiesForCurrentPeriod(clubName, limit, activityType, periodType);
     }
 
+    //@CrossOrigin("*")
     @RequestMapping(value = "/activities/{clubName}/{activityType}/stats/{periodType}", method = RequestMethod.GET)
     public Statistics getStatisticsForCurrentPeriodByActivityType(@PathVariable("clubName") String clubName,
                                                                   @PathVariable("activityType") String activityType,
@@ -97,6 +102,7 @@ public class ActivityController {
         return statsUtils.createStatsForCurrentPeriod(clubName, activityType.toLowerCase(), periodType);
     }
 
+    //@CrossOrigin("*")
     @RequestMapping(value = "/activities/{clubName}/{activityType}/stats/{periodType}/{periodNumber}/{year}", method = RequestMethod.GET)
     public Statistics getStatisticsForPeriodByActivityType(@PathVariable("clubName") String clubName,
                                                            @PathVariable("activityType") String activityType,
@@ -106,6 +112,7 @@ public class ActivityController {
         return statsUtils.createStatsForHistoricPeriod(clubName, activityType.toLowerCase(), periodType, periodNumber, year);
     }
 
+    //@CrossOrigin("*")
     @RequestMapping(value = "/activities/{clubName}/{activityType}/latest/{numberOfActivities}", method = RequestMethod.GET)
     public List<Activity> getMostRecentActivitiesByActivityType(@PathVariable("clubName") String clubName,
                                                                 @PathVariable("activityType") String activityType,
@@ -113,6 +120,7 @@ public class ActivityController {
         return activityUtils.getMostRecentActivities(clubName, activityType, numberOfActivities);
     }
 
+    //@CrossOrigin("*")
     @RequestMapping(value = "/activities/{activityType}/total/meters/{month}/{year}", method = RequestMethod.GET)
     public double getTotalMetersForMonthByActivity(@PathVariable("activityType") String activityType, @PathVariable("month") int month, @PathVariable("year") int year) {
         return activityUtils.getMetersForMonthByActivity(activityType, month, year);
