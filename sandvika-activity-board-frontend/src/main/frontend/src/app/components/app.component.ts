@@ -27,7 +27,12 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.redirectUrl = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + window.location.pathname;
+        if (window.location.port && window.location.port !== '80') {
+            this.redirectUrl = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + window.location.pathname;
+        } else {
+            this.redirectUrl = window.location.protocol + "//" + window.location.hostname + window.location.pathname
+        }
+
         this.activatedRoute.queryParams.subscribe(r => {
             if (r['code']) {
                 this.authService.loginAttempt(r['code']);

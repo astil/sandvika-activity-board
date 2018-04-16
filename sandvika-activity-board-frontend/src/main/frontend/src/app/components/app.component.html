@@ -11,7 +11,7 @@
     <div class="log-in w-25 m-auto" *ngIf="!isLoggedIn || !athlete.club">
         <div class="w-100 mb-4"><img src="../../assets/logo.svg"></div>
 
-        <a *ngIf="!isLoggedIn" class="btn btn-outline-strava btn-lg btn-block" href="https://www.strava.com/oauth/authorize?client_id=3034&redirect_uri={{redirectUrl}}&response_type=code">Logg inn med Str</a>
+        <a *ngIf="!isLoggedIn" class="btn btn-outline-strava btn-lg btn-block" href="https://www.strava.com/oauth/authorize?client_id=3034&redirect_uri={{redirectUrl}}&response_type=code">Logg inn med Strava</a>
 
         <h4 *ngIf="isLoggedIn && !athlete.club">Du er ikke medlem av en klubb, kontakt leaderboard ansvarlig for din klubb.</h4>
 
