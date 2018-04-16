@@ -107,7 +107,7 @@ public class StravaSlurper {
 
     private List<StravaActivity> getActivitiesFromStrava(Athlete athlete, int page, long after) {
         String url = BASE_PATH
-                + "/activities?after="+ (after == 0 ? "" : after) +"page=" + page + "&per_page=200&access_token=" + athlete.getToken();
+                + "/activities?after="+ (after == 0 ? "" : after) +"&page=" + page + "&per_page=200&access_token=" + athlete.getToken();
         log.info(url);
         StravaActivity[] activitiesFromStrava = restTemplate.getForObject(url, StravaActivity[].class);
         return Arrays.asList(activitiesFromStrava);
