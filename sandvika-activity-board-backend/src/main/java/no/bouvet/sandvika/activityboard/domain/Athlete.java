@@ -19,6 +19,8 @@ public class Athlete {
     private String firstName;
     private String profile;
     private Map<String, List<Activity>> badges;
+    private String token;
+    private String club;
 
     public int getId() {
         return id;
@@ -131,6 +133,14 @@ public class Athlete {
         }
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     @Override
     public String toString() {
         return "Athlete{" +
@@ -145,5 +155,15 @@ public class Athlete {
 
     public double getCurrentHandicap() {
         return getHandicapForDate(new Date());
+    }
+
+    public String getClub()
+    {
+        return club;
+    }
+
+    public void setClub(String club)
+    {
+        this.club = club;
     }
 }

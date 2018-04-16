@@ -4,10 +4,14 @@ import no.bouvet.sandvika.activityboard.domain.Club;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-@RepositoryRestResource(collectionResourceRel = "club", path = "club")
-public interface ClubRepository extends MongoRepository<Club, Integer> {
-    Club findById(int id);
+import java.util.List;
 
-    void deleteById(int id);
+@RepositoryRestResource(collectionResourceRel = "club", path = "club")
+public interface ClubRepository extends MongoRepository<Club, String> {
+    Club findById(String id);
+    List<Club> findClubsByMemberIdsContains(Integer athleteId);
+
+
+    void deleteById(String id);
 
 }

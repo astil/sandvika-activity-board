@@ -28,6 +28,7 @@
                         <h2 *ngIf="tab.code === 'all'" style="text-align: center; font-family: 'Roboto', sans-serif;">{{tab.activityType.decode}}</h2>
                         <h2 *ngIf="tab.code === 'month'" style="text-align: center; font-family: 'Roboto', sans-serif;">{{tab.pageNumber | numToMonth}} - {{tab.activityType.decode}}</h2>
                         <h2 *ngIf="tab.code === 'week'" style="text-align: center; font-family: 'Roboto', sans-serif;">Uke {{tab.pageNumber}} - {{tab.activityType.decode}}</h2>
+                        <h2 style="text-align: center; font-family: 'Roboto', sans-serif;">Hei {{loggedInAthlete.firstname}}</h2>
                     </div>
                     <latest-activities-component [activities]="latestActivities"></latest-activities-component>
                     <stats-data-component [tab]="tab" [thisWeekStats]="thisWeekStats" title=""></stats-data-component>
@@ -58,7 +59,7 @@
                                 <span *ngIf="i > 2">{{i+1}}</span>
                             </td>
                             <td class="d-md-table-cell">
-                                <ngbd-modal-component [athlete]="athlete"></ngbd-modal-component>
+                                <ngbd-modal-component [selectedActivity]="athlete"></ngbd-modal-component>
                             </td>
                             <td class="d-md-table-cell">{{athlete.points | number : '1.0-1'}}</td>
                             <td class="d-none d-md-table-cell">{{athlete.lastActivityDate | date:

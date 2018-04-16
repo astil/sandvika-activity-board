@@ -1,9 +1,18 @@
 package no.bouvet.sandvika.activityboard.api;
 
-import no.bouvet.sandvika.activityboard.domain.Activity;
-import no.bouvet.sandvika.activityboard.domain.Athlete;
-import no.bouvet.sandvika.activityboard.domain.Badge;
-import no.bouvet.sandvika.activityboard.domain.Club;
+import java.util.List;
+
+import no.bouvet.sandvika.activityboard.domain.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.points.PointsCalculator;
@@ -13,12 +22,6 @@ import no.bouvet.sandvika.activityboard.repository.BadgeRepository;
 import no.bouvet.sandvika.activityboard.repository.ClubRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @EnableAsync
@@ -40,44 +43,11 @@ public class AdminController {
     @Autowired
     BadgeAppointer badgeAppointer;
 
-    @RequestMapping(value = "/reload", method = RequestMethod.GET)
-    public void reloadUsersAndPoints() {
-        athleteRepository.deleteAll();
-
-        List<Activity> allActivities = activityRepository.findAll();
-        allActivities
-                .stream()
-                .filter(a -> a.getAthleteId() != null && !athleteRepository.exists(a.getAthleteId()))
-                .forEach(this::saveAthlete);
-
-        for (Activity activity : allActivities) {
-            if (activity.getAthleteId() == null || activity.getAthleteId() == 0) {
-                Athlete athlete = athleteRepository.findOneByLastNameAndFirstName(activity.getAthleteLastName(), activity.getAthletefirstName());
-                if (athlete != null) {
-                    activity.setAthleteId(athlete.getId());
-                    activityRepository.save(activity);
-                } else {
-                    log.info("Activity missing athlteteId and no Athlete found: " + activity.toString());
-
-                }
-            }
-        }
-        updateHistoricHandicapForAllAthletes(400);
-    }
-
-    private void saveAthlete(Activity activity) {
-        Athlete athlete = new Athlete();
-        athlete.setLastName(activity.getAthleteLastName());
-        athlete.setFirstName(activity.getAthletefirstName());
-        athlete.setId(activity.getAthleteId());
-        athleteRepository.save(athlete);
-    }
-
-
-    //    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/activities/refresh/{pages}", method = RequestMethod.GET)
-    public void refreshActivities(@PathVariable("pages") int pages) {
-        stravaSlurper.updateActivities(pages);
+    @ResponseBody
+    public UpdateSummary refreshActivities(@PathVariable("pages") int pages) {
+        return stravaSlurper.updateActivities(pages, 0);
+
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT)
@@ -108,6 +78,22 @@ public class AdminController {
             activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
             activityRepository.save(activity);
         }
+    }
+
+    @RequestMapping(value = "/athlete", method = RequestMethod.POST)
+    public void addAthlete(@RequestBody Athlete athlete) {
+        athleteRepository.save(athlete);
+    }
+
+    @RequestMapping(value = "/athlete/{id}", method = RequestMethod.PUT)
+    @ResponseBody
+    public String addToken(@PathVariable("id") int id, @RequestBody Token token) {
+        Athlete athlete = athleteRepository.findById(id);
+        if (athlete == null)
+            return "Unknown user";
+        athlete.setToken(token.getToken());
+        athleteRepository.save(athlete);
+        return "Token added to user " + athlete.toString();
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.DELETE)
@@ -167,14 +153,4 @@ public class AdminController {
         });
 
     }
-
-    @RequestMapping(value = "/club", method = RequestMethod.POST)
-    public void addClub(@RequestBody Club club) {
-        if (club.getId() == null || club.getCompetitonStartDate() == null) {
-            throw(new IllegalArgumentException());
-        }
-        stravaSlurper.createClub(club);
-    }
-
-
 }

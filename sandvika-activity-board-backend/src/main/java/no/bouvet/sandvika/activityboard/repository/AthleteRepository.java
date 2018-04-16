@@ -15,5 +15,9 @@ public interface AthleteRepository extends MongoRepository<Athlete, Integer>
 
     Athlete findOneByLastNameAndFirstName(String lastName, String firstName);
 
+    Athlete findOneByToken(String token);
+
     List<Athlete> findAllByBadgesIsNotNull();
+
+    List<Athlete> findAllByTokenIsNotNull();
 }

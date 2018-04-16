@@ -12,6 +12,36 @@
     overflow: hidden;
 }
 
+.btn-outline-strava {
+    color: #fc4c02;
+    background-color: transparent;
+    background-image: none;
+    border-color: #fc4c02;
+}
+
+.btn-outline-strava:hover {
+    color: #fff;
+    background-color: #fc4c02;
+    border-color: #fc4c02;
+}
+
+.btn-outline-strava:focus, .btn-outline-strava.focus {
+    box-shadow: 0 0 0 0.2rem rgba(227, 139, 133, 0.5);
+}
+
+.btn-outline-strava.disabled, .btn-outline-strava:disabled {
+    color: #fc4c02;
+    background-color: transparent;
+}
+
+.btn-outline-strava:not([disabled]):not(.disabled):active, .btn-outline-strava:not([disabled]):not(.disabled).active,
+.show > .btn-outline-strava.dropdown-toggle {
+    color: #fff;
+    background-color: #fc4c02;
+    border-color: #fc4c02;
+    box-shadow: 0 0 0 0.2rem rgba(227, 139, 133, 0.5);
+}
+
 .mini-cards .card .card-block .card-text {
     padding: 5%;
 }

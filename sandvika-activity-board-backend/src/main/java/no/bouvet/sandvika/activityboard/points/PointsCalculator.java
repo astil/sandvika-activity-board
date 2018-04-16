@@ -42,6 +42,7 @@ public final class PointsCalculator {
 
     private static double getPointsForBadges(Set<Badge> badges) {
         double points = 0;
+        if (badges == null) return 0;
         for (Badge badge : badges) {
             points += badge.getPoints();
         }

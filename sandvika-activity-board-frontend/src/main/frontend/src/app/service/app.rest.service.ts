@@ -6,79 +6,66 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import {Athlete} from '../domain/athlete';
 import {Activity} from "../domain/activity";
 import {Statistics} from "../domain/Statistics";
 import {TabContent} from "../domain/TabContent";
+import {HttpClient, HttpResponse} from "@angular/common/http";
+import {Athlete} from "../domain/athlete";
 
 @Injectable()
 export class AppRestService {
-    // private restUrl = 'http://localhost:8080/';  // URL to web api
+    // private restUrl = 'http://localhost:8005/';  // URL to web api
     private restUrl = '';  // URL to web api
 
-    constructor(private http: Http) {
+    constructor(private http: HttpClient) {
     }
 
-    getLeaderboardPoints(activityType, periodType, pageNumber, year): Observable<Athlete[]> {
-        return this.http.get(this.restUrl + "leaderboard/" + activityType + "/" + periodType + "/" + pageNumber + "/" + year)
-            .map(this.extractData)
-            .catch(this.handleError);
+    getLeaderboardPoints(activityType, periodType, pageNumber, year, club: String): Observable<Activity[]> {
+        return this.http.get<Activity[]>(this.restUrl + "leaderboard/" + club + "/" + activityType + "/" + periodType + "/" + pageNumber + "/" + year)
+            .catch(AppRestService.handleError);
     }
 
-    getLeaderBoardTotalPoints(activityType: String): Observable<Athlete[]> {
-        return this.http.get(this.restUrl + "leaderboard/" + activityType + "/competition/")
-            .map(this.extractData)
-            .catch(this.handleError);
+    getLeaderBoardTotalPoints(activityType: String, club: String): Observable<Activity[]> {
+        return this.http.get<Activity[]>(this.restUrl + "leaderboard/" + club + "/" + activityType + "/competition/")
+            .catch(AppRestService.handleError);
     }
 
-    getMontlyTopActivity(limit): Observable<Activity[]> {
-        return this.http.get(this.restUrl + "activities/month/top/" + limit + "/points")
-            .map(this.extractData)
-            .catch(this.handleError);
+    getMontlyTopActivity(limit, club: String): Observable<Activity[]> {
+        return this.http.get<Activity[]>(this.restUrl + "activities/" + club + "/month/top/" + limit + "/points")
+            .catch(AppRestService.handleError);
     }
 
-    getAllStats(tab: TabContent): Observable<Statistics> {
+    getAllStats(tab: TabContent, club: String): Observable<Statistics> {
         if (tab.altDecode === 'competition') {
-            return this.http.get(this.restUrl + "activities/" + tab.activityType.code + "/stats/" + tab.altDecode)
-                .map(this.extractData)
-                .catch(this.handleError);
+            return this.http.get<Statistics>(this.restUrl + "activities/" + club + "/" + tab.activityType.code + "/stats/" + tab.altDecode)
+                .catch(AppRestService.handleError);
         } else {
-            return this.http.get(this.restUrl + "activities/" + tab.activityType.code + "/stats/" + tab.altDecode + "/" + tab.pageNumber + "/" + tab.year)
-                .map(this.extractData)
-                .catch(this.handleError);
+            return this.http.get<Statistics>(this.restUrl + "activities/" + club + "/" + tab.activityType.code + "/stats/" + tab.altDecode + "/" + tab.pageNumber + "/" + tab.year)
+                .catch(AppRestService.handleError);
         }
     }
 
     getAthleteById(id): Observable<Activity[]> {
-        return this.http.get(this.restUrl + "athlete/" + id + "/activities")
-            .map(this.extractData)
-            .catch(this.handleError);
+        return this.http.get<Activity[]>(this.restUrl + "athlete/" + id + "/activities")
+            .catch(AppRestService.handleError);
     }
 
-    getLatestActivities(activityType: String, numberOfActivities): Observable<Activity[]> {
-        return this.http.get(this.restUrl + "/activities/" + activityType + "/latest/" + numberOfActivities)
-            .map(this.extractData)
-            .catch(this.handleError);
+    getLatestActivities(activityType: String, numberOfActivities, club: String): Observable<Activity[]> {
+        return this.http.get<Activity[]>(this.restUrl + "/activities/" + club + "/" + activityType + "/latest/" + numberOfActivities)
+            .catch(AppRestService.handleError);
     }
 
-    getTopActivities(tab: TabContent): Observable<Activity[]> {
+    getTopActivities(tab: TabContent, club: String): Observable<Activity[]> {
         if (tab.altDecode === 'competition') {
-            return this.http.get(this.restUrl + "activities/" + tab.activityType.code + "/top/5/" + tab.altDecode)
-                .map(this.extractData)
-                .catch(this.handleError);
+            return this.http.get<Activity[]>(this.restUrl + "activities/" + club + "/" + tab.activityType.code + "/top/5/" + tab.altDecode)
+                .catch(AppRestService.handleError);
         } else {
-            return this.http.get(this.restUrl + "activities/" + tab.activityType.code + "/top/5/" + tab.altDecode + "/" + tab.pageNumber + "/" + tab.year)
-                .map(this.extractData)
-                .catch(this.handleError);
+            return this.http.get<Activity[]>(this.restUrl + "activities/" + club + "/" + tab.activityType.code + "/top/5/" + tab.altDecode + "/" + tab.pageNumber + "/" + tab.year)
+                .catch(AppRestService.handleError);
         }
     }
 
-    private extractData(res: Response) {
-        let body = res.json();
-        return body || {};
-    }
-
-    private handleError(error: Response | any) {
+    private static handleError(error: Response | any) {
         // In a real world app, we might use a remote logging infrastructure
         let errMsg: string;
         if (error instanceof Response) {
