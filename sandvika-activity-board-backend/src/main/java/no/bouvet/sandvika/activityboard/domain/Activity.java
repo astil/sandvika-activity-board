@@ -45,7 +45,7 @@ public class Activity
     private double handicap;
     private Integer athleteId;
     private Set<Badge> badges;
-    private List<String> photos;
+    private List<Photo> photos;
 
 
     public Activity()
@@ -369,19 +369,19 @@ public class Activity
         this.points = points;
     }
 
-    public List<String> getPhotos() {
+    public List<Photo> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<String> photos) {
+    public void setPhotos(List<Photo> photos) {
         this.photos = photos;
     }
 
-    public void addPhoto(String photoUrl) {
+    public void addPhoto(Photo photo) {
         if (photos == null) {
             photos = new ArrayList<>();
         }
-        photos.add(photoUrl);
+        photos.add(photo);
     }
 
     @Override

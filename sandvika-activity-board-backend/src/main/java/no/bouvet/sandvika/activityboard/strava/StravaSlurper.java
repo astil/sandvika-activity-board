@@ -107,9 +107,14 @@ public class StravaSlurper {
         return activity;
     }
 
-    private List<String> getPhotosFromActivity(int activityId, String athleteToken) {
+    private List<Photo> getPhotosFromActivity(int activityId, String athleteToken) {
         StravaActivityFull stravaActivityFull = getActivityFromStrava(activityId, athleteToken);
-        return Arrays.asList(stravaActivityFull.getStravaPhotos().getStravaPrimaryPhoto().getStravaUrls().get600());
+        return Arrays.asList(createPhoto(stravaActivityFull));
+    }
+
+    private Photo createPhoto(StravaActivityFull stravaActivityFull) {
+        return new Photo(stravaActivityFull.getId(), stravaActivityFull.getStravaPhotos().getStravaPrimaryPhoto().getStravaUrls().get600());
+
     }
 
     private StravaActivityFull getActivityFromStrava(int activityId, String token) {

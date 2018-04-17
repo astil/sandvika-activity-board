@@ -3,6 +3,7 @@ package no.bouvet.sandvika.activityboard.utils;
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Club;
 import no.bouvet.sandvika.activityboard.domain.PeriodType;
+import no.bouvet.sandvika.activityboard.domain.Photo;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,8 +107,8 @@ public class ActivityUtils {
                 .sum();
     }
 
-    public List<String> getMostRecentActivityPhotos(String clubName, String activityType, int numberOfPhotos) {
-        List<String> photoList;
+    public List<Photo> getMostRecentActivityPhotos(String clubName, String activityType, int numberOfPhotos) {
+        List<Photo> photoList;
         if (activityType.equalsIgnoreCase("all") || activityType.equalsIgnoreCase("")) {
             photoList = getPhotos(numberOfPhotos, clubName);
         } else {
@@ -116,25 +117,25 @@ public class ActivityUtils {
         return photoList;
     }
 
-    private List<String> getPhotosByActivityType(String clubName, int numberOfPhotos, String activityType) {
+    private List<Photo> getPhotosByActivityType(String clubName, int numberOfPhotos, String activityType) {
         List<Activity> activityList = activityRepository.findByTypeAndPhotosIsNotNullOrderByStartDateLocalDesc(activityType)
                 .limit(numberOfPhotos)
                 .collect(Collectors.toList());
         Club club = clubRepository.findById(clubName);
         List<Activity> filteredActivities = activityList.stream().filter(activity -> club.getMemberIds().contains(activity.getAthleteId())).collect(Collectors.toList());
-        List<String> photoList = new ArrayList<>();
+        List<Photo> photoList = new ArrayList<>();
         filteredActivities.forEach(a -> photoList.addAll(a.getPhotos()));
         return photoList;
 
     }
 
-    private List<String> getPhotos(int numberOfPhotos, String clubName) {
+    private List<Photo> getPhotos(int numberOfPhotos, String clubName) {
         List<Activity> activityList = activityRepository.findAllByPhotosIsNotNullOrderByStartDateLocalDesc()
                 .limit(numberOfPhotos)
                 .collect(Collectors.toList());
         Club club = clubRepository.findById(clubName);
         List<Activity> filteredActivities = activityList.stream().filter(activity -> club.getMemberIds().contains(activity.getAthleteId())).collect(Collectors.toList());
-        List<String> photoList = new ArrayList<>();
+        List<Photo> photoList = new ArrayList<>();
         filteredActivities.forEach(a -> photoList.addAll(a.getPhotos()));
         return photoList;
     }

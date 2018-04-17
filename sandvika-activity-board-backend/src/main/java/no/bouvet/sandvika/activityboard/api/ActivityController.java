@@ -2,6 +2,7 @@ package no.bouvet.sandvika.activityboard.api;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.LeaderboardEntry;
+import no.bouvet.sandvika.activityboard.domain.Photo;
 import no.bouvet.sandvika.activityboard.domain.Statistics;
 import no.bouvet.sandvika.activityboard.utils.ActivityUtils;
 import no.bouvet.sandvika.activityboard.utils.LeaderboardUtils;
@@ -116,9 +117,9 @@ public class ActivityController {
         return activityUtils.getMetersForMonthByActivity(activityType, month, year);
     }
     @RequestMapping(value = "/activities/{clubName}/{activityType}/{periodType}/photos/latest/{numberOfPhotos}", method = RequestMethod.GET)
-    public List<String> getRecentActivityPhotos(@PathVariable("clubName") String clubName,
-                                                        @PathVariable("activityType") String activityType,
-                                                        @PathVariable("numberOfPhotos") int numberOfPhotos) {
+    public List<Photo> getRecentActivityPhotos(@PathVariable("clubName") String clubName,
+                                               @PathVariable("activityType") String activityType,
+                                               @PathVariable("numberOfPhotos") int numberOfPhotos) {
 
         return activityUtils.getMostRecentActivityPhotos(clubName, activityType.toLowerCase(), numberOfPhotos);
     }
