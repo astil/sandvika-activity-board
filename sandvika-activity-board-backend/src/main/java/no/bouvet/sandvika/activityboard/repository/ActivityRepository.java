@@ -32,5 +32,9 @@ public interface ActivityRepository extends MongoRepository<Activity, Integer>
 
     Stream<Activity> findAllByOrderByStartDateLocalDesc();
 
+    Stream<Activity> findAllByPhotosIsNotNullOrderByStartDateLocalDesc();
+
+    Stream<Activity> findByTypeAndPhotosIsNotNullOrderByStartDateLocalDesc(String type);
+
     Activity findOneByAthleteLastName(String lastName);
 }
