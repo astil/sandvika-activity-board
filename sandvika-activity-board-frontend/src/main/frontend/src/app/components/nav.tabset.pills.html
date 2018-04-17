@@ -28,13 +28,14 @@
 
             <div class="flex-wrapper">
                 <div class="vertical-wrapper">
+                    <app-photo-carousel [club]="chosenClub" [activityType]="tab.activityType.code"></app-photo-carousel>
                     <div class="d-block d-sm-none w-100">
                         <h2 *ngIf="tab.code === 'all'" style="text-align: center; font-family: 'Roboto', sans-serif;">{{tab.activityType.decode}}</h2>
                         <h2 *ngIf="tab.code === 'month'" style="text-align: center; font-family: 'Roboto', sans-serif;">{{tab.pageNumber | numToMonth}} - {{tab.activityType.decode}}</h2>
                         <h2 *ngIf="tab.code === 'week'" style="text-align: center; font-family: 'Roboto', sans-serif;">Uke {{tab.pageNumber}} - {{tab.activityType.decode}}</h2>
                     </div>
-                    <latest-activities-component [activities]="latestActivities"></latest-activities-component>
                     <stats-data-component [tab]="tab" [thisWeekStats]="thisWeekStats" title=""></stats-data-component>
+                    <latest-activities-component [activities]="latestActivities"></latest-activities-component>
                     <top-activities-component [tab]="tab" [activities]="activities"></top-activities-component>
                 </div>
 

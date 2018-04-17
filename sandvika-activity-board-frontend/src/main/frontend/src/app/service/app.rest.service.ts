@@ -7,6 +7,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 import {Activity} from "../domain/activity";
+import {Photo} from "../domain/photo";
 import {Statistics} from "../domain/Statistics";
 import {TabContent} from "../domain/TabContent";
 import {HttpClient, HttpResponse} from "@angular/common/http";
@@ -65,8 +66,8 @@ export class AppRestService {
         }
     }
 
-    get10Photos(tab: TabContent, club: string): Observable<Activity[]> {
-        return this.http.get<Activity[]>(this.restUrl + "activities/" + club + "/" + tab.activityType.code + "/photo/6")
+    get10Photos(activityType: string, club: string): Observable<Photo[]> {
+        return this.http.get<Photo[]>(this.restUrl + "activities/" + club + "/" + activityType + "/photos/latest/10")
             .catch(AppRestService.handleError);
     }
 
