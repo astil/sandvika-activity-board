@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 public class ClubController
 {
-
     @Autowired
     ClubRepository clubRepository;
 
@@ -31,7 +30,7 @@ public class ClubController
         }
 
         club.getMemberIds().stream().map(athleteRepository::findById).forEach(athlete -> {
-            athlete.setClub(club.getId());
+            athlete.getClubs().add(club.getId());
             athleteRepository.save(athlete);
         });
 
@@ -46,7 +45,7 @@ public class ClubController
         clubRepository.save(club);
 
         Athlete athlete = athleteRepository.findById(athleteId);
-        athlete.setClub(club.getId());
+        athlete.getClubs().add(club.getId());
         athleteRepository.save(athlete);
     }
 

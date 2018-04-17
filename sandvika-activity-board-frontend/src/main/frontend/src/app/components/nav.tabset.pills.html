@@ -16,10 +16,14 @@
                     <button type="button" class="btn btn-outline-primary disabled btn-block" *ngIf="tab.pageNumber >= tab.maxPage" aria-disabled="true">Neste <i class="fa fa-angle-right" aria-hidden="true"></i></button>
                 </div>
                 <div class="d-none d-sm-block status-header">
-                    <h2 *ngIf="tab.code === 'all'">{{tab.activityType.decode}}</h2>
-                    <h2 *ngIf="tab.code === 'month'">{{tab.pageNumber | numToMonth}} - {{tab.activityType.decode}}</h2>
-                    <h2 *ngIf="tab.code === 'week'">Uke {{tab.pageNumber}} - {{tab.activityType.decode}}</h2>
+                    <h2 style="text-align: center;" *ngIf="tab.code === 'all'">{{tab.activityType.decode}}</h2>
+                    <h2 style="text-align: center;" *ngIf="tab.code === 'month'">{{tab.pageNumber | numToMonth}} - {{tab.activityType.decode}}</h2>
+                    <h2 style="text-align: center;" *ngIf="tab.code === 'week'">Uke {{tab.pageNumber}} - {{tab.activityType.decode}}</h2>
                 </div>
+                <div class="d-none d-sm-block status-header">
+                    <h2 style="text-align: center; font-family: 'Roboto', sans-serif;">{{chosenClub}}</h2>
+                </div>
+                <button type="button" class="btn btn-outline-primary velg-klubb" (click)="resetClub()">Velg klubb</button>
             </div>
 
             <div class="flex-wrapper">
@@ -28,7 +32,6 @@
                         <h2 *ngIf="tab.code === 'all'" style="text-align: center; font-family: 'Roboto', sans-serif;">{{tab.activityType.decode}}</h2>
                         <h2 *ngIf="tab.code === 'month'" style="text-align: center; font-family: 'Roboto', sans-serif;">{{tab.pageNumber | numToMonth}} - {{tab.activityType.decode}}</h2>
                         <h2 *ngIf="tab.code === 'week'" style="text-align: center; font-family: 'Roboto', sans-serif;">Uke {{tab.pageNumber}} - {{tab.activityType.decode}}</h2>
-                        <h2 style="text-align: center; font-family: 'Roboto', sans-serif;">Hei {{loggedInAthlete.firstname}}</h2>
                     </div>
                     <latest-activities-component [activities]="latestActivities"></latest-activities-component>
                     <stats-data-component [tab]="tab" [thisWeekStats]="thisWeekStats" title=""></stats-data-component>

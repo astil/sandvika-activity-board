@@ -51,13 +51,13 @@ public class AthleteController {
     }
 
     @RequestMapping(value = "/athlete/login", method = RequestMethod.GET)
-    //@CrossOrigin(value = "*")
+//    @CrossOrigin(value = "*")
     public Athlete tokenRegistration(@RequestParam String token) {
         return athleteRepository.findOneByToken(token);
     }
 
     @RequestMapping(value = "/athlete/login/token-registration", method = RequestMethod.GET)
-    //@CrossOrigin(value = "*")
+//    @CrossOrigin(value = "*")
     public Athlete tokenRegistration(@RequestParam(required = false) String state, @RequestParam String code, HttpServletResponse response)
     {
         StravaToken stravaToken = restTemplate.postForEntity("https://www.strava.com/oauth/token?client_id=3034&client_secret=506d1d0ed30af56b74a458a26419dd6ead8e910d&code=" + code, "", StravaToken.class).getBody();

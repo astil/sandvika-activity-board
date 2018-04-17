@@ -166,6 +166,15 @@ stats-data-component {
     flex-wrap: wrap;
 }
 
+.log-in {
+    width: 100%;
+}
+
+.velg-klubb {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
 .pagination .btn-group {
     width: 100%;
     display: flex;
@@ -206,10 +215,19 @@ stats-data-component {
         margin: 20px auto;
     }
 
+    .log-in {
+        width: 50%;
+    }
+
+    .velg-klubb {
+        width: auto;
+        margin-bottom: 0;
+    }
+
     .nav-wrapper {
         margin-bottom: 5px;
         display: flex;
-        width: 50%;
+        width: 70%;
     }
 
     .nav-wrapper > div {
@@ -254,6 +272,10 @@ stats-data-component {
     .bouvet-brand img {
         top: 5px;
         right: 0;
+    }
+
+    .log-in {
+        width: 25%;
     }
 }
 

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {AppRestService} from "../service/app.rest.service";
 import {Athlete} from "../domain/athlete";
 import {NgbDropdownConfig, NgbTabChangeEvent} from "@ng-bootstrap/ng-bootstrap";
@@ -8,6 +8,7 @@ import {Statistics} from "../domain/Statistics";
 import {Activity} from "../domain/activity";
 import {ActivityType} from "../domain/ActivityType";
 import {AuthCodeService} from "../service/auth-code.service";
+import {CookieService} from "ngx-cookie-service";
 
 @Component({
     selector: 'ngbd-tabset-pills',
@@ -16,7 +17,9 @@ import {AuthCodeService} from "../service/auth-code.service";
     providers: [AppRestService, DateUtilsServiceService, NgbDropdownConfig]
 })
 export class NgbdTabsetPills implements OnInit {
-    @Input() loggedInAthlete: Athlete;
+    private loggedInAthlete: Athlete;
+    @Input() chosenClub: string;
+    @Output() chooseClub = new EventEmitter<boolean>();
 
     private pageWeek: number;
     private pageMonth: number;
@@ -44,7 +47,7 @@ export class NgbdTabsetPills implements OnInit {
     private thisWeekStats: Statistics;
     private errorMessage: any;
 
-    constructor(private appRestService: AppRestService, private authCodeService: AuthCodeService) {
+    constructor(private appRestService: AppRestService, private authCodeService: AuthCodeService, private cookie: CookieService) {
         this.loggedInAthlete = this.authCodeService.athlete;
 
         this.pageWeek = DateUtilsServiceService.getWeekNumber(new Date());
@@ -60,22 +63,22 @@ export class NgbdTabsetPills implements OnInit {
     ngOnInit(): void {
         this.loggedInAthlete = this.authCodeService.athlete;
 
-        this.appRestService.getAllStats(this.pillTab[0], this.loggedInAthlete.club).subscribe(
+        this.appRestService.getAllStats(this.pillTab[0], this.chosenClub).subscribe(
             statistics => this.processStatsResult(statistics),
             error => this.errorMessage = <any>error
         );
 
-        this.appRestService.getTopActivities(this.pillTab[0], this.loggedInAthlete.club).subscribe(
+        this.appRestService.getTopActivities(this.pillTab[0], this.chosenClub).subscribe(
             activities => this.processTopResult(activities),
             error => this.errorMessage = <any>error
         );
 
-        this.appRestService.getLeaderBoardTotalPoints(this.pillTab[0].activityType.code, this.loggedInAthlete.club)
+        this.appRestService.getLeaderBoardTotalPoints(this.pillTab[0].activityType.code, this.chosenClub)
             .subscribe(
                 athlete => this.athletes = athlete,
                 error => this.errorMessage = <any>error);
 
-        this.appRestService.getLatestActivities(this.pillTab[0].activityType.code, 5, this.loggedInAthlete.club).subscribe(
+        this.appRestService.getLatestActivities(this.pillTab[0].activityType.code, 5, this.chosenClub).subscribe(
             activities => this.processLatestResult(activities),
             error => this.errorMessage = <any>error
         );
@@ -111,43 +114,48 @@ export class NgbdTabsetPills implements OnInit {
             tab.pageNumber++;
         }
 
-        this.appRestService.getAllStats(tab, this.loggedInAthlete.club).subscribe(
+        this.appRestService.getAllStats(tab, this.chosenClub).subscribe(
             statistics => this.processStatsResult(statistics),
             error => this.errorMessage = <any>error
         );
 
-        this.appRestService.getTopActivities(tab, this.loggedInAthlete.club).subscribe(
+        this.appRestService.getTopActivities(tab, this.chosenClub).subscribe(
             activities => this.processTopResult(activities),
             error => this.errorMessage = <any>error
         );
 
-        this.appRestService.getLatestActivities(tab.activityType.code, 5, this.loggedInAthlete.club).subscribe(
+        this.appRestService.getLatestActivities(tab.activityType.code, 5, this.chosenClub).subscribe(
             activities => this.processLatestResult(activities),
             error => this.errorMessage = <any>error
         );
 
         switch (tab.code) {
             case "all" :
-                this.appRestService.getLeaderBoardTotalPoints(tab.activityType.code, this.loggedInAthlete.club)
+                this.appRestService.getLeaderBoardTotalPoints(tab.activityType.code, this.chosenClub)
                     .subscribe(
                         athlete => this.athletes = athlete,
                         error => this.errorMessage = <any>error);
                 break;
             case "month" :
-                this.appRestService.getLeaderboardPoints(tab.activityType.code, "month", tab.pageNumber, tab.year, this.loggedInAthlete.club)
+                this.appRestService.getLeaderboardPoints(tab.activityType.code, "month", tab.pageNumber, tab.year, this.chosenClub)
                     .subscribe(
                         athlete => this.athletes = athlete,
                         error => this.errorMessage = <any>error);
                 break;
             case "week" :
-                this.appRestService.getLeaderboardPoints(tab.activityType.code, "week", tab.pageNumber, tab.year, this.loggedInAthlete.club)
+                this.appRestService.getLeaderboardPoints(tab.activityType.code, "week", tab.pageNumber, tab.year, this.chosenClub)
                     .subscribe(
                         athlete => this.athletes = athlete,
                         error => this.errorMessage = <any>error);
 
-                this.appRestService.getAllStats(tab, this.loggedInAthlete.club);
+                this.appRestService.getAllStats(tab, this.chosenClub);
 
                 break;
         }
+    }
+
+    resetClub() {
+        this.cookie.delete('default-club');
+        this.chooseClub.emit(true);
     }
 }

@@ -5,7 +5,9 @@ export class Athlete {
     handicapList: Handicap[];
     profile: string;
     token: string;
-    club: string;
+    clubs: string[];
+    defaultClub: string;
+
 }
 
 export class Handicap {

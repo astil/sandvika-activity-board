@@ -24,6 +24,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {AuthCodeService} from "./service/auth-code.service";
 import {RouterModule} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
+import { PhotoCarouselComponent } from './photo-carousel/photo-carousel.component';
 
 @NgModule({
     declarations: [
@@ -40,7 +41,8 @@ import {CookieService} from "ngx-cookie-service";
         ConvertNumberToMonthMinimal,
         OrderBy,
         ConvertMinToHhMmSs,
-        ConvertMinToHhT
+        ConvertMinToHhT,
+        PhotoCarouselComponent
     ],
     entryComponents: [NgbdModalContent],
     imports: [

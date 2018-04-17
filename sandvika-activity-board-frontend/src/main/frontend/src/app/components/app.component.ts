@@ -4,6 +4,7 @@ import {AuthCodeService} from "../service/auth-code.service";
 import {ActivatedRoute} from "@angular/router";
 import {Subscriber} from "rxjs/Subscriber";
 import {Athlete} from "../domain/athlete";
+import {CookieService} from "ngx-cookie-service";
 
 @Component({
     selector: 'app-root',
@@ -17,8 +18,9 @@ export class AppComponent implements OnInit {
     private athlete: Athlete;
 
     private redirectUrl : string;
+    private defaultClub: string;
 
-    constructor(private authService: AuthCodeService, private activatedRoute: ActivatedRoute) {
+    constructor(private authService: AuthCodeService, private activatedRoute: ActivatedRoute, private cookie: CookieService) {
         this.isLoggedIn = authService.isAuthenticated;
         authService.isAuthenticatedChange.subscribe((value) => this.isLoggedIn = value);
 
@@ -33,6 +35,10 @@ export class AppComponent implements OnInit {
             this.redirectUrl = window.location.protocol + "//" + window.location.hostname + window.location.pathname
         }
 
+        if(this.cookie.check('default-club')) {
+            this.defaultClub = this.cookie.get('default-club');
+        }
+
         this.activatedRoute.queryParams.subscribe(r => {
             if (r['code']) {
                 this.authService.loginAttempt(r['code']);
@@ -45,5 +51,16 @@ export class AppComponent implements OnInit {
     ngOnDestroy() {
         //prevent memory leak when component destroyed
         this.authSubscription.unsubscribe();
+    }
+
+    registerClub(club: string) {
+        this.cookie.set('default-club', club);
+        this.defaultClub = club;
+    }
+
+    resetClubEmitter(reset: boolean) {
+        if (reset) {
+            this.defaultClub = null;
+        }
     }
 }

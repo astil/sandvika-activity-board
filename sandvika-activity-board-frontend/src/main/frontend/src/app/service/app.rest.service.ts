@@ -14,7 +14,7 @@ import {Athlete} from "../domain/athlete";
 
 @Injectable()
 export class AppRestService {
-    // private restUrl = 'http://localhost:8005/';  // URL to web api
+    // private restUrl = 'http://localhost:8080/';  // URL to web api
     private restUrl = '';  // URL to web api
 
     constructor(private http: HttpClient) {
@@ -63,6 +63,11 @@ export class AppRestService {
             return this.http.get<Activity[]>(this.restUrl + "activities/" + club + "/" + tab.activityType.code + "/top/5/" + tab.altDecode + "/" + tab.pageNumber + "/" + tab.year)
                 .catch(AppRestService.handleError);
         }
+    }
+
+    get10Photos(tab: TabContent, club: string): Observable<Activity[]> {
+        return this.http.get<Activity[]>(this.restUrl + "activities/" + club + "/" + tab.activityType.code + "/photo/6")
+            .catch(AppRestService.handleError);
     }
 
     private static handleError(error: Response | any) {

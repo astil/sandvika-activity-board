@@ -20,7 +20,7 @@ public class Athlete {
     private String profile;
     private Map<String, List<Activity>> badges;
     private String token;
-    private String club;
+    private List<String> clubs;
 
     public int getId() {
         return id;
@@ -157,13 +157,16 @@ public class Athlete {
         return getHandicapForDate(new Date());
     }
 
-    public String getClub()
+    public List<String> getClubs()
     {
-        return club;
+        if (clubs == null) {
+            clubs = new ArrayList<>();
+        }
+        return clubs;
     }
 
-    public void setClub(String club)
+    public void setClubs(List<String> clubs)
     {
-        this.club = club;
+        this.clubs = clubs;
     }
 }
