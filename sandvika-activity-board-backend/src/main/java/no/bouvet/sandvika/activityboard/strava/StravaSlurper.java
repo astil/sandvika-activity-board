@@ -1,9 +1,6 @@
 package no.bouvet.sandvika.activityboard.strava;
 
-import no.bouvet.sandvika.activityboard.domain.Activity;
-import no.bouvet.sandvika.activityboard.domain.Athlete;
-import no.bouvet.sandvika.activityboard.domain.StravaActivity;
-import no.bouvet.sandvika.activityboard.domain.UpdateSummary;
+import no.bouvet.sandvika.activityboard.domain.*;
 import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.points.PointsCalculator;
@@ -18,15 +15,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Component
 public class StravaSlurper {
-    private static final String BASE_PATH = "https://www.strava.com/api/v3/athlete/";
+    private static final String BASE_PATH = "https://www.strava.com/api/v3/";
     public static String STRAVA_CLIENT_TOKEN = "43cef4065b62813502a456d39508702f3d74ad61";
     private static Logger log = LoggerFactory.getLogger(StravaSlurper.class);
 
@@ -48,6 +43,8 @@ public class StravaSlurper {
 
     @Autowired
     BadgeAppointer badgeAppointer;
+
+    private static Map<Integer, Integer> loadedPhotos = new HashMap<>();
 
     @Scheduled(fixedRate = 1000 * 60 * 10)
     public void updateLatestActivities() {
@@ -101,13 +98,30 @@ public class StravaSlurper {
         activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
         activity.setBadges(badgeAppointer.getBadgesForActivity(activity));
         activity.setPoints(PointsCalculator.getPointsForActivity(activity, handicapCalculator.getHandicapForActivity(activity)));
+        // Foreløpig kan vi kun hente ett bilde fra hver aktivitet. Vi trenger derfor ikke sjekke om det har kommet nye
+        if (stravaActivity.getTotalPhotoCount() > 0 && !loadedPhotos.containsKey(stravaActivity.getId())) {
+            activity.setPhotos(getPhotosFromActivity(activity.getId(), athlete.getToken()));
+            loadedPhotos.put(activity.getId(), 1);
+        }
         log.debug("Created activity: " + activity.toString());
         return activity;
     }
 
+    private List<String> getPhotosFromActivity(int activityId, String athleteToken) {
+        StravaActivityFull stravaActivityFull = getActivityFromStrava(activityId, athleteToken);
+        return Arrays.asList(stravaActivityFull.getStravaPhotos().getStravaPrimaryPhoto().getStravaUrls().get600());
+    }
+
+    private StravaActivityFull getActivityFromStrava(int activityId, String token) {
+        String url = BASE_PATH
+                + "activities/" + activityId + "?access_token=" + token;
+        log.info(url);
+        return restTemplate.getForObject(url, StravaActivityFull.class);
+    }
+
     private List<StravaActivity> getActivitiesFromStrava(Athlete athlete, int page, long after) {
         String url = BASE_PATH
-                + "/activities?"+ (after == 0 ? "" : "after="+ after + "&") +"page=" + page + "&per_page=200&access_token=" + athlete.getToken();
+                + "athlete/activities?"+ (after == 0 ? "" : "after="+ after + "&") +"page=" + page + "&per_page=200&access_token=" + athlete.getToken();
         log.info(url);
         StravaActivity[] activitiesFromStrava = restTemplate.getForObject(url, StravaActivity[].class);
         return Arrays.asList(activitiesFromStrava);

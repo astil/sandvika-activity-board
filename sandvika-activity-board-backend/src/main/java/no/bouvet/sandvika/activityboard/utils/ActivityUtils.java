@@ -8,6 +8,7 @@ import no.bouvet.sandvika.activityboard.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,10 +54,13 @@ public class ActivityUtils {
         return getActivitiesForPeriodByActivityType(clubName, activityType, periodType, periodNumber, year);
     }
 
-    public List<Activity> getActivitiesByActivityType(String activityType, int numberOfActivities) {
-        return activityRepository.findByTypeOrderByStartDateLocalDesc(activityType)
+    public List<Activity> getActivitiesByActivityType(String activityType, int numberOfActivities, String clubName) {
+        List<Activity> activityList = activityRepository.findByTypeOrderByStartDateLocalDesc(activityType)
                 .limit(numberOfActivities)
                 .collect(Collectors.toList());
+        Club club = clubRepository.findById(clubName);
+        List<Activity> filteredActivities = activityList.stream().filter(activity -> club.getMemberIds().contains(activity.getAthleteId())).collect(Collectors.toList());
+        return filteredActivities;
     }
 
     public List<Activity> getActivities(int numberOfActivities, String clubName) {
@@ -89,7 +93,7 @@ public class ActivityUtils {
         if (activityType.equalsIgnoreCase("all") || activityType.equalsIgnoreCase("")) {
             activityList = getActivities(numberOfActivities, clubName);
         } else {
-            activityList = getActivitiesByActivityType(activityType.toLowerCase(), numberOfActivities);
+            activityList = getActivitiesByActivityType(activityType.toLowerCase(), numberOfActivities, clubName);
         }
         return activityList;
     }
@@ -100,5 +104,38 @@ public class ActivityUtils {
                 .filter(a -> a.getType().equalsIgnoreCase(activityType))
                 .mapToDouble(Activity::getDistanceInMeters)
                 .sum();
+    }
+
+    public List<String> getMostRecentActivityPhotos(String clubName, String activityType, int numberOfPhotos) {
+        List<String> photoList;
+        if (activityType.equalsIgnoreCase("all") || activityType.equalsIgnoreCase("")) {
+            photoList = getPhotos(numberOfPhotos, clubName);
+        } else {
+            photoList = getPhotosByActivityType(clubName, numberOfPhotos, activityType.toLowerCase());
+        }
+        return photoList;
+    }
+
+    private List<String> getPhotosByActivityType(String clubName, int numberOfPhotos, String activityType) {
+        List<Activity> activityList = activityRepository.findByTypeAndPhotosIsNotNullOrderByStartDateLocalDesc(activityType)
+                .limit(numberOfPhotos)
+                .collect(Collectors.toList());
+        Club club = clubRepository.findById(clubName);
+        List<Activity> filteredActivities = activityList.stream().filter(activity -> club.getMemberIds().contains(activity.getAthleteId())).collect(Collectors.toList());
+        List<String> photoList = new ArrayList<>();
+        filteredActivities.forEach(a -> photoList.addAll(a.getPhotos()));
+        return photoList;
+
+    }
+
+    private List<String> getPhotos(int numberOfPhotos, String clubName) {
+        List<Activity> activityList = activityRepository.findAllByPhotosIsNotNullOrderByStartDateLocalDesc()
+                .limit(numberOfPhotos)
+                .collect(Collectors.toList());
+        Club club = clubRepository.findById(clubName);
+        List<Activity> filteredActivities = activityList.stream().filter(activity -> club.getMemberIds().contains(activity.getAthleteId())).collect(Collectors.toList());
+        List<String> photoList = new ArrayList<>();
+        filteredActivities.forEach(a -> photoList.addAll(a.getPhotos()));
+        return photoList;
     }
 }

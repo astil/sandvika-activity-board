@@ -1,5 +1,6 @@
 package no.bouvet.sandvika.activityboard.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +45,7 @@ public class Activity
     private double handicap;
     private Integer athleteId;
     private Set<Badge> badges;
+    private List<String> photos;
 
 
     public Activity()
@@ -365,6 +367,21 @@ public class Activity
     public void setPoints(double points)
     {
         this.points = points;
+    }
+
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
+
+    public void addPhoto(String photoUrl) {
+        if (photos == null) {
+            photos = new ArrayList<>();
+        }
+        photos.add(photoUrl);
     }
 
     @Override

@@ -62,7 +62,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "total_photo_count",
     "has_kudoed",
     "workout_type",
-    "suffer_score"
+    "suffer_score",
+
 })
 public class StravaActivity
 {
