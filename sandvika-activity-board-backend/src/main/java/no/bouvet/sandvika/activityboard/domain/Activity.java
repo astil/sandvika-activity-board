@@ -109,7 +109,7 @@ public class Activity
         this.athleteLastName = athleteLastName;
     }
 
-    public String getAthletefirstName()
+    public String getAthleteFirstName()
     {
         return athletefirstName;
     }
@@ -440,5 +440,22 @@ public class Activity
 
     public Integer getAthleteId() {
         return athleteId;
+    }
+
+    public ActivitySummary getSummary() {
+        ActivitySummary summary = new ActivitySummary();
+        summary.setId(this.getId());
+        summary.setName(this.getName());
+        summary.setAthletefirstName(this.getAthleteFirstName());
+        summary.setAthleteLastName(this.getAthleteLastName());
+        summary.setPoints(this.getPoints());
+        summary.setDescription(this.getDescription());
+        summary.setDistanceInMeters(this.getDistanceInMeters());
+        summary.setMovingTimeInSeconds(this.getMovingTimeInSeconds());
+        summary.setElapsedTimeInSeconds(this.getElapsedTimeInSeconds());
+        summary.setTotalElevationGaininMeters(this.getTotalElevationGaininMeters());
+        summary.setType(this.getType());
+        summary.setStartDateLocal(this.getStartDateLocal());
+        return summary;
     }
 }

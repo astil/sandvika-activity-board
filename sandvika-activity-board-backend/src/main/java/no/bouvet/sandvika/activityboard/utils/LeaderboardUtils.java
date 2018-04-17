@@ -51,7 +51,7 @@ public class LeaderboardUtils {
             if (!entries.containsKey(activity.getAthleteId())) {
                 LeaderboardEntry entry = new LeaderboardEntry(activity.getAthleteId(), activity.getPoints());
                 entry.setAthleteLastName(activity.getAthleteLastName());
-                entry.setAthleteFirstName(activity.getAthletefirstName());
+                entry.setAthleteFirstName(activity.getAthleteFirstName());
                 entry.setNumberOfActivities(1);
 
                 entry.setHandicap(getCurrentHandicap(activity.getAthleteId()));

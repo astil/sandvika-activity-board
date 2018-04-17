@@ -1,16 +1,16 @@
 package no.bouvet.sandvika.activityboard.domain;
 
 public class Photo {
-    private int activityId;
+    private ActivitySummary activitySummary;
     private String url;
 
-    public Photo(int activityId, String url) {
-        this.activityId = activityId;
+    public Photo(ActivitySummary activitySummary, String url) {
+        this.activitySummary = activitySummary;
         this.url = url;
     }
 
-    public int getActivityId() {
-        return activityId;
+    public ActivitySummary getActivitySummary() {
+        return this.activitySummary;
     }
 
     public String getUrl() {

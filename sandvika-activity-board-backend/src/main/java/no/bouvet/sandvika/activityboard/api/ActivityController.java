@@ -116,7 +116,7 @@ public class ActivityController {
     public double getTotalMetersForMonthByActivity(@PathVariable("activityType") String activityType, @PathVariable("month") int month, @PathVariable("year") int year) {
         return activityUtils.getMetersForMonthByActivity(activityType, month, year);
     }
-    @RequestMapping(value = "/activities/{clubName}/{activityType}/{periodType}/photos/latest/{numberOfPhotos}", method = RequestMethod.GET)
+    @RequestMapping(value = "/activities/{clubName}/{activityType}/photos/latest/{numberOfPhotos}", method = RequestMethod.GET)
     public List<Photo> getRecentActivityPhotos(@PathVariable("clubName") String clubName,
                                                @PathVariable("activityType") String activityType,
                                                @PathVariable("numberOfPhotos") int numberOfPhotos) {

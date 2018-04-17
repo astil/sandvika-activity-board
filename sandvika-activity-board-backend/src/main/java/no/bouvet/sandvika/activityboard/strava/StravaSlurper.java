@@ -100,20 +100,20 @@ public class StravaSlurper {
         activity.setPoints(PointsCalculator.getPointsForActivity(activity, handicapCalculator.getHandicapForActivity(activity)));
         // Foreløpig kan vi kun hente ett bilde fra hver aktivitet. Vi trenger derfor ikke sjekke om det har kommet nye
         if (stravaActivity.getTotalPhotoCount() > 0 && !loadedPhotos.containsKey(stravaActivity.getId())) {
-            activity.setPhotos(getPhotosFromActivity(activity.getId(), athlete.getToken()));
+            activity.setPhotos(getPhotosFromActivity(activity, athlete.getToken()));
             loadedPhotos.put(activity.getId(), 1);
         }
         log.debug("Created activity: " + activity.toString());
         return activity;
     }
 
-    private List<Photo> getPhotosFromActivity(int activityId, String athleteToken) {
-        StravaActivityFull stravaActivityFull = getActivityFromStrava(activityId, athleteToken);
-        return Arrays.asList(createPhoto(stravaActivityFull));
+    private List<Photo> getPhotosFromActivity(Activity activity, String athleteToken) {
+        StravaActivityFull stravaActivityFull = getActivityFromStrava(activity.getId(), athleteToken);
+        return Arrays.asList(createPhoto(activity, stravaActivityFull));
     }
 
-    private Photo createPhoto(StravaActivityFull stravaActivityFull) {
-        return new Photo(stravaActivityFull.getId(), stravaActivityFull.getStravaPhotos().getStravaPrimaryPhoto().getStravaUrls().get600());
+    private Photo createPhoto(Activity activity, StravaActivityFull stravaActivityFull) {
+        return new Photo(activity.getSummary(), stravaActivityFull.getStravaPhotos().getStravaPrimaryPhoto().getStravaUrls().get600());
 
     }
 
