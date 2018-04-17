@@ -1,5 +1,6 @@
 package no.bouvet.sandvika.activityboard.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +45,7 @@ public class Activity
     private double handicap;
     private Integer athleteId;
     private Set<Badge> badges;
+    private List<Photo> photos;
 
 
     public Activity()
@@ -107,7 +109,7 @@ public class Activity
         this.athleteLastName = athleteLastName;
     }
 
-    public String getAthletefirstName()
+    public String getAthleteFirstName()
     {
         return athletefirstName;
     }
@@ -367,6 +369,21 @@ public class Activity
         this.points = points;
     }
 
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
+    }
+
+    public void addPhoto(Photo photo) {
+        if (photos == null) {
+            photos = new ArrayList<>();
+        }
+        photos.add(photo);
+    }
+
     @Override
     public boolean equals(Object o)
     {
@@ -423,5 +440,22 @@ public class Activity
 
     public Integer getAthleteId() {
         return athleteId;
+    }
+
+    public ActivitySummary getSummary() {
+        ActivitySummary summary = new ActivitySummary();
+        summary.setId(this.getId());
+        summary.setName(this.getName());
+        summary.setAthletefirstName(this.getAthleteFirstName());
+        summary.setAthleteLastName(this.getAthleteLastName());
+        summary.setPoints(this.getPoints());
+        summary.setDescription(this.getDescription());
+        summary.setDistanceInMeters(this.getDistanceInMeters());
+        summary.setMovingTimeInSeconds(this.getMovingTimeInSeconds());
+        summary.setElapsedTimeInSeconds(this.getElapsedTimeInSeconds());
+        summary.setTotalElevationGaininMeters(this.getTotalElevationGaininMeters());
+        summary.setType(this.getType());
+        summary.setStartDateLocal(this.getStartDateLocal());
+        return summary;
     }
 }
