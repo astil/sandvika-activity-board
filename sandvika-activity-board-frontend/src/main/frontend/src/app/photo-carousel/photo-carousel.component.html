@@ -3,7 +3,7 @@
     <img [src]="photo.url" alt="{{photo.activitySummary.name}}">
     <div class="carousel-caption">
       <h3>{{photo.activitySummary.name}}</h3>
-      <p>{{photo.activitySummary.type}} - {{photo.activitySummary.movingTimeInSeconds / 60 | number : '1.0-1'}} min - {{photo.activitySummary.distanceInMeters / 1000 | number : '1.0-1'}} km - {{photo.activitySummary.points}} poeng</p>
+      <p>{{photo.activitySummary.type}} - {{photo.activitySummary.movingTimeInSeconds / 60 | number : '1.0-1'}} min - {{photo.activitySummary.distanceInMeters / 1000 | number : '1.0-1'}} km - {{photo.activitySummary.points | number : '1.0-1'}} poeng</p>
     </div>
   </ng-template>
 </ngb-carousel>
