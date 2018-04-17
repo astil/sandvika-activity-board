@@ -56,21 +56,19 @@ public class ActivityUtils {
     }
 
     public List<Activity> getActivitiesByActivityType(String activityType, int numberOfActivities, String clubName) {
-        List<Activity> activityList = activityRepository.findByTypeOrderByStartDateLocalDesc(activityType)
+        Club club = clubRepository.findById(clubName);
+        return activityRepository.findByTypeOrderByStartDateLocalDesc(activityType).
+                filter(activity -> club.getMemberIds().contains(activity.getAthleteId()))
                 .limit(numberOfActivities)
                 .collect(Collectors.toList());
-        Club club = clubRepository.findById(clubName);
-        List<Activity> filteredActivities = activityList.stream().filter(activity -> club.getMemberIds().contains(activity.getAthleteId())).collect(Collectors.toList());
-        return filteredActivities;
     }
 
     public List<Activity> getActivities(int numberOfActivities, String clubName) {
-        List<Activity> activityList = activityRepository.findAllByOrderByStartDateLocalDesc()
+        Club club = clubRepository.findById(clubName);
+        return activityRepository.findAllByOrderByStartDateLocalDesc()
+                .filter(activity -> club.getMemberIds().contains(activity.getAthleteId()))
                 .limit(numberOfActivities)
                 .collect(Collectors.toList());
-        Club club = clubRepository.findById(clubName);
-        List<Activity> filteredActivities = activityList.stream().filter(activity -> club.getMemberIds().contains(activity.getAthleteId())).collect(Collectors.toList());
-        return filteredActivities;
     }
 
     public List<Activity> getTopActivities(String clubName, int limit, String activityType, String periodType, int periodNumber, int year) {
@@ -118,25 +116,26 @@ public class ActivityUtils {
     }
 
     private List<Photo> getPhotosByActivityType(String clubName, int numberOfPhotos, String activityType) {
+        Club club = clubRepository.findById(clubName);
         List<Activity> activityList = activityRepository.findByTypeAndPhotosIsNotNullOrderByStartDateLocalDesc(activityType)
+                .filter(activity -> club.getMemberIds().contains(activity.getAthleteId()))
                 .limit(numberOfPhotos)
                 .collect(Collectors.toList());
-        Club club = clubRepository.findById(clubName);
-        List<Activity> filteredActivities = activityList.stream().filter(activity -> club.getMemberIds().contains(activity.getAthleteId())).collect(Collectors.toList());
-        List<Photo> photoList = new ArrayList<>();
-        filteredActivities.forEach(a -> photoList.addAll(a.getPhotos()));
-        return photoList;
+        List<Photo> photos = new ArrayList<>();
+        activityList.forEach(a -> photos.addAll(a.getPhotos()));
+        return photos;
 
     }
 
     private List<Photo> getPhotos(int numberOfPhotos, String clubName) {
+        Club club = clubRepository.findById(clubName);
         List<Activity> activityList = activityRepository.findAllByPhotosIsNotNullOrderByStartDateLocalDesc()
+                .filter(activity -> club.getMemberIds().contains(activity.getAthleteId()))
                 .limit(numberOfPhotos)
                 .collect(Collectors.toList());
-        Club club = clubRepository.findById(clubName);
-        List<Activity> filteredActivities = activityList.stream().filter(activity -> club.getMemberIds().contains(activity.getAthleteId())).collect(Collectors.toList());
-        List<Photo> photoList = new ArrayList<>();
-        filteredActivities.forEach(a -> photoList.addAll(a.getPhotos()));
-        return photoList;
+
+        List<Photo> photos = new ArrayList<>();
+                activityList.forEach(a -> photos.addAll(a.getPhotos()));
+        return photos;
     }
 }
