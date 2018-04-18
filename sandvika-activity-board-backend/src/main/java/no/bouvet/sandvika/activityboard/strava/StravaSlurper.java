@@ -99,7 +99,9 @@ public class StravaSlurper {
         activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
         activity.setBadges(badgeAppointer.getBadgesForActivity(activity));
         activity.setPoints(PointsCalculator.getPointsForActivity(activity, handicapCalculator.getHandicapForActivity(activity)));
-        activity.setPhotos(getPhotosFromActivity(activity, athlete.getToken()));
+        if (stravaActivity.getTotalPhotoCount() > 0) {
+            activity.setPhotos(getPhotosFromActivity(activity, athlete.getToken()));
+        }
         log.debug("Created activity: " + activity.toString());
         return activity;
     }
