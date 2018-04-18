@@ -75,7 +75,6 @@ export class NgbdModalComponent implements OnInit {
     private errorMessage: any;
 
     constructor(private modalService: NgbModal, private appRestService: AppRestService, private auth : AuthCodeService) {
-        //this.athlete = auth.athlete;
     }
 
     open() {
@@ -88,8 +87,6 @@ export class NgbdModalComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        console.log(this.selectedActivity);
-
         this.appRestService.getAthleteById(this.selectedActivity.athleteId).subscribe(
             activity => this.activities = activity,
             error =>  this.errorMessage = <any>error);

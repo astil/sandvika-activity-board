@@ -1,7 +1,7 @@
-img {
-    width: 100%;
-}
-
 ngb-carousel {
     margin-bottom: 10px;
+}
+
+.carousel img {
+    width: 100%;
 }

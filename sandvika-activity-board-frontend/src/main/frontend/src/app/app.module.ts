@@ -25,6 +25,7 @@ import {AuthCodeService} from "./service/auth-code.service";
 import {RouterModule} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
 import { PhotoCarouselComponent } from './photo-carousel/photo-carousel.component';
+import {TitleCasePipe} from "@angular/common";
 
 @NgModule({
     declarations: [
