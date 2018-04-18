@@ -15,7 +15,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -44,7 +46,6 @@ public class StravaSlurper {
     @Autowired
     BadgeAppointer badgeAppointer;
 
-    private static Map<Integer, Integer> loadedPhotos = new HashMap<>();
 
     @Scheduled(fixedRate = 1000 * 60 * 10)
     public void updateLatestActivities() {
@@ -57,7 +58,7 @@ public class StravaSlurper {
         for (Athlete athlete : athleteRepository.findAllByTokenIsNotNull()) {
             List<StravaActivity> stravaActivities = new ArrayList<>();
 
-            IntStream.rangeClosed(1, pages).forEach(i ->stravaActivities.addAll(getActivitiesFromStrava(athlete, i, after)));
+            IntStream.rangeClosed(1, pages).forEach(i -> stravaActivities.addAll(getActivitiesFromStrava(athlete, i, after)));
             List<Activity> activities = new ArrayList<>();
             stravaActivities.forEach(stravaActivity ->
                     activities.add(createActivity(stravaActivity, athlete)));
@@ -98,11 +99,7 @@ public class StravaSlurper {
         activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
         activity.setBadges(badgeAppointer.getBadgesForActivity(activity));
         activity.setPoints(PointsCalculator.getPointsForActivity(activity, handicapCalculator.getHandicapForActivity(activity)));
-        // Foreløpig kan vi kun hente ett bilde fra hver aktivitet. Vi trenger derfor ikke sjekke om det har kommet nye
-        if (stravaActivity.getTotalPhotoCount() > 0 && !loadedPhotos.containsKey(stravaActivity.getId())) {
-            activity.setPhotos(getPhotosFromActivity(activity, athlete.getToken()));
-            loadedPhotos.put(activity.getId(), 1);
-        }
+        activity.setPhotos(getPhotosFromActivity(activity, athlete.getToken()));
         log.debug("Created activity: " + activity.toString());
         return activity;
     }
@@ -126,7 +123,7 @@ public class StravaSlurper {
 
     private List<StravaActivity> getActivitiesFromStrava(Athlete athlete, int page, long after) {
         String url = BASE_PATH
-                + "athlete/activities?"+ (after == 0 ? "" : "after="+ after + "&") +"page=" + page + "&per_page=200&access_token=" + athlete.getToken();
+                + "athlete/activities?" + (after == 0 ? "" : "after=" + after + "&") + "page=" + page + "&per_page=200&access_token=" + athlete.getToken();
         log.info(url);
         StravaActivity[] activitiesFromStrava = restTemplate.getForObject(url, StravaActivity[].class);
         return Arrays.asList(activitiesFromStrava);
