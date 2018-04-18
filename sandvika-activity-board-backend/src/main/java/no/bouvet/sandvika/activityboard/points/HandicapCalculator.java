@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
 import no.bouvet.sandvika.activityboard.utils.ActiveHoursUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +21,15 @@ import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
 import no.bouvet.sandvika.activityboard.utils.Utils;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Component
 public class HandicapCalculator {
+
+    private static final int NUM_DAYS_BACK_IN_TIME_TO_UPDATE_HC = 100;
+    @Autowired
+    ActivityRepository activityRepository;
+
     private static Logger log = LoggerFactory.getLogger(HandicapCalculator.class);
 
     private final AthleteRepository athleteRepository;
@@ -31,6 +38,21 @@ public class HandicapCalculator {
     public HandicapCalculator(AthleteRepository athleteRepository, ActiveHoursUtil activeHoursUtil) {
         this.athleteRepository = athleteRepository;
         this.activeHoursUtil = activeHoursUtil;
+    }
+
+    @Scheduled(cron = "0 0 1 * * *")
+    private void updateActivityHandicapScheduledTask() {
+        updateActivityHandicap(NUM_DAYS_BACK_IN_TIME_TO_UPDATE_HC);
+    }
+
+    public void updateActivityHandicap(int days) {
+        updateHistoricalHandicapForAllAthletes(days);
+        List<Activity> activities = activityRepository.findAll();
+        for (Activity activity : activities) {
+            activity.setHandicap(getHandicapForActivity(activity));
+            activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
+            activityRepository.save(activity);
+        }
     }
 
     @Scheduled(cron = "0 0 0 * * *")

@@ -60,13 +60,7 @@ public class AdminController {
     @Async
     @RequestMapping(value = "/athlete/all/updateHistoricHandicap/{days}", method = RequestMethod.GET)
     public void updateHistoricHandicapForAllAthletes(@PathVariable("days") int days) {
-        handicapCalculator.updateHistoricalHandicapForAllAthletes(days);
-        List<Activity> activities = activityRepository.findAll();
-        for (Activity activity : activities) {
-            activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
-            activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
-            activityRepository.save(activity);
-        }
+        handicapCalculator.updateActivityHandicap(days);
     }
 
     @RequestMapping(value = "/athlete/{id}/updateHistoricHandicap", method = RequestMethod.GET)

@@ -1,5 +1,6 @@
 package no.bouvet.sandvika.activityboard.strava;
 
+import no.bouvet.sandvika.activityboard.api.AdminController;
 import no.bouvet.sandvika.activityboard.domain.*;
 import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
@@ -46,10 +47,14 @@ public class StravaSlurper {
     @Autowired
     BadgeAppointer badgeAppointer;
 
-
     @Scheduled(fixedRate = 1000 * 60 * 10)
     public void updateLatestActivities() {
-        updateActivities(1, DateUtil.getEpochDaysAgo(10));
+        updateActivities(1, DateUtil.getEpochDaysAgo(5));
+    }
+
+    @Scheduled(cron = "0 5 0 ? * *")
+    public void refreshActivities() {
+        updateActivities(1, 0);
     }
 
     public UpdateSummary updateActivities(int pages, long after) {
