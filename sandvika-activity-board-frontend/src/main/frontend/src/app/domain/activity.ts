@@ -3,7 +3,7 @@ export class Activity {
     points: Number ;
     name: String ;
     athleteLastName: String ;
-    athletefirstName: String ;
+    athleteFirstName: String ;
     description: String ;
     distanceInMeters: Number ;
     movingTimeInSeconds: Number ;

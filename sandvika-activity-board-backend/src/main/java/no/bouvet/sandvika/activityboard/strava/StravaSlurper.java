@@ -73,7 +73,7 @@ public class StravaSlurper {
 
     private Activity createActivity(StravaActivity stravaActivity, Athlete athlete) {
         Activity activity = new Activity();
-        activity.setAthletefirstName(athlete.getFirstName());
+        activity.setAthleteFirstName(athlete.getFirstName());
         activity.setAthleteLastName(athlete.getLastName());
         activity.setAthleteId(athlete.getId());
         activity.setType(stravaActivity.getType());

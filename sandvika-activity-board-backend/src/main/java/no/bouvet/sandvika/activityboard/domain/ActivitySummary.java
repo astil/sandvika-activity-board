@@ -7,7 +7,7 @@ public class ActivitySummary {
     private double points;
     private String name;
     private String athleteLastName;
-    private String athletefirstName;
+    private String athleteFirstName;
     private String description;
     private double distanceInMeters;
     private int movingTimeInSeconds;
@@ -48,12 +48,12 @@ public class ActivitySummary {
         this.athleteLastName = athleteLastName;
     }
 
-    public String getAthletefirstName() {
-        return athletefirstName;
+    public String getAthleteFirstName() {
+        return athleteFirstName;
     }
 
-    public void setAthletefirstName(String athletefirstName) {
-        this.athletefirstName = athletefirstName;
+    public void setAthleteFirstName(String athleteFirstName) {
+        this.athleteFirstName = athleteFirstName;
     }
 
     public String getDescription() {

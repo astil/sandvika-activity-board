@@ -15,7 +15,7 @@ public class Activity
     private double points;
     private String name;
     private String athleteLastName;
-    private String athletefirstName;
+    private String athleteFirstName;
     private String description;
     private double distanceInMeters;
     private int movingTimeInSeconds;
@@ -52,19 +52,19 @@ public class Activity
     {
     }
 
-    public Activity(int id, int points, String athleteLastName, String athletefirstName)
+    public Activity(int id, int points, String athleteLastName, String athleteFirstName)
     {
         this.id = id;
         this.points = points;
-        this.athletefirstName = athletefirstName;
+        this.athleteFirstName = athleteFirstName;
         this.athleteLastName = athleteLastName;
     }
 
-    public Activity(int id, int points, String athleteLastName, String athletefirstName, Date startDateLocal)
+    public Activity(int id, int points, String athleteLastName, String athleteFirstName, Date startDateLocal)
     {
         this.id = id;
         this.points = points;
-        this.athletefirstName = athletefirstName;
+        this.athleteFirstName = athleteFirstName;
         this.athleteLastName = athleteLastName;
         this.startDateLocal = startDateLocal;
     }
@@ -111,12 +111,12 @@ public class Activity
 
     public String getAthleteFirstName()
     {
-        return athletefirstName;
+        return athleteFirstName;
     }
 
-    public void setAthletefirstName(String athletefirstName)
+    public void setAthleteFirstName(String athleteFirstName)
     {
-        this.athletefirstName = athletefirstName;
+        this.athleteFirstName = athleteFirstName;
     }
 
     public String getDescription()
@@ -414,7 +414,7 @@ public class Activity
         sb.append("points=").append(points);
         sb.append(", name='").append(name).append('\'');
         sb.append(", athleteLastName='").append(athleteLastName).append('\'');
-        sb.append(", athletefirstName='").append(athletefirstName).append('\'');
+        sb.append(", athleteFirstName='").append(athleteFirstName).append('\'');
         sb.append(", distanceInMeters=").append(distanceInMeters);
         sb.append(", movingTimeInSeconds=").append(movingTimeInSeconds);
         sb.append(", type='").append(type).append('\'');
@@ -446,7 +446,7 @@ public class Activity
         ActivitySummary summary = new ActivitySummary();
         summary.setId(this.getId());
         summary.setName(this.getName());
-        summary.setAthletefirstName(this.getAthleteFirstName());
+        summary.setAthleteFirstName(this.getAthleteFirstName());
         summary.setAthleteLastName(this.getAthleteLastName());
         summary.setPoints(this.getPoints());
         summary.setDescription(this.getDescription());
