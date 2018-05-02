@@ -6,6 +6,7 @@ import no.bouvet.sandvika.activityboard.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,6 +63,7 @@ public class AdminController {
     public void updateHistoricHandicapForAllAthletes(@PathVariable("days") int days) {
         handicapCalculator.updateActivityHandicap(days);
     }
+
 
     @RequestMapping(value = "/athlete/{id}/updateHistoricHandicap", method = RequestMethod.GET)
     public void updateHistoricHandicapForAthlete(@PathVariable("id") int id) {

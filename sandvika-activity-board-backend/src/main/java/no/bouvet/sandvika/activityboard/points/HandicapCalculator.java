@@ -55,17 +55,6 @@ public class HandicapCalculator {
         }
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
-    public void updateHandicapForAllAthletes() {
-        List<Athlete> athletes = athleteRepository.findAll();
-
-        for (Athlete athlete : athletes) {
-            Handicap hc = new Handicap(calculateHandicapForAthlete(athlete), new Date());
-            log.info("Adding new HC for " + athlete.getLastName() + " " + hc.toString());
-            athlete.getHandicapList().add(hc);
-        }
-        athleteRepository.save(athletes);
-    }
 
     public void updateHistoricalHandicapForAllAthletes(int days) {
         deleteHandicapsForAllAthlets();
@@ -128,11 +117,6 @@ public class HandicapCalculator {
         }
         log.info("\tHC: " + hc);
         return hc;
-    }
-
-    private double calculateHandicapForAthlete(Athlete athlete) {
-        double activeHours = activeHoursUtil.getActiveHoursByDaysAndAthlete(30, athlete);
-        return calculateHandicap(activeHours);
     }
 
     private void updateHandicapForAthleteForDate(int athleteId, Date dateDaysAgo) {
