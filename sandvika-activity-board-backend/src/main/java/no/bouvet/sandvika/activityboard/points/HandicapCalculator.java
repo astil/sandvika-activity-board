@@ -40,7 +40,7 @@ public class HandicapCalculator {
         this.activeHoursUtil = activeHoursUtil;
     }
 
-    @Scheduled(cron = "0 0 1 * * *")
+    //@Scheduled(cron = "0 0 1 * * *")
     private void updateActivityHandicapScheduledTask() {
         updateActivityHandicap(NUM_DAYS_BACK_IN_TIME_TO_UPDATE_HC);
     }
