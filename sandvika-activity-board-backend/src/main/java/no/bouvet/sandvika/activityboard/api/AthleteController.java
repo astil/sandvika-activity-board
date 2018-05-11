@@ -26,6 +26,9 @@ public class AthleteController {
     ActiveHoursUtil activeHoursUtil;
 
     @Autowired
+    AdminController adminController;
+
+    @Autowired
     RestTemplate restTemplate;
 
     //@CrossOrigin("*")
@@ -64,7 +67,10 @@ public class AthleteController {
         } else {
             throw new IllegalArgumentException("Strava token not found!");
         }
-
+        if (athlete.getHandicapList().isEmpty()) {
+            adminController.updateHistoricHandicapForAthlete(athlete.getId());
+            adminController.refreshActivitiesForAthlete(athlete.getId(), 1);
+        }
         return athlete;
     }
 

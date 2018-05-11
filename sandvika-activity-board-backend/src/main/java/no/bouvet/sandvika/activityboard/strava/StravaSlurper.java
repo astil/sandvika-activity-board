@@ -1,6 +1,5 @@
 package no.bouvet.sandvika.activityboard.strava;
 
-import no.bouvet.sandvika.activityboard.api.AdminController;
 import no.bouvet.sandvika.activityboard.domain.*;
 import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
@@ -61,19 +60,24 @@ public class StravaSlurper {
         log.info("Updating activities");
         UpdateSummary updateSummary = new UpdateSummary();
         for (Athlete athlete : athleteRepository.findAllByTokenIsNotNull()) {
-            List<StravaActivity> stravaActivities = new ArrayList<>();
-
-            IntStream.rangeClosed(1, pages).forEach(i -> stravaActivities.addAll(getActivitiesFromStrava(athlete, i, after)));
-            List<Activity> activities = new ArrayList<>();
-            stravaActivities.forEach(stravaActivity ->
-                    activities.add(createActivity(stravaActivity, athlete)));
-            activityRepository.save(activities
-                    .stream()
-                    .filter(activity -> activity.getPoints() > 0)
-                    .collect(Collectors.toList()));
-            updateSummary.addNumberOfActivities(athlete.getLastName(), activities.size());
+            Integer numberOfActivities = updateActivitiesForAthlete(pages, after, athlete);
+            updateSummary.addNumberOfActivities(athlete.getLastName(), numberOfActivities);
         }
         return updateSummary;
+    }
+
+    public Integer updateActivitiesForAthlete(int pages, long after, Athlete athlete) {
+        List<StravaActivity> stravaActivities = new ArrayList<>();
+
+        IntStream.rangeClosed(1, pages).forEach(i -> stravaActivities.addAll(getActivitiesFromStrava(athlete, i, after)));
+        List<Activity> activities = new ArrayList<>();
+        stravaActivities.forEach(stravaActivity ->
+                activities.add(createActivity(stravaActivity, athlete)));
+        activityRepository.save(activities
+                .stream()
+                .filter(activity -> activity.getPoints() > 0)
+                .collect(Collectors.toList()));
+        return activities.size();
     }
 
 

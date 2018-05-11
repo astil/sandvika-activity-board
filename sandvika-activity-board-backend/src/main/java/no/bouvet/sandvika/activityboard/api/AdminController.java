@@ -1,19 +1,6 @@
 package no.bouvet.sandvika.activityboard.api;
 
-import java.util.List;
-
 import no.bouvet.sandvika.activityboard.domain.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
 import no.bouvet.sandvika.activityboard.points.PointsCalculator;
@@ -23,6 +10,12 @@ import no.bouvet.sandvika.activityboard.repository.BadgeRepository;
 import no.bouvet.sandvika.activityboard.repository.ClubRepository;
 import no.bouvet.sandvika.activityboard.strava.StravaSlurper;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @EnableAsync
@@ -64,6 +57,17 @@ public class AdminController {
         handicapCalculator.updateActivityHandicap(days);
     }
 
+    @RequestMapping(value = "/athlete/{id}/activities/load/{pages}", method = RequestMethod.GET)
+    @ResponseBody
+    public Integer refreshActivitiesForAthlete(@PathVariable("id") int athleteId, @PathVariable("pages") int pages) {
+        if (!athleteRepository.exists(athleteId)) {
+            throw new IllegalArgumentException("Athlete does not exist");
+        }
+        Athlete athlete = athleteRepository.findById(athleteId);
+
+        return stravaSlurper.updateActivitiesForAthlete(pages, 0, athlete);
+
+    }
 
     @RequestMapping(value = "/athlete/{id}/updateHistoricHandicap", method = RequestMethod.GET)
     public void updateHistoricHandicapForAthlete(@PathVariable("id") int id) {
