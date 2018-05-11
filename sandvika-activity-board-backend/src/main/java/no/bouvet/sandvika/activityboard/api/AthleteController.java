@@ -53,13 +53,13 @@ public class AthleteController {
             StravaAthlete stravaAthlete = stravaToken.getStravaAthlete();
             athlete = athleteRepository.findById(stravaAthlete.getId());
             if (athlete == null || athlete.getLastName() == null || athlete.getProfile() == null) {
-                Athlete newAthlete = new Athlete();
-                newAthlete.setId(stravaAthlete.getId());
-                newAthlete.setFirstName(stravaAthlete.getFirstname());
-                newAthlete.setLastName(stravaAthlete.getLastname());
-                newAthlete.setProfile(stravaAthlete.getProfile());
-
-                athlete = newAthlete;
+                if (athlete == null) {
+                    athlete = new Athlete();
+                }
+                athlete.setId(stravaAthlete.getId());
+                athlete.setFirstName(stravaAthlete.getFirstname());
+                athlete.setLastName(stravaAthlete.getLastname());
+                athlete.setProfile(stravaAthlete.getProfile());
             }
             athlete.setToken(stravaToken.getAccessToken());
 
