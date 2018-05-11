@@ -49,7 +49,7 @@ public class AthleteController {
         if (Objects.nonNull(stravaToken)) {
             StravaAthlete stravaAthlete = stravaToken.getStravaAthlete();
             athlete = athleteRepository.findById(stravaAthlete.getId());
-            if (athlete == null) {
+            if (athlete == null || athlete.getLastName() == null || athlete.getProfile() == null) {
                 Athlete newAthlete = new Athlete();
                 newAthlete.setId(stravaAthlete.getId());
                 newAthlete.setFirstName(stravaAthlete.getFirstname());

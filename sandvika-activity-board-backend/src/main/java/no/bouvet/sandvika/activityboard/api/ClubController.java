@@ -23,6 +23,12 @@ public class ClubController {
             throw (new IllegalArgumentException());
         }
 
+        for (int memberId : club.getMemberIds()) {
+            if (!athleteRepository.exists(memberId)) {
+                createAthlete(memberId);
+            }
+        }
+
         club.getMemberIds().stream().map(athleteRepository::findById).forEach(athlete -> {
             if (!athlete.getClubs().contains(club.getId())) {
                 athlete.getClubs().add(club.getId());
@@ -31,6 +37,12 @@ public class ClubController {
         });
 
         clubRepository.save(club);
+    }
+
+    private void createAthlete(int memberId) {
+        Athlete athlete = new Athlete();
+        athlete.setId(memberId);
+        athleteRepository.save(athlete);
     }
 
     @RequestMapping(value = "/club/{id}/{athleteId}", method = RequestMethod.PUT)
