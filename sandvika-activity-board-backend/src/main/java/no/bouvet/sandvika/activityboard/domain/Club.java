@@ -8,6 +8,7 @@ public class Club {
     private String id;
     private List<Integer> memberIds;
     private Date competitionStartDate;
+    private List<Integer> adminIds;
 
     public String getId() {
         return id;
@@ -33,10 +34,25 @@ public class Club {
         this.competitionStartDate = competitionStartDate;
     }
 
+    public List<Integer> getAdminIds() {
+        return adminIds;
+    }
+
+    public void setAdminIds(List<Integer> adminIds) {
+        this.adminIds = adminIds;
+    }
+
     public void addMember(Integer memberId) {
         if (memberIds == null) {
             memberIds = new ArrayList<>();
         }
         memberIds.add(memberId);
+    }
+
+    public void addAdmin(Integer adminId) {
+        if (adminIds == null) {
+            adminIds = new ArrayList<>();
+        }
+        adminIds.add(adminId);
     }
 }
