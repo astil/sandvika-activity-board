@@ -1,33 +1,17 @@
 package no.bouvet.sandvika.activityboard.api;
 
-import java.io.IOException;
+import no.bouvet.sandvika.activityboard.domain.*;
+import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
+import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
+import no.bouvet.sandvika.activityboard.utils.ActiveHoursUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import javax.servlet.http.HttpServletResponse;
-
-import no.bouvet.sandvika.activityboard.domain.AthleteStats;
-import no.bouvet.sandvika.activityboard.domain.PeriodType;
-import no.bouvet.sandvika.activityboard.domain.StravaAthlete;
-import no.bouvet.sandvika.activityboard.domain.StravaToken;
-import no.bouvet.sandvika.activityboard.repository.ClubRepository;
-import no.bouvet.sandvika.activityboard.utils.ActiveHoursUtil;
-import no.bouvet.sandvika.activityboard.utils.DateUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-
-import no.bouvet.sandvika.activityboard.domain.Activity;
-import no.bouvet.sandvika.activityboard.domain.Athlete;
-import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
-import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 
 @RestController
 public class AthleteController {
@@ -58,16 +42,14 @@ public class AthleteController {
 
     @RequestMapping(value = "/athlete/login/token-registration", method = RequestMethod.GET)
 //    @CrossOrigin(value = "*")
-    public Athlete tokenRegistration(@RequestParam(required = false) String state, @RequestParam String code, HttpServletResponse response)
-    {
+    public Athlete tokenRegistration(@RequestParam(required = false) String state, @RequestParam String code, HttpServletResponse response) {
         StravaToken stravaToken = restTemplate.postForEntity("https://www.strava.com/oauth/token?client_id=3034&client_secret=506d1d0ed30af56b74a458a26419dd6ead8e910d&code=" + code, "", StravaToken.class).getBody();
 
         Athlete athlete = null;
         if (Objects.nonNull(stravaToken)) {
             StravaAthlete stravaAthlete = stravaToken.getStravaAthlete();
             athlete = athleteRepository.findById(stravaAthlete.getId());
-            if (athlete == null)
-            {
+            if (athlete == null || athlete.getLastName() == null || athlete.getProfile() == null) {
                 Athlete newAthlete = new Athlete();
                 newAthlete.setId(stravaAthlete.getId());
                 newAthlete.setFirstName(stravaAthlete.getFirstname());
