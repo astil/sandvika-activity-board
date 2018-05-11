@@ -17,10 +17,10 @@ import java.util.Set;
  */
 @Component
 public final class PointsCalculator {
-    static final int KILOMETER_VALUE = 3;
-    static final int MINUTE_VALUE = 1;
-    static final double ELEVATIOIN_METER_VALUE = 0.3;
-    static final int SECONDS_IN_MINUTE = 60;
+    public static final int KILOMETER_VALUE = 3;
+    public static final int MINUTE_VALUE = 1;
+    public static final double ELEVATIOIN_METER_VALUE = 0.3;
+    public static final int SECONDS_IN_MINUTE = 60;
 
     private PointsCalculator() {
     }

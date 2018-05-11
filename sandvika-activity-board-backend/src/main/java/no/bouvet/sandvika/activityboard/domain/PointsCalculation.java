@@ -1,5 +1,7 @@
 package no.bouvet.sandvika.activityboard.domain;
 
+import no.bouvet.sandvika.activityboard.points.PointsCalculator;
+
 public class PointsCalculation {
     private int minutes;
     private double elevationGain;
@@ -103,14 +105,14 @@ public class PointsCalculation {
 
     public void createCalculation() {
         String calc = "Points = (((" +
-                minutes + " * " + minCoeffisient +
+                minutes + " * " + PointsCalculator.MINUTE_VALUE + " * " + minCoeffisient +
                 ") + (" +
-                km + " * " + kmCoeffisient +
+                km + " * " + PointsCalculator.KILOMETER_VALUE + " * " + kmCoeffisient +
                 ") + (" +
-                elevationGain + " * " + elevationCoeffisient +
+                elevationGain + " * " + PointsCalculator.ELEVATIOIN_METER_VALUE + " * " + elevationCoeffisient +
                 ") + " +
                 achievements + ") * " + hc + ") /2" + " = " +
-                (((minutes * minCoeffisient) + (km * kmCoeffisient) + (elevationGain * elevationCoeffisient) + achievements) * hc)/2;
+                (((minutes * minCoeffisient * PointsCalculator.MINUTE_VALUE) + (km * kmCoeffisient * PointsCalculator.KILOMETER_VALUE) + (elevationGain * elevationCoeffisient * PointsCalculator.ELEVATIOIN_METER_VALUE) + achievements) * hc)/2;
         calculation = calc;
     }
 
