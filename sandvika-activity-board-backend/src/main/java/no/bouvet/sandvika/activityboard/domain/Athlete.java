@@ -1,15 +1,8 @@
 package no.bouvet.sandvika.activityboard.domain;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.OptionalDouble;
-
 import org.springframework.data.annotation.Id;
+
+import java.util.*;
 
 public class Athlete {
     @Id
@@ -88,6 +81,9 @@ public class Athlete {
     }
 
     public double getHandicapForDate(Date startDateLocal) {
+        if (handicapList == null) {
+            return 1;
+        }
         OptionalDouble handicap = handicapList.stream()
                 .filter(h -> h.getTimestamp().before(startDateLocal))
                 .sorted(Comparator.comparing(Handicap::getTimestamp).reversed())
@@ -157,16 +153,14 @@ public class Athlete {
         return getHandicapForDate(new Date());
     }
 
-    public List<String> getClubs()
-    {
+    public List<String> getClubs() {
         if (clubs == null) {
             clubs = new ArrayList<>();
         }
         return clubs;
     }
 
-    public void setClubs(List<String> clubs)
-    {
+    public void setClubs(List<String> clubs) {
         this.clubs = clubs;
     }
 }

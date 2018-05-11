@@ -1,9 +1,6 @@
 package no.bouvet.sandvika.activityboard.utils;
 
-import no.bouvet.sandvika.activityboard.domain.Activity;
-import no.bouvet.sandvika.activityboard.domain.Club;
-import no.bouvet.sandvika.activityboard.domain.PeriodType;
-import no.bouvet.sandvika.activityboard.domain.Photo;
+import no.bouvet.sandvika.activityboard.domain.*;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,5 +134,25 @@ public class ActivityUtils {
         List<Photo> photos = new ArrayList<>();
                 activityList.forEach(a -> photos.addAll(a.getPhotos()));
         return photos;
+    }
+
+    public PointsCalculation getPointsCalculationForActivity(int activityId) {
+        Activity activity = activityRepository.findOne(activityId);
+        PointsCalculation pointsCalculation = new PointsCalculation();
+        pointsCalculation.setAchievements(activity.getAchievementCount());
+        pointsCalculation.setElevationGain(activity.getTotalElevationGaininMeters());
+        pointsCalculation.setHc(activity.getHandicap());
+        pointsCalculation.setKm(activity.getDistanceInMeters()/1000);
+        pointsCalculation.setMinutes(activity.getMovingTimeInSeconds()/60);
+        pointsCalculation.setActivityType(activity.getType());
+        pointsCalculation.setActivityId(activity.getId());
+
+        ActivityType activityType = ActivityType.toActivityType(activity.getType());
+        pointsCalculation.setElevationCoeffisient(activityType.elevationCoefficient());
+        pointsCalculation.setKmCoeffisient(activityType.distanceCoefficient());
+        pointsCalculation.setMinCoeffisient(activityType.durationCoefficient());
+        pointsCalculation.createCalculation();
+
+        return pointsCalculation;
     }
 }

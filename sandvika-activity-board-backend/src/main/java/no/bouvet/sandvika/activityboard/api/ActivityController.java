@@ -1,15 +1,11 @@
 package no.bouvet.sandvika.activityboard.api;
 
-import no.bouvet.sandvika.activityboard.domain.Activity;
-import no.bouvet.sandvika.activityboard.domain.LeaderboardEntry;
-import no.bouvet.sandvika.activityboard.domain.Photo;
-import no.bouvet.sandvika.activityboard.domain.Statistics;
+import no.bouvet.sandvika.activityboard.domain.*;
 import no.bouvet.sandvika.activityboard.utils.ActivityUtils;
 import no.bouvet.sandvika.activityboard.utils.LeaderboardUtils;
 import no.bouvet.sandvika.activityboard.utils.StatsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -116,6 +112,7 @@ public class ActivityController {
     public double getTotalMetersForMonthByActivity(@PathVariable("activityType") String activityType, @PathVariable("month") int month, @PathVariable("year") int year) {
         return activityUtils.getMetersForMonthByActivity(activityType, month, year);
     }
+
     @RequestMapping(value = "/activities/{clubName}/{activityType}/photos/latest/{numberOfPhotos}", method = RequestMethod.GET)
     public List<Photo> getRecentActivityPhotos(@PathVariable("clubName") String clubName,
                                                @PathVariable("activityType") String activityType,
@@ -124,4 +121,8 @@ public class ActivityController {
         return activityUtils.getMostRecentActivityPhotos(clubName, activityType.toLowerCase(), numberOfPhotos);
     }
 
+    @RequestMapping(value = "/activities/{activityId}/pointcalculation", method = RequestMethod.GET)
+    public PointsCalculation getRecentActivityPhotos(@PathVariable("activityId") int activityId) {
+        return activityUtils.getPointsCalculationForActivity(activityId);
+    }
 }
