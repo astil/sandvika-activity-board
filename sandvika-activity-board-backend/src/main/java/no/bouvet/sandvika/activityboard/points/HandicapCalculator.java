@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Component
 public class HandicapCalculator {
 
-    private static final int NUM_DAYS_BACK_IN_TIME_TO_UPDATE_HC = 100;
+    private static final int NUM_DAYS_BACK_IN_TIME_TO_UPDATE_HC = 30;
     @Autowired
     ActivityRepository activityRepository;
 
@@ -40,7 +40,7 @@ public class HandicapCalculator {
         this.activeHoursUtil = activeHoursUtil;
     }
 
-    //@Scheduled(cron = "0 0 1 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     private void updateActivityHandicapScheduledTask() {
         updateActivityHandicap(NUM_DAYS_BACK_IN_TIME_TO_UPDATE_HC);
     }
@@ -57,7 +57,7 @@ public class HandicapCalculator {
 
 
     public void updateHistoricalHandicapForAllAthletes(int days) {
-        deleteHandicapsForAllAthlets();
+        deleteHandicapsForAllAthlets(days);
         IntStream.range(0, days).forEach(i ->
                 updateHandicapForAllAthletesForDate(DateUtil.getDateDaysAgo(i)));
     }
@@ -71,10 +71,10 @@ public class HandicapCalculator {
         }
     }
 
-    private void deleteHandicapsForAllAthlets() {
+    private void deleteHandicapsForAllAthlets(int days) {
         List<Athlete> athletes = athleteRepository.findAll();
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR, -2);
+        calendar.add(Calendar.DATE, -days);
         for (Athlete athlete : athletes) {
             athlete.setHandicapList(athlete.getHandicapList()
                     .stream()

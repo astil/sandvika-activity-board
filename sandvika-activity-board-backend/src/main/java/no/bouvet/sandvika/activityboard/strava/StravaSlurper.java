@@ -51,7 +51,7 @@ public class StravaSlurper {
         updateActivities(1, DateUtil.getEpochDaysAgo(5));
     }
 
-    @Scheduled(cron = "0 5 0 ? * *")
+    @Scheduled(cron = "0 30 0 * * *")
     public void refreshActivities() {
         updateActivities(1, 0);
     }
