@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Component
 public class HandicapCalculator {
 
-    private static final int NUM_DAYS_BACK_IN_TIME_TO_UPDATE_HC = 30;
+    private static final int NUM_DAYS_BACK_IN_TIME_TO_UPDATE_HC = 300;
     @Autowired
     ActivityRepository activityRepository;
 
@@ -40,7 +40,7 @@ public class HandicapCalculator {
         this.activeHoursUtil = activeHoursUtil;
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 30 1 * * *")
     private void updateActivityHandicapScheduledTask() {
         updateActivityHandicap(NUM_DAYS_BACK_IN_TIME_TO_UPDATE_HC);
     }

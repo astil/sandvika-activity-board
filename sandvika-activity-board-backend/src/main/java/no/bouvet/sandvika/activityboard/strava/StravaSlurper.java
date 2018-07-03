@@ -1,5 +1,6 @@
 package no.bouvet.sandvika.activityboard.strava;
 
+import com.google.common.util.concurrent.RateLimiter;
 import no.bouvet.sandvika.activityboard.domain.*;
 import no.bouvet.sandvika.activityboard.points.BadgeAppointer;
 import no.bouvet.sandvika.activityboard.points.HandicapCalculator;
@@ -26,6 +27,7 @@ public class StravaSlurper {
     private static final String BASE_PATH = "https://www.strava.com/api/v3/";
     public static String STRAVA_CLIENT_TOKEN = "43cef4065b62813502a456d39508702f3d74ad61";
     private static Logger log = LoggerFactory.getLogger(StravaSlurper.class);
+    final RateLimiter rateLimiter = RateLimiter.create(2); // rate is "2 permits per second"
 
 
     @Autowired
@@ -51,7 +53,7 @@ public class StravaSlurper {
         updateActivities(1, DateUtil.getEpochDaysAgo(5));
     }
 
-    @Scheduled(cron = "0 30 0 * * *")
+    @Scheduled(cron = "0 15 0 * * *")
     public void refreshActivities() {
         updateActivities(1, 0);
     }
@@ -60,6 +62,7 @@ public class StravaSlurper {
         log.info("Updating activities");
         UpdateSummary updateSummary = new UpdateSummary();
         for (Athlete athlete : athleteRepository.findAllByTokenIsNotNull()) {
+            rateLimiter.acquire();
             Integer numberOfActivities = updateActivitiesForAthlete(pages, after, athlete);
             updateSummary.addNumberOfActivities(athlete.getLastName(), numberOfActivities);
         }
@@ -132,7 +135,7 @@ public class StravaSlurper {
         return restTemplate.getForObject(url, StravaActivityFull.class);
     }
 
-    private List<StravaActivity> getActivitiesFromStrava(Athlete athlete, int page, long after) {
+    protected List<StravaActivity> getActivitiesFromStrava(Athlete athlete, int page, long after) {
         String url = BASE_PATH
                 + "athlete/activities?" + (after == 0 ? "" : "after=" + after + "&") + "page=" + page + "&per_page=200&access_token=" + athlete.getToken();
         log.info(url);
