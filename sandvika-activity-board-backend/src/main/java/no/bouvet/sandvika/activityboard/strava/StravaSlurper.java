@@ -62,7 +62,6 @@ public class StravaSlurper {
         log.info("Updating activities");
         UpdateSummary updateSummary = new UpdateSummary();
         for (Athlete athlete : athleteRepository.findAllByTokenIsNotNull()) {
-            rateLimiter.acquire();
             Integer numberOfActivities = updateActivitiesForAthlete(pages, after, athlete);
             updateSummary.addNumberOfActivities(athlete.getLastName(), numberOfActivities);
         }
@@ -132,6 +131,7 @@ public class StravaSlurper {
         String url = BASE_PATH
                 + "activities/" + activityId + "?access_token=" + token;
         log.info(url);
+        rateLimiter.acquire();
         return restTemplate.getForObject(url, StravaActivityFull.class);
     }
 
