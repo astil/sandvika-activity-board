@@ -11,7 +11,7 @@ export class AuthCodeService {
     athlete: Athlete;
     athleteChange: Subject<Athlete> = new Subject<Athlete>();
 
-    isAuthenticated: boolean = false;
+    isAuthenticated = false;
     isAuthenticatedChange: Subject<boolean> = new Subject<boolean>();
 
     constructor(private http: HttpClient, private cookie: CookieService) {}

@@ -36,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.redirectUrl = window.location.protocol + '//' + window.location.hostname + window.location.pathname
         }
 
-        if(this.cookie.check('default-club')) {
+        if (this.cookie.check('default-club')) {
             this.defaultClub = this.cookie.get('default-club');
         }
 
