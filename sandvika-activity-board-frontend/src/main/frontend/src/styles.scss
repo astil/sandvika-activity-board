@@ -2,6 +2,7 @@
 
 @import '~bootstrap/dist/css/bootstrap.min.css';
 @import '~font-awesome/css/font-awesome.css';
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 @media (max-width: 1000px) {
     body {
@@ -100,3 +101,8 @@ a:focus, a:hover, .btn-outline-primary:hover, .btn-outline-primary:active {
         max-width: 60%;
     }
 }
+
+.mat-sort-header-container {
+  align-items: center;
+}
+

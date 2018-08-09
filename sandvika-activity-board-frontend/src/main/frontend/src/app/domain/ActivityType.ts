@@ -1,8 +1,8 @@
 export class ActivityType {
-    code: String;
-    decode: String;
+    code: string;
+    decode: string;
 
-    constructor(code: String, decode: String) {
+    constructor(code: string, decode: string) {
         this.code = code;
         this.decode = decode;
     }
