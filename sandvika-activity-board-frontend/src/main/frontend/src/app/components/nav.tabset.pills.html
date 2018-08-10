@@ -23,7 +23,8 @@
                 <div class="d-none d-sm-block status-header">
                     <h2 style="text-align: center; font-family: 'Roboto', sans-serif;">{{chosenClub}}</h2>
                 </div>
-                <button type="button" class="btn btn-outline-primary velg-klubb" (click)="resetClub()">Velg klubb</button>
+              <button type="button" class="btn btn-outline-primary velg-klubb" (click)="resetClub()">Velg klubb</button>
+              <app-admin *ngIf="isAdmin"></app-admin>
             </div>
 
             <div class="flex-wrapper">

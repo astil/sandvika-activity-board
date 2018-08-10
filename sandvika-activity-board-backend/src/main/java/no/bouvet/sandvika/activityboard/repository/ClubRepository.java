@@ -10,6 +10,7 @@ import java.util.List;
 public interface ClubRepository extends MongoRepository<Club, String> {
     Club findById(String id);
     List<Club> findClubsByMemberIdsContains(Integer athleteId);
+    List<Club> findClubsByAdminIdsContains(Integer athleteId);
 
 
     void deleteById(String id);

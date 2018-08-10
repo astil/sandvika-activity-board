@@ -5,6 +5,7 @@ import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.utils.ActiveHoursUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -108,6 +109,4 @@ public class AthleteController {
         athleteStats.setActiveHoursHcPeriod(activeHoursUtil.getActiveHoursByDaysAndAthlete(30, athlete));
         return athleteStats;
     }
-
-
 }

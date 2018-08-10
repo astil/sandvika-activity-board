@@ -25,7 +25,9 @@ import {AuthCodeService} from "./service/auth-code.service";
 import {RouterModule} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
 import { PhotoCarouselComponent } from './photo-carousel/photo-carousel.component';
-import {TitleCasePipe} from "@angular/common";
+import { AdminComponent } from './components/admin/admin.component';
+import { RefreshActivitiesComponent } from './components/admin/refresh-activities/refresh-activities.component';
+import { AddAthleteToClubComponent } from './components/admin/add-athlete-to-club/add-athlete-to-club.component';
 
 @NgModule({
     declarations: [
@@ -43,9 +45,12 @@ import {TitleCasePipe} from "@angular/common";
         OrderBy,
         ConvertMinToHhMmSs,
         ConvertMinToHhT,
-        PhotoCarouselComponent
+        PhotoCarouselComponent,
+        AdminComponent,
+        RefreshActivitiesComponent,
+        AddAthleteToClubComponent
     ],
-    entryComponents: [NgbdModalContent],
+    entryComponents: [NgbdModalContent, AdminComponent],
     imports: [
         BrowserModule,
         FormsModule,

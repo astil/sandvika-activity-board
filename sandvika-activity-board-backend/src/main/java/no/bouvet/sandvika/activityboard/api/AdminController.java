@@ -13,12 +13,14 @@ import no.bouvet.sandvika.activityboard.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @EnableAsync
+@Secured("ROLE_ADMIN")
 public class AdminController {
     private static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AdminController.class);
     @Autowired

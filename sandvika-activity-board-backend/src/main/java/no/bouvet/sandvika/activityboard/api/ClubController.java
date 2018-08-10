@@ -5,6 +5,7 @@ import no.bouvet.sandvika.activityboard.domain.Club;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class ClubController {
     @Autowired
     AthleteRepository athleteRepository;
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/club", method = RequestMethod.POST)
     public void createClub(@RequestBody Club club) {
         if (club.getId() == null || club.getCompetitionStartDate() == null) {
@@ -45,6 +47,7 @@ public class ClubController {
         athleteRepository.save(athlete);
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/club/{id}/{athleteId}", method = RequestMethod.PUT)
     public void addMember(@PathVariable("id") String id, @PathVariable("athleteId") int athleteId) {
         if (!clubRepository.exists(id)) {
@@ -69,6 +72,7 @@ public class ClubController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/club/{id}/admin/{athleteId}", method = RequestMethod.PUT)
     public void addAdmin(@PathVariable("id") String id, @PathVariable("athleteId") int athleteId) {
         Club club = clubRepository.findById(id);
@@ -82,5 +86,13 @@ public class ClubController {
     public List<Club> getAthleteClubs(@PathVariable("athleteId") int athleteId) {
         return clubRepository.findClubsByMemberIdsContains(athleteId);
     }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/club/athlete/admin/{athleteId}", method = RequestMethod.GET)
+    public List<Club> getAdminAthleteClubs(@PathVariable("athleteId") int athleteId) {
+        return clubRepository.findClubsByAdminIdsContains(athleteId);
+    }
+
+
 
 }

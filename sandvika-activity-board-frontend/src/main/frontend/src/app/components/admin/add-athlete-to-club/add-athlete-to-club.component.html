@@ -1,0 +1,14 @@
+<form (ngSubmit)="onAthleteSubmit(addAthleteForm)" #addAthleteForm="ngForm" ng>
+  <div class="form-group">
+    <label for="club">Klubb: </label>
+    <select class="form-control" id="club" name="club" (ngModel)="club.id" required>
+      <option *ngFor="let club of clubs" [value]="club.id" >{{club.id}}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="typeahead-basic">Atlet ID:</label>
+    <input id="typeahead-basic" type="number" class="form-control" [(ngModel)]="athleteId" name="athleteId" [ngbTypeahead]="search" required/>
+  </div>
+  <button type="submit" class="btn btn-success" [disabled]="!addAthleteForm.form.valid">Submit</button>
+</form>

@@ -46,6 +46,7 @@ export class NgbdTabsetPills implements OnInit {
 
     private thisWeekStats: Statistics;
     private errorMessage: any;
+    private isAdmin = false;
 
     constructor(private appRestService: AppRestService, private authCodeService: AuthCodeService, private cookie: CookieService) {
         this.loggedInAthlete = this.authCodeService.athlete;
@@ -58,6 +59,7 @@ export class NgbdTabsetPills implements OnInit {
 
         this.pillTab[1].maxPage = this.pageMonth;
         this.pillTab[2].maxPage = this.pageWeek;
+        this.isAdmin = this.authCodeService.isAdmin;
     }
 
     ngOnInit(): void {

@@ -7,6 +7,7 @@ export class Athlete {
     token: string;
     clubs: string[];
     defaultClub: string;
+    roles: string[];
 
 }
 

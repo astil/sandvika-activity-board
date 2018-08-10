@@ -1,0 +1,27 @@
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Admin</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ngb-tabset>
+      <ngb-tab title="Oppdater aktiviteter">
+        <ng-template ngbTabContent>
+          <app-refresh-activities (notify)='onNotify($event)'></app-refresh-activities>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Legg til atlet">
+        <ng-template ngbTabContent>
+          <app-add-athlete-to-club (notify)='onNotify($event)'></app-add-athlete-to-club>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+  </div>
+  <div>
+    <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+  </div>
+</ng-template>
+
+<button type="button" class="btn btn-outline-primary" (click)="open(content)">Admin</button>
