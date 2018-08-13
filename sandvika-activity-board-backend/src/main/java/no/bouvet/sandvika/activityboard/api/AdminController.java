@@ -20,7 +20,6 @@ import java.util.List;
 
 @RestController
 @EnableAsync
-@Secured("ROLE_ADMIN")
 public class AdminController {
     private static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AdminController.class);
     @Autowired
@@ -41,12 +40,14 @@ public class AdminController {
 
     @RequestMapping(value = "/activities/refresh/{pages}", method = RequestMethod.GET)
     @ResponseBody
+    @Secured("ROLE_ADMIN")
     public UpdateSummary refreshActivities(@PathVariable("pages") int pages) {
         return stravaSlurper.updateActivities(pages, 0);
 
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT)
+    @Secured("ROLE_ADMIN")
     public void addActivity(@PathVariable("id") int id, @RequestBody Activity activity) {
         activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
         activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
@@ -55,12 +56,14 @@ public class AdminController {
 
     @Async
     @RequestMapping(value = "/athlete/all/updateHistoricHandicap/{days}", method = RequestMethod.GET)
+    @Secured("ROLE_ADMIN")
     public void updateHistoricHandicapForAllAthletes(@PathVariable("days") int days) {
         handicapCalculator.updateActivityHandicap(days);
     }
 
     @RequestMapping(value = "/athlete/{id}/activities/load/{pages}", method = RequestMethod.GET)
     @ResponseBody
+    @Secured("ROLE_ADMIN")
     public Integer refreshActivitiesForAthlete(@PathVariable("id") int athleteId, @PathVariable("pages") int pages) {
         if (!athleteRepository.exists(athleteId)) {
             throw new IllegalArgumentException("Athlete does not exist");
@@ -72,6 +75,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/athlete/{id}/updateHistoricHandicap", method = RequestMethod.GET)
+    @Secured("ROLE_ADMIN")
     public void updateHistoricHandicapForAthlete(@PathVariable("id") int id) {
         handicapCalculator.updateHandicapForAthlete(id);
         List<Activity> activities = activityRepository.findByAthleteId(id);
@@ -99,27 +103,32 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.DELETE)
+    @Secured("ROLE_ADMIN")
     public void deleteActivity(@PathVariable("id") int id) {
         activityRepository.delete(id);
     }
 
 
     @RequestMapping(value = "/badges", method = RequestMethod.DELETE)
+    @Secured("ROLE_ADMIN")
     public void deleteAllBadges() {
         badgeRepository.deleteAll();
     }
 
     @RequestMapping(value = "/badges", method = RequestMethod.POST)
+    @Secured("ROLE_ADMIN")
     public void addBadge(@RequestBody Badge badge) {
         badgeRepository.save(badge);
     }
 
     @RequestMapping(value = "/badges", method = RequestMethod.GET)
+    @Secured("ROLE_ADMIN")
     public List<Badge> listAllBadges() {
         return badgeRepository.findAll();
     }
 
     @RequestMapping(value = "/badges/appointHistoricalBadges/{days}", method = RequestMethod.GET)
+    @Secured("ROLE_ADMIN")
     public void listAllBadges(@PathVariable("days") int days) {
         log.info("Appointing badges for the last " + days + " days.");
         List<Activity> activities = activityRepository.findByStartDateLocalAfter(DateUtil.getDateDaysAgo(days));
@@ -132,6 +141,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/badges/deleteAllBadgesFromAthletes", method = RequestMethod.DELETE)
+    @Secured("ROLE_ADMIN")
     public void deleteAllBadgesFromAthletes() {
         List<Badge> badges = badgeRepository.findAll();
         badges.forEach(badge ->
