@@ -33,6 +33,7 @@ import { RefreshActivitiesComponent } from './components/admin/refresh-activitie
 import { AddAthleteToClubComponent } from './components/admin/add-athlete-to-club/add-athlete-to-club.component';
 import { TitleCasePipe } from '@angular/common';
 import { SortService } from './components/sort.service';
+import {DeleteActivityComponent} from './components/admin/delete-activity/delete-activity.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { SortService } from './components/sort.service';
     PhotoCarouselComponent,
     AdminComponent,
     RefreshActivitiesComponent,
-    AddAthleteToClubComponent
+    AddAthleteToClubComponent,
+    DeleteActivityComponent
   ],
   entryComponents: [NgbdModalContent],
   imports: [

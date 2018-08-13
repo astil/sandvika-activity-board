@@ -20,11 +20,12 @@ export class RefreshActivitiesComponent implements OnInit {
 
   }
 
-  refreshActivities(data: NgForm): void {
+  refreshActivities(form: NgForm): void {
     this.isLoading = true;
-    this.restService.refreshActivities(data.value.pages).subscribe(() => {
+    this.restService.refreshActivities(form.value.pages).subscribe(() => {
       this.notify.emit("Oppdatert");
       this.isLoading = false;
+      form.reset();
     } );
   }
 

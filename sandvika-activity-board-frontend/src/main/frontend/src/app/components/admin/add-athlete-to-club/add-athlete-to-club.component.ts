@@ -49,11 +49,12 @@ export class AddAthleteToClubComponent implements OnInit {
       map((text) => this.options.filter((athlete) => athlete.toString().indexOf(text) === 0))
     );
 
-  onAthleteSubmit(data: NgForm) {
-    let athleteId = Number(data.value.athleteId);
-    let clubId = data.value.club;
+  onAthleteSubmit(form: NgForm) {
+    let athleteId = Number(form.value.athleteId);
+    let clubId = form.value.club;
     this.restService.addNewAthleteToClub(clubId, athleteId).subscribe(() => {
       this.notify.emit(`AtletId ${athleteId} har blitt lagt til i klubb ${clubId}`);
+      form.reset()
     })
   }
 

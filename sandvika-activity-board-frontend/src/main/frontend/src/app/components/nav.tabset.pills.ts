@@ -93,7 +93,7 @@ export class NgbdTabsetPills implements OnInit {
     this.appRestService.getLeaderBoardTotalPoints(this.pillTab[0].activityType.code, this.chosenClub).subscribe(
         athlete => this.athletes = athlete.slice(),
         error => (this.errorMessage = <any>error)
-      )
+      );
 
     this.appRestService.getLatestActivities(this.pillTab[0].activityType.code, 5, this.chosenClub).subscribe(
         activities => this.processLatestResult(activities),

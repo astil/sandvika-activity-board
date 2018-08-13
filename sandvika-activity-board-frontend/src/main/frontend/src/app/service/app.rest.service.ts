@@ -17,7 +17,7 @@ import {CookieService} from "ngx-cookie-service";
 
 @Injectable()
 export class AppRestService {
-    // private restUrl = 'http://localhost:8080/';  // URL to web api
+    //private restUrl = 'http://localhost:8080/';  // URL to web api
     private restUrl = '';  // URL to web api
 
     constructor(private http: HttpClient, private cookie: CookieService) {
@@ -95,6 +95,11 @@ export class AppRestService {
 
     getAllAthletes() {
       return this.http.get<Athlete[]>(this.restUrl + "athlete")
+        .catch(AppRestService.handleError);
+    }
+
+    deleteActivity(activity: number) {
+      return this.http.delete(this.restUrl + "activities/" + activity, this.getHeaders())
         .catch(AppRestService.handleError);
     }
 
