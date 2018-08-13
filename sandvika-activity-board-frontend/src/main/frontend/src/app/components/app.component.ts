@@ -1,10 +1,10 @@
-import {Component, OnInit} from "@angular/core";
-import {AppRestService} from "../service/app.rest.service";
-import {AuthCodeService} from "../service/auth-code.service";
-import {ActivatedRoute} from "@angular/router";
-import {Subscriber} from "rxjs/Subscriber";
-import {Athlete} from "../domain/athlete";
-import {CookieService} from "ngx-cookie-service";
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {AppRestService} from '../service/app.rest.service';
+import {AuthCodeService} from '../service/auth-code.service';
+import {ActivatedRoute} from '@angular/router';
+import {Subscriber} from 'rxjs/Subscriber';
+import {Athlete} from '../domain/athlete';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
     selector: 'app-root',
@@ -12,12 +12,12 @@ import {CookieService} from "ngx-cookie-service";
     styleUrls: ['app.component.css'],
     providers: [AppRestService]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
     private isLoggedIn: boolean;
     private authSubscription: Subscriber<boolean>;
     private athlete: Athlete;
 
-    private redirectUrl : string;
+    private redirectUrl: string;
     private defaultClub: string;
 
     constructor(private authService: AuthCodeService, private activatedRoute: ActivatedRoute, private cookie: CookieService) {
@@ -30,12 +30,13 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         if (window.location.port && window.location.port !== '80') {
-            this.redirectUrl = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + window.location.pathname;
+          this.redirectUrl =
+            window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + window.location.pathname;
         } else {
-            this.redirectUrl = window.location.protocol + "//" + window.location.hostname + window.location.pathname
+            this.redirectUrl = window.location.protocol + '//' + window.location.hostname + window.location.pathname
         }
 
-        if(this.cookie.check('default-club')) {
+        if (this.cookie.check('default-club')) {
             this.defaultClub = this.cookie.get('default-club');
         }
 
@@ -49,7 +50,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnDestroy() {
-        //prevent memory leak when component destroyed
+        // prevent memory leak when component destroyed
         this.authSubscription.unsubscribe();
     }
 

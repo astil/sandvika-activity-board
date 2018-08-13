@@ -18,6 +18,11 @@
         </ng-template>
       </ngb-tab>
     </ngb-tabset>
+    <ngb-tab title="Slett aktivitet">
+      <ng-template ngbTabContent>
+        <app-delete-activity (notify)="onNotify($event)"></app-delete-activity>
+      </ng-template>
+    </ngb-tab>
   </div>
   <div>
     <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>

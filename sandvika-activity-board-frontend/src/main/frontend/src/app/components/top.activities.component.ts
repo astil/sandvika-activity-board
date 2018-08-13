@@ -1,7 +1,7 @@
-import {Component, OnInit, Input} from "@angular/core";
-import {AppRestService} from "../service/app.rest.service";
-import {Activity} from "../domain/activity";
-import {TabContent} from "../domain/TabContent";
+import {Component, OnInit, Input} from '@angular/core';
+import {AppRestService} from '../service/app.rest.service';
+import {Activity} from '../domain/activity';
+import {TabContent} from '../domain/TabContent';
 
 @Component({
     selector: 'top-activities-component',
