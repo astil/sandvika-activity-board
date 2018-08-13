@@ -49,11 +49,13 @@ export class AuthCodeService {
         this.athleteChange.next(this._athlete);
         this.isAuthenticated = true;
         this._token = this._athlete.token;
-        this.athlete.roles.forEach(role => {
-          if(role === "ROLE_ADMIN"){
-            this.isAdmin = true;
-          }
-        });
+        if(this.athlete.roles){
+          this.athlete.roles.forEach(role => {
+            if(role === "ROLE_ADMIN"){
+              this.isAdmin = true;
+            }
+          });
+        }
 
         this.isAuthenticatedChange.next(this.isAuthenticated);
         console.log('Access token: ' + this._token);
