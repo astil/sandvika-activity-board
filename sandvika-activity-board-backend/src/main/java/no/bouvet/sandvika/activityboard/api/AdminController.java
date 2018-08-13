@@ -63,7 +63,6 @@ public class AdminController {
 
     @RequestMapping(value = "/athlete/{id}/activities/load/{pages}", method = RequestMethod.GET)
     @ResponseBody
-    @Secured("ROLE_ADMIN")
     public Integer refreshActivitiesForAthlete(@PathVariable("id") int athleteId, @PathVariable("pages") int pages) {
         if (!athleteRepository.exists(athleteId)) {
             throw new IllegalArgumentException("Athlete does not exist");
@@ -75,7 +74,6 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/athlete/{id}/updateHistoricHandicap", method = RequestMethod.GET)
-    @Secured("ROLE_ADMIN")
     public void updateHistoricHandicapForAthlete(@PathVariable("id") int id) {
         handicapCalculator.updateHandicapForAthlete(id);
         List<Activity> activities = activityRepository.findByAthleteId(id);
@@ -87,12 +85,14 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/athlete", method = RequestMethod.POST)
+    @Secured("ROLE_ADMIN")
     public void addAthlete(@RequestBody Athlete athlete) {
         athleteRepository.save(athlete);
     }
 
     @RequestMapping(value = "/athlete/{id}", method = RequestMethod.PUT)
     @ResponseBody
+    @Secured("ROLE_ADMIN")
     public String addToken(@PathVariable("id") int id, @RequestBody Token token) {
         Athlete athlete = athleteRepository.findById(id);
         if (athlete == null)
