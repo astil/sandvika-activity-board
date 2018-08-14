@@ -1,19 +1,19 @@
-import {ActivityType} from "./ActivityType";
+import {ActivityType} from './ActivityType';
 
 export class TabContent {
-    code: String;
-    decode: String;
-    altDecode: String;
+    code: string;
+    decode: string;
+    altDecode: string;
     pageNumber: number;
     maxPage: number;
     year: number;
     activityType: ActivityType;
 
-    constructor(code: String, decode: String, altDecode: String) {
+    constructor(code: string, decode: string, altDecode: string) {
         this.code = code;
         this.decode = decode;
         this.altDecode = altDecode;
-        this.activityType  = new ActivityType("all", "Alle");
+        this.activityType  = new ActivityType('all', 'Alle');
         this.year = new Date().getFullYear();
     }
 }

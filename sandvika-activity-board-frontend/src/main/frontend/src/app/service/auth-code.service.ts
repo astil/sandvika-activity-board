@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-// import {Router} from '@angular/router';
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {Subject} from "rxjs/Subject";
-import {StravaAthlete} from "../domain/StravaAthlete";
-import {Athlete} from "../domain/athlete";
-import {CookieService} from "ngx-cookie-service";
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Subject} from 'rxjs/Subject';
+import {StravaAthlete} from '../domain/StravaAthlete';
+import {Athlete} from '../domain/athlete';
+import {CookieService} from 'ngx-cookie-service';
 
 @Injectable()
 export class AuthCodeService {
@@ -12,15 +11,13 @@ export class AuthCodeService {
     athlete: Athlete;
     athleteChange: Subject<Athlete> = new Subject<Athlete>();
 
-    isAuthenticated: boolean = false;
+    isAuthenticated = false;
     isAuthenticatedChange: Subject<boolean> = new Subject<boolean>();
 
-    constructor(private http: HttpClient, private cookie: CookieService) {
-
-    }
+    constructor(private http: HttpClient, private cookie: CookieService) {}
 
     loginAttempt(code: string): void {
-        console.log("Logging in");
+        console.log('Logging in');
 
         const params = new HttpParams();
         params.set('state', '');
@@ -53,3 +50,4 @@ export class AuthCodeService {
         this.cookie.set('strava-token', this.token);
     }
 }
+

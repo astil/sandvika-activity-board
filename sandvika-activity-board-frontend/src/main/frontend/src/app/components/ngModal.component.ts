@@ -1,94 +1,59 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {Sort} from '@angular/material';
 
 import {NgbActiveModal, NgbModal, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
-import {AppRestService} from "../service/app.rest.service";
-import {Activity} from "../domain/activity";
-import {AuthCodeService} from "../service/auth-code.service";
-import {ModalAthlete} from "../domain/athlete";
-
-@Component({
-    selector: 'ngbd-modal-content',
-    template: `
-    <div class="modal-header">
-      <h4 class="modal-title">{{athlete.athleteFirstName}} {{athlete.athleteLastName}}</h4>
-      <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-        <div class="panel panel-default">
-            <table class="table table-striped table-condensed">
-                <thead>
-                    <tr>
-                        <th class="d-none d-md-table-cell">Dato</th>
-                        <th class="d-md-table-cell">Navn</th>
-                        <th class="d-md-table-cell">Type</th>
-                        <th class="d-md-table-cell">Poeng</th>
-                        <th class="d-none d-md-table-cell">Distanse</th>
-                        <th class="d-none d-md-table-cell">Tid i bevegelse</th>
-                        <th class="d-none d-md-table-cell">Totaltid</th>
-                        <th class="d-none d-md-table-cell">Høydemeter</th>
-                        <th class="d-none d-md-table-cell">SufferScore</th>
-                        <th class="d-md-table-cell">HC</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let activity of activities | orderBy:'-startDateLocal'">
-                        <td class="d-none d-md-table-cell">{{activity.startDateLocal | date: 'dd/MM/yyyy'}}</td>
-                        <td class="d-md-table-cell"><a href="https://www.strava.com/activities/{{activity.id}}">{{activity.name}}</a></td>
-                        <td class="d-md-table-cell">{{activity.type}}</td>
-                        <td class="d-md-table-cell">{{activity.points | number : '1.0-1'}}</td>
-                        <td class="d-none d-md-table-cell">{{activity.distanceInMeters | meterToKm}} km</td>
-                        <td class="d-none d-md-table-cell">{{activity.movingTimeInSeconds | convertToHours}}</td>
-                        <td class="d-none d-md-table-cell">{{activity.elapsedTimeInSeconds | convertToHours}}</td>
-                        <td class="d-none d-md-table-cell">{{activity.totalElevationGaininMeters}}</td>
-                        <td class="d-none d-md-table-cell">{{activity.sufferScore}}</td>  
-                        <td class="d-md-table-cell">{{activity.handicap | number : '1.0-1'}}</td>  
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">Close</button>
-    </div>
-  `
-})
-export class NgbdModalContent {
-    @Input() activities;
-    @Input() athlete;
-
-    constructor(public activeModal: NgbActiveModal) {}
-}
+import {AppRestService} from '../service/app.rest.service';
+import {Activity} from '../domain/activity';
+import {AuthCodeService} from '../service/auth-code.service';
+import {ModalAthlete} from '../domain/athlete';
+import {SortService} from './sort.service';
 
 @Component({
     selector: 'ngbd-modal-component',
-    template: '<a href="#" (click)="open()">{{selectedActivity.athleteFirstName}} {{selectedActivity.athleteLastName}}</a>',
+    template: '<a href="#" (click)="open()">{{selectedAthlete.athleteFirstName}} {{selectedAthlete.athleteLastName}}</a>',
     providers: [AppRestService],
-    inputs: ['selectedActivity'],
     styleUrls: ['app.component.css']
 })
 export class NgbdModalComponent implements OnInit {
-    @Input() selectedActivity: ModalAthlete;
+    @Input() selectedAthlete: ModalAthlete;
 
     private activities: Activity[];
     private errorMessage: any;
 
-    constructor(private modalService: NgbModal, private appRestService: AppRestService, private auth : AuthCodeService) {
+    constructor(private modalService: NgbModal, private appRestService: AppRestService, private auth: AuthCodeService) {
     }
 
     open() {
-        let options: NgbModalOptions = {
-            windowClass: "modal-custom-size"
+        const options: NgbModalOptions = {
+            windowClass: 'modal-custom-size'
         };
         const modalRef = this.modalService.open(NgbdModalContent, options);
         modalRef.componentInstance.activities = this.activities;
-        modalRef.componentInstance.athlete = this.selectedActivity;
+        modalRef.componentInstance.athlete = this.selectedAthlete;
     }
 
     ngOnInit(): void {
-        this.appRestService.getAthleteById(this.selectedActivity.athleteId).subscribe(
-            activity => this.activities = activity,
+        this.appRestService.getAthleteById(this.selectedAthlete.athleteId).subscribe(
+            activity => this.activities = activity.slice(),
             error =>  this.errorMessage = <any>error);
+    }
+}
+
+@Component({
+    selector: 'ngbd-modal-content',
+    templateUrl: 'ngModalContent.component.html'
+})
+export class NgbdModalContent implements OnInit {
+    @Input() activities;
+    @Input() athlete;
+
+    constructor(public activeModal: NgbActiveModal, private sortService: SortService) {}
+
+    ngOnInit(): void {
+      this.sortActivities({active: 'startDateLocal', direction: 'asc'});
+    }
+
+    sortActivities(sort: Sort): void {
+      this.activities = this.sortService.sortActivities(sort, this.activities);
     }
 }
