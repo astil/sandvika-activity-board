@@ -26,14 +26,14 @@ export class AuthCodeService {
 
         if (this.cookie.check('strava-token')) {
             this.http.get<Athlete>(this.appRestService.restUrl
-              + '/athlete/login?token=' + this.cookie.get('strava-token'), {params: params})
+              + 'athlete/login?token=' + this.cookie.get('strava-token'), {params: params})
                 .subscribe(data => {
                         this.doLogin(data);
                     },
                     err => console.log(err));
         } else if (code) {
             this.http.get<Athlete>(this.appRestService.restUrl
-              + '/athlete/login/token-registration?code=' + code, {params: params})
+              + 'athlete/login/token-registration?code=' + code, {params: params})
                 .subscribe(data => {
                         this.doLogin(data);
                     },

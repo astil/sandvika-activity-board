@@ -1,5 +1,5 @@
 <div *ngIf="datasets && datasets.length > 0" class="chart-container" style="position: relative; width:800px">
-  <canvas baseChart [labels]="labels" [datasets]="datasets" [colors]="colors" [options]="options" [legend]="legend" [chartType]="type">
+  <canvas id="activityChart" baseChart #baseChart="base-chart" [labels]="labels" [datasets]="datasets" [colors]="colors" [options]="options" [legend]="legend" [chartType]="type">
   </canvas>
 </div>
 

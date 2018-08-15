@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Activity } from '../domain/activity';
 import { empty } from 'rxjs/Observer';
 import { ActivityType } from '../domain/ActivityType';
+import { ChartsModule, BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-activity-chart',
@@ -9,6 +10,8 @@ import { ActivityType } from '../domain/ActivityType';
 })
 export class ActivityChartComponent implements OnInit {
   @Input() activities: Activity[];
+
+  @ViewChild('baseChart') chart: BaseChartDirective;
 
   navOptions = [
     {
@@ -67,8 +70,19 @@ export class ActivityChartComponent implements OnInit {
   public legend = true;
   public type = 'line';
 
+  constructor(private changeDetector: ChangeDetectorRef) {}
+
   ngOnInit() {
     this.select(this.navOptions[0].id);
+  }
+
+  refreshChart() {
+    // Workaround to fix faulty ng2-charts issue with updating labels, colors, options etc.
+    if (this.chart) {
+      this.changeDetector.detectChanges();
+      this.chart.ngOnDestroy();
+      this.chart.chart = this.chart.getChartBuilder(this.chart.ctx);
+    }
   }
 
   select(selected: string): void {
@@ -82,6 +96,8 @@ export class ActivityChartComponent implements OnInit {
         this.drawVelocity();
         break;
     }
+
+    this.refreshChart();
   }
 
   drawHandicap(): void {
@@ -97,8 +113,8 @@ export class ActivityChartComponent implements OnInit {
       handicapData[i] = { t: formattedDate, y: handicap };
     }
 
-    this.datasets = [{ data: handicapData, label: 'Handicaputvikling' }];
     this.setOptions('Tid', 'Handicap');
+    this.datasets = [{ data: handicapData, label: 'Handicaputvikling' }];
   }
 
   drawVelocity(): void {
@@ -109,32 +125,33 @@ export class ActivityChartComponent implements OnInit {
       const activity = this.activities[j];
 
       const formattedDate = this.convertDate(activity.startDateLocal);
-      const velocity = this.calculateVelocity(
-        activity.distanceInMeters,
-        activity.movingTimeInSeconds
-      );
+      const velocity = this.calculateVelocity(activity.distanceInMeters, activity.movingTimeInSeconds);
 
       this.labels[i] = formattedDate;
       velocityData[i] = { t: formattedDate, y: velocity };
     }
 
+    this.setOptions('Tid', 'km / h');
     this.datasets = [{ data: velocityData, label: 'Gjennomsnittshastighet' }];
-    this.setOptions('Tid', 'km/h');
   }
 
-  setOptions(xAxesLabel: string, yAxesLabel: string) {
+  setOptions(xAxisLabel: string, yAxisLabel: string) {
     this.options = {
       scales: {
         xAxes: [
           {
-            display: true,
-            labelString: xAxesLabel
+            scaleLabel: {
+              display: true,
+              labelString: xAxisLabel
+            }
           }
         ],
         yAxes: [
           {
-            display: true,
-            labelString: yAxesLabel
+            scaleLabel: {
+              display: true,
+              labelString: yAxisLabel
+            }
           }
         ]
       }
@@ -163,7 +180,6 @@ export class ActivityChartComponent implements OnInit {
 
     return this.convertmetersPerSecToKmPerHour(velocity);
   }
-
   convertmetersPerSecToKmPerHour(metersPerSecond: number): number {
     const kmPerHour = metersPerSecond * 3.6;
 
