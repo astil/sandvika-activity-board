@@ -4,39 +4,46 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
+
 <div class="modal-body">
-    <div class="panel panel-default">
-        <table matSort (matSortChange)="sortActivities($event)" class="table table-striped table-condensed">
-            <thead>
-                <tr>
-                    <th mat-sort-header="startDateLocal" class="d-none d-md-table-cell">Dato</th>
-                    <th mat-sort-header="name" class="d-md-table-cell">Navn</th>
-                    <th mat-sort-header="type" class="d-md-table-cell">Type</th>
-                    <th mat-sort-header="points" class="d-md-table-cell">Poeng</th>
-                    <th mat-sort-header="distanceInMeters" class="d-none d-md-table-cell">Distanse</th>
-                    <th mat-sort-header="movingTimeInSeconds" class="d-none d-md-table-cell">Tid i bevegelse</th>
-                    <th mat-sort-header="elapsedTimeInSeconds" class="d-none d-md-table-cell">Totaltid</th>
-                    <th mat-sort-header="totalElevationGaininMeters" class="d-none d-md-table-cell">Høydemeter</th>
-                    <th mat-sort-header="sufferScore" class="d-none d-md-table-cell">SufferScore</th>
-                    <th mat-sort-header="handicap" class="d-md-table-cell">HC</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let activity of activities">
-                    <td class="d-none d-md-table-cell">{{activity.startDateLocal | date: 'dd/MM/yyyy'}}</td>
-                    <td class="d-md-table-cell"><a href="https://www.strava.com/activities/{{activity.id}}">{{activity.name}}</a></td>
-                    <td class="d-md-table-cell">{{activity.type}}</td>
-                    <td class="d-md-table-cell">{{activity.points | number : '1.0-1'}}</td>
-                    <td class="d-none d-md-table-cell">{{activity.distanceInMeters | meterToKm}} km</td>
-                    <td class="d-none d-md-table-cell">{{activity.movingTimeInSeconds | convertToHours}}</td>
-                    <td class="d-none d-md-table-cell">{{activity.elapsedTimeInSeconds | convertToHours}}</td>
-                    <td class="d-none d-md-table-cell">{{activity.totalElevationGaininMeters}}</td>
-                    <td class="d-none d-md-table-cell">{{activity.sufferScore}}</td>
-                    <td class="d-md-table-cell">{{activity.handicap | number : '1.0-1'}}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+  <div class="panel panel-default">
+    <app-activity-chart [activities]="activities" ></app-activity-chart>
+  </div>
+
+  <div class="panel panel-default">
+    <table matSort (matSortChange)="sortActivities($event)" class="table table-striped table-condensed">
+      <thead>
+        <tr>
+          <th mat-sort-header="startDateLocal" class="d-none d-md-table-cell">Dato</th>
+          <th mat-sort-header="name" class="d-md-table-cell">Navn</th>
+          <th mat-sort-header="type" class="d-md-table-cell">Type</th>
+          <th mat-sort-header="points" class="d-md-table-cell">Poeng</th>
+          <th mat-sort-header="distanceInMeters" class="d-none d-md-table-cell">Distanse</th>
+          <th mat-sort-header="movingTimeInSeconds" class="d-none d-md-table-cell">Tid i bevegelse</th>
+          <th mat-sort-header="elapsedTimeInSeconds" class="d-none d-md-table-cell">Totaltid</th>
+          <th mat-sort-header="totalElevationGaininMeters" class="d-none d-md-table-cell">Høydemeter</th>
+          <th mat-sort-header="sufferScore" class="d-none d-md-table-cell">SufferScore</th>
+          <th mat-sort-header="handicap" class="d-md-table-cell">HC</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let activity of activities">
+          <td class="d-none d-md-table-cell">{{activity.startDateLocal | date: 'dd/MM/yyyy'}}</td>
+          <td class="d-md-table-cell">
+            <a href="https://www.strava.com/activities/{{activity.id}}">{{activity.name}}</a>
+          </td>
+          <td class="d-md-table-cell">{{activity.type}}</td>
+          <td class="d-md-table-cell">{{activity.points | number : '1.0-1'}}</td>
+          <td class="d-none d-md-table-cell">{{activity.distanceInMeters | meterToKm}} km</td>
+          <td class="d-none d-md-table-cell">{{activity.movingTimeInSeconds | convertToHours}}</td>
+          <td class="d-none d-md-table-cell">{{activity.elapsedTimeInSeconds | convertToHours}}</td>
+          <td class="d-none d-md-table-cell">{{activity.totalElevationGaininMeters}}</td>
+          <td class="d-none d-md-table-cell">{{activity.sufferScore}}</td>
+          <td class="d-md-table-cell">{{activity.handicap | number : '1.0-1'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">Close</button>

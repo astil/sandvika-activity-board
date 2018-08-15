@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Http, Response} from '@angular/http';
+import {Http, Response } from '@angular/http';
+import {HttpParams} from '@angular/common/http';
 
 import {Observable} from 'rxjs/Observable';
 
@@ -15,11 +16,10 @@ import {Athlete, ModalAthlete} from '../domain/athlete';
 
 @Injectable()
 export class AppRestService {
-    // private restUrl = 'http://localhost:8080/';  // URL to web api
-    private restUrl = '';  // URL to web api
+    // restUrl = 'http://localhost:8080/';  // URL to web api
+    restUrl = '';  // URL to web api
 
-    constructor(private http: HttpClient) {
-    }
+    constructor(private http: HttpClient) {}
 
     getLeaderboardPoints(activityType, periodType, pageNumber, year, club: String): Observable<ModalAthlete[]> {
         return this.http.get<ModalAthlete[]>(
@@ -49,9 +49,21 @@ export class AppRestService {
         }
     }
 
-    getAthleteById(id): Observable<Activity[]> {
-        return this.http.get<Activity[]>(this.restUrl + 'athlete/' + id + '/activities')
+    getAthleteById(id: number): Observable<Activity[]> {
+      return this.http.get<Activity[]>(this.restUrl + 'athlete/' + id + '/activities')
             .catch(AppRestService.handleError);
+    }
+
+    getAthleteByActivitiyTypeOrPeriod(
+      id: number, activityType: string, periodType: string, periodNumber: number, year: number): Observable<Activity[]> {
+      const params = new HttpParams()
+      .set('activityType', activityType)
+      .set('periodType', periodType)
+      .set('periodNumber', (periodNumber) ? periodNumber.toString() : '0')
+      .set('year', (year) ? year.toString() : '0');
+
+      return this.http.get<Activity[]>(this.restUrl + 'athlete/' + id + '/activities', {params})
+          .catch(AppRestService.handleError);
     }
 
     getLatestActivities(activityType: String, numberOfActivities, club: String): Observable<Activity[]> {

@@ -44,6 +44,42 @@ public class ActivityUtils {
         return filteredActivities;
     }
 
+    public List<Activity> getUserActivitiesForPeriodByActivityType(int userId, String activityType, String periodType, int periodNumber, int year) {
+        List<Activity> userActivities;
+
+        userActivities = getUserActivitiesForPeriod(userId, periodType, periodNumber, year);
+
+        if (Utils.hasValue(activityType) && !activityType.equalsIgnoreCase("all")) {
+            userActivities = userActivities.stream().filter(activity -> activity.getType().equalsIgnoreCase(activityType)).collect(Collectors.toList());
+        }
+
+        return userActivities;
+    }
+
+    private List<Activity> getUserActivitiesForPeriod(int userId, String periodType, int periodNumber, int year) {
+        List<Activity> userActivities;
+
+        if (Utils.hasValue(periodType) && !periodType.equalsIgnoreCase("all")) {
+            Period period = null;
+
+            if ((periodNumber != 0) && (year != 0)) {
+                period = DateUtil.getPeriod(PeriodType.valueOf(periodType.toUpperCase()), periodNumber, year);
+            } else if (periodType.equalsIgnoreCase("week")) {
+                period = DateUtil.getPeriodFromWeekStartToDate(DateUtil.getDateDaysAgo(1));
+            } else if (periodType.equalsIgnoreCase("month")) {
+                period = DateUtil.getPeriodFromMonthStartToDate(DateUtil.getDateDaysAgo(7));
+            }
+
+            List<Activity> activityList = activityRepository.findByStartDateLocalBetween(period.getStart(), period.getEnd());
+            userActivities = activityList.stream().filter(activity -> activity.getAthleteId() == userId).collect(Collectors.toList());
+
+        } else {
+            userActivities = activityRepository.findByAthleteId(userId);
+        }
+
+        return userActivities;
+    }
+
     public List<Activity> getActivities(String clubName,
                                         String activityType,
                                         String periodType,

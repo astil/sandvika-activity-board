@@ -7,6 +7,7 @@ import {Activity} from '../domain/activity';
 import {AuthCodeService} from '../service/auth-code.service';
 import {ModalAthlete} from '../domain/athlete';
 import {SortService} from './sort.service';
+import { TabContent } from '../domain/TabContent';
 
 @Component({
     selector: 'ngbd-modal-component',
@@ -16,12 +17,15 @@ import {SortService} from './sort.service';
 })
 export class NgbdModalComponent implements OnInit {
     @Input() selectedAthlete: ModalAthlete;
+    @Input() activityType: string;
+    @Input() periodType: string;
+    @Input() periodNumber: number;
+    @Input() year: number;
 
     private activities: Activity[];
     private errorMessage: any;
 
-    constructor(private modalService: NgbModal, private appRestService: AppRestService, private auth: AuthCodeService) {
-    }
+    constructor(private modalService: NgbModal, private appRestService: AppRestService, private auth: AuthCodeService) {}
 
     open() {
         const options: NgbModalOptions = {
@@ -33,11 +37,12 @@ export class NgbdModalComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.appRestService.getAthleteById(this.selectedAthlete.athleteId).subscribe(
-            activity => this.activities = activity.slice(),
-            error =>  this.errorMessage = <any>error);
+      this.appRestService.getAthleteByActivitiyTypeOrPeriod(
+        this.selectedAthlete.athleteId, this.activityType.toLowerCase(), this.periodType, this.periodNumber, this.year).subscribe(
+        activity => this.activities = activity.slice(),
+        error =>  this.errorMessage = <any>error);
+      }
     }
-}
 
 @Component({
     selector: 'ngbd-modal-content',

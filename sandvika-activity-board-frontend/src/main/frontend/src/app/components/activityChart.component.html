@@ -1,0 +1,12 @@
+<div *ngIf="datasets && datasets.length > 0" class="chart-container" style="position: relative; width:800px">
+  <canvas baseChart [labels]="labels" [datasets]="datasets" [colors]="colors" [options]="options" [legend]="legend" [chartType]="type">
+  </canvas>
+</div>
+
+<ul *ngIf="activities" class="nav nav-pills">
+  <li class="nav-item" *ngFor="let navOption of navOptions">
+    <a class="nav-link" [ngClass]="{'active': selectedNavOption === navOption.id}" href="#" (click)="select(navOption.id)">
+      {{navOption.title}}
+    </a>
+  </li>
+</ul>

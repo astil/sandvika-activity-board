@@ -6,6 +6,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSortModule } from '@angular/material';
 
+import { ChartsModule } from 'ng2-charts';
+
 import { AppComponent } from './components/app.component';
 import { AppRestService } from './service/app.rest.service';
 import { NgbdModalComponent, NgbdModalContent } from './components/ngModal.component';
@@ -19,6 +21,7 @@ import {
 } from './pipes/timeConverterPipe';
 import { OrderBy } from './pipes/customOrderBy';
 import { NgbdTabsetPills } from './components/nav.tabset.pills';
+import { ActivityChartComponent } from './components/activityChart.component';
 import { StatsDataComponent } from './components/stats.data.component';
 import { LatestActivities } from './components/latest.activities.component';
 import { TopActivities } from './components/top.activities.component';
@@ -37,6 +40,7 @@ import { SortService } from './components/sort.service';
     NgbdModalComponent,
     NgbdModalContent,
     NgbdTabsetPills,
+    ActivityChartComponent,
     StatsDataComponent,
     LatestActivities,
     TopActivities,
@@ -54,6 +58,7 @@ import { SortService } from './components/sort.service';
     BrowserModule,
     BrowserAnimationsModule,
     MatSortModule,
+    ChartsModule,
     FormsModule,
     HttpClientModule,
     OAuthModule.forRoot(),
