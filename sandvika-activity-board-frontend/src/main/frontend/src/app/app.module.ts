@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -34,6 +34,9 @@ import { AddAthleteToClubComponent } from './components/admin/add-athlete-to-clu
 import { TitleCasePipe } from '@angular/common';
 import { SortService } from './components/sort.service';
 import {DeleteActivityComponent} from './components/admin/delete-activity/delete-activity.component';
+import { UpdateHistoricHandicapComponent } from './components/admin/update-historic-handicap/update-historic-handicap.component';
+import { CreateNewClubComponent } from './components/admin/create-new-club/create-new-club.component';
+import { SetNewCompetitionStartDateComponent } from './components/admin/set-new-competition-start-date/set-new-competition-start-date.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +58,10 @@ import {DeleteActivityComponent} from './components/admin/delete-activity/delete
     AdminComponent,
     RefreshActivitiesComponent,
     AddAthleteToClubComponent,
-    DeleteActivityComponent
+    DeleteActivityComponent,
+    UpdateHistoricHandicapComponent,
+    CreateNewClubComponent,
+    SetNewCompetitionStartDateComponent
   ],
   entryComponents: [NgbdModalContent],
   imports: [
@@ -63,6 +69,7 @@ import {DeleteActivityComponent} from './components/admin/delete-activity/delete
     BrowserAnimationsModule,
     MatSortModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     OAuthModule.forRoot(),
     NgbModule.forRoot(),

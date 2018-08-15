@@ -9,23 +9,39 @@
     <ngb-tabset>
       <ngb-tab title="Oppdater aktiviteter">
         <ng-template ngbTabContent>
-          <app-refresh-activities (notify)='onNotify($event)'></app-refresh-activities>
+          <app-refresh-activities (success)="onSuccess($event)" (error)="onError($event)"></app-refresh-activities>
         </ng-template>
       </ngb-tab>
-      <ngb-tab title="Legg til atlet">
+      <ngb-tab title="Legg til medlem">
         <ng-template ngbTabContent>
-          <app-add-athlete-to-club (notify)='onNotify($event)'></app-add-athlete-to-club>
+          <app-add-athlete-to-club (success)="onSuccess($event)" (error)="onError($event)"></app-add-athlete-to-club>
         </ng-template>
       </ngb-tab>
       <ngb-tab title="Slett aktivitet">
         <ng-template ngbTabContent>
-          <app-delete-activity (notify)="onNotify($event)"></app-delete-activity>
+          <app-delete-activity (success)="onSuccess($event)" (error)="onError($event)"></app-delete-activity>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Oppdater handikapp">
+        <ng-template ngbTabContent>
+          <app-update-historic-handicap (success)="onSuccess($event)" (error)="onError($event)"></app-update-historic-handicap>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Opprett ny klubb">
+        <ng-template ngbTabContent>
+          <app-create-new-club (success)="onSuccess($event)" (error)="onError($event)"></app-create-new-club>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Sett ny start dato for klubb">
+        <ng-template ngbTabContent>
+          <app-set-new-competition-start-date (success)="onSuccess($event)" (error)="onError($event)"></app-set-new-competition-start-date>
         </ng-template>
       </ngb-tab>
     </ngb-tabset>
   </div>
   <div>
     <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+    <ngb-alert *ngIf="errorMessage" type="danger" (close)="errorMessage = null"> {{ errorMessage }}</ngb-alert>
   </div>
 </ng-template>
 

@@ -1,11 +1,11 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {Observable, Subject} from "rxjs";
-import {debounceTime, distinctUntilChanged, map} from "rxjs/operators";
-import {NgForm} from "@angular/forms";
-import {Athlete} from "../../../domain/athlete";
-import {AppRestService} from "../../../service/app.rest.service";
-import {AuthCodeService} from "../../../service/auth-code.service";
-import {Club} from "../../../domain/Club";
+import {Observable, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import {NgForm} from '@angular/forms';
+import {Athlete} from '../../../domain/athlete';
+import {AppRestService} from '../../../service/app.rest.service';
+import {AuthCodeService} from '../../../service/auth-code.service';
+import {Club} from '../../../domain/Club';
 
 @Component({
   selector: 'app-add-athlete-to-club',
@@ -15,10 +15,10 @@ export class AddAthleteToClubComponent implements OnInit {
 
   clubs: Club[];
   options: string[];
-  private success = new Subject<string>();
-  successMessage: string;
   @Output()
-  notify: EventEmitter<string> = new EventEmitter<string>();
+  success: EventEmitter<string> = new EventEmitter<string>();
+  @Output()
+  error: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(private restService: AppRestService, private auth: AuthCodeService) { }
 
@@ -29,17 +29,12 @@ export class AddAthleteToClubComponent implements OnInit {
     });
 
     this.restService.getAllAthletes().subscribe((athletes: Athlete[]) => {
-      let temp = [];
+      const temp = [];
       athletes.forEach(athlete => {
         temp.push(athlete.id);
       });
       this.options = temp;
     });
-
-    this.success.subscribe((message) => this.successMessage = message);
-    this.success.pipe(
-      debounceTime(5000)
-    ).subscribe(() => this.successMessage = null);
   }
 
   search = (text$: Observable<string>) =>
@@ -50,11 +45,13 @@ export class AddAthleteToClubComponent implements OnInit {
     );
 
   onAthleteSubmit(form: NgForm) {
-    let athleteId = Number(form.value.athleteId);
-    let clubId = form.value.club;
+    const athleteId = Number(form.value.athleteId);
+    const clubId = form.value.club;
     this.restService.addNewAthleteToClub(clubId, athleteId).subscribe(() => {
-      this.notify.emit(`AtletId ${athleteId} har blitt lagt til i klubb ${clubId}`);
+      this.success.emit(`AtletId ${athleteId} har blitt lagt til i klubb ${clubId}`);
       form.reset()
+    }, (error) => {
+      this.error.emit(error);
     })
   }
 

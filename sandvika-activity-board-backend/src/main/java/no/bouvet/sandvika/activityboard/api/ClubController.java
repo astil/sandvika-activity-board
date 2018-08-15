@@ -4,10 +4,12 @@ import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.domain.Club;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.repository.ClubRepository;
+import no.bouvet.sandvika.activityboard.services.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -17,6 +19,16 @@ public class ClubController {
 
     @Autowired
     AthleteRepository athleteRepository;
+
+    @Autowired
+    ClubService clubService;
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/club/{clubId}", method = RequestMethod.PUT)
+    public void setNewCompetitionStartDate(@PathVariable("clubId") String clubId, @RequestParam(value = "date") String date){
+        this.clubService.updateCompetitionStartDate(clubId, date);
+    }
+
 
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/club", method = RequestMethod.POST)

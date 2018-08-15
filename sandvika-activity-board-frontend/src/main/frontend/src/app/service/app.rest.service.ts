@@ -1,19 +1,19 @@
 import {Injectable} from '@angular/core';
-import {Http, Response} from '@angular/http';
+import {Response} from '@angular/http';
 
 import {Observable} from 'rxjs/Observable';
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import {Activity} from "../domain/activity";
-import {Photo} from "../domain/photo";
-import {Statistics} from "../domain/Statistics";
-import {TabContent} from "../domain/TabContent";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Athlete, ModalAthlete} from "../domain/athlete";
-import {Club} from "../domain/Club";
-import {CookieService} from "ngx-cookie-service";
+import {Activity} from '../domain/activity';
+import {Photo} from '../domain/photo';
+import {Statistics} from '../domain/Statistics';
+import {TabContent} from '../domain/TabContent';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Athlete, ModalAthlete} from '../domain/athlete';
+import {Club} from '../domain/Club';
+import {CookieService} from 'ngx-cookie-service';
 
 @Injectable()
 export class AppRestService {
@@ -79,27 +79,47 @@ export class AppRestService {
     }
 
     getAllClubsWhereAthleteIsAdmin(athleteId: string): Observable<Club[]> {
-      return this.http.get<Club[]>(this.restUrl + "club/athlete/admin/" + athleteId, this.getHeaders())
+      return this.http.get<Club[]>(this.restUrl + 'club/athlete/admin/' + athleteId, this.getHeaders())
         .catch(AppRestService.handleError);
     }
 
     addNewAthleteToClub(clubId: string, athleteId: number) {
-      return this.http.put<Athlete>(this.restUrl + "club/" + clubId + "/" + athleteId,null, this.getHeaders())
+      return this.http.put<Athlete>(this.restUrl + 'club/' + clubId + '/' + athleteId, null, this.getHeaders())
         .catch(AppRestService.handleError);
     }
 
     refreshActivities(pages: number) {
-      return this.http.get(this.restUrl + "activities/refresh/" + pages, this.getHeaders())
+      return this.http.get(this.restUrl + 'activities/refresh/' + pages, this.getHeaders())
         .catch(AppRestService.handleError);
     }
 
     getAllAthletes() {
-      return this.http.get<Athlete[]>(this.restUrl + "athlete")
+      return this.http.get<Athlete[]>(this.restUrl + 'athlete')
         .catch(AppRestService.handleError);
     }
 
     deleteActivity(activity: number) {
-      return this.http.delete(this.restUrl + "activities/" + activity, this.getHeaders())
+      return this.http.delete(this.restUrl + 'activities/' + activity, this.getHeaders())
+        .catch(AppRestService.handleError);
+    }
+
+    updateAllHistoricHandicaps(days: number) {
+      return this.http.get(this.restUrl + 'athlete/all/updateHistoricHandicap/' + days, this.getHeaders())
+        .catch(AppRestService.handleError);
+    }
+
+    updateAthleteHistoricHandicap(athleteId: number) {
+      return this.http.get(this.restUrl + 'athlete/' + athleteId + '/updateHistoricHandicap', this.getHeaders())
+        .catch(AppRestService.handleError);
+    }
+
+    createNewClub(body: Club) {
+      return this.http.post(this.restUrl + 'club', body, this.getHeaders())
+        .catch(AppRestService.handleError);
+    }
+
+    updateCompetitionStartDate(clubId: string, date: string) {
+      return this.http.put(this.restUrl + 'club/' + clubId + '?date=' + date, null, this.getHeaders())
         .catch(AppRestService.handleError);
     }
 
@@ -107,7 +127,7 @@ export class AppRestService {
       return  {
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
-          "Authorization": "Bearer " + this.cookie.get("strava-token")
+          'Authorization': 'Bearer ' + this.cookie.get('strava-token')
         })
       };
     }

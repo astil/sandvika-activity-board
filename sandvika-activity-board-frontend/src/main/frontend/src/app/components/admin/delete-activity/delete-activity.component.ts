@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {AppRestService} from '../../../service/app.rest.service';
-import {NgForm} from "@angular/forms";
+import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'app-delete-activity',
@@ -9,7 +9,9 @@ import {NgForm} from "@angular/forms";
 export class DeleteActivityComponent implements OnInit {
 
   @Output()
-  notify: EventEmitter<string> = new EventEmitter<string>();
+  success: EventEmitter<string> = new EventEmitter<string>();
+  @Output()
+  error: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(private restService: AppRestService) { }
 
@@ -18,8 +20,10 @@ export class DeleteActivityComponent implements OnInit {
 
   deleteActivity(form: NgForm): void {
     this.restService.deleteActivity(form.value.activity).subscribe(() => {
-      this.notify.emit(`${form.value.activity} har blitt slettet`);
+      this.success.emit(`${form.value.activity} har blitt slettet`);
       form.reset();
-    })
+    }, (error) => {
+      this.error.emit(error);
+    });
   }
 }

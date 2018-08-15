@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Subject} from 'rxjs/Subject';
-import {StravaAthlete} from '../domain/StravaAthlete';
 import {Athlete} from '../domain/athlete';
 import {CookieService} from 'ngx-cookie-service';
 
@@ -13,7 +12,7 @@ export class AuthCodeService {
 
     isAuthenticated = false;
     isAuthenticatedChange: Subject<boolean> = new Subject<boolean>();
-    isAdmin: boolean = false;
+    isAdmin = false;
 
     constructor(private http: HttpClient, private cookie: CookieService) {}
 
@@ -46,9 +45,9 @@ export class AuthCodeService {
         this.athleteChange.next(this._athlete);
         this.isAuthenticated = true;
         this._token = this._athlete.token;
-        if(this.athlete.roles){
+        if (this.athlete.roles) {
           this.athlete.roles.forEach(role => {
-            if(role === "ROLE_ADMIN"){
+            if (role === 'ROLE_ADMIN') {
               this.isAdmin = true;
             }
           });

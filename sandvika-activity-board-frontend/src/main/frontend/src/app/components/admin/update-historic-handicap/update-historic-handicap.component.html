@@ -1,0 +1,27 @@
+<h2>
+  Oppdater medlem handikapp:
+</h2>
+<form  #athleteHandicap="ngForm" (ngSubmit)="updateAthleteHandicap(athleteHandicap)" ng>
+  <div class="form-group">
+    <label for="athleteId">Athlete Id: </label>
+    <input type="number"  class="form-control" id="athleteId"
+           name="athleteId" (ngModel)="athleteId" required>
+  </div>
+  <button *ngIf="!isLoadingAthleteHandicap" [disabled]="!athleteHandicap.form.valid" type="submit" class="btn btn-success">Submit</button>
+  <i *ngIf="isLoadingAthleteHandicap" class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+</form>
+<br/>
+
+<h2>
+  Oppdater handikapp for alle medlemer:
+</h2>
+<form  #allHandicaps="ngForm" (ngSubmit)="updateAllHandicaps(allHandicaps)" ng>
+  <div class="form-group">
+    <label for="days">Dager: </label>
+    <input type="number"  class="form-control" id="days"
+           name="days" (ngModel)="days" required>
+  </div>
+  <button *ngIf="!isLoadingAllHandicaps" [disabled]="!allHandicaps.form.valid" type="submit" class="btn btn-success">Submit</button>
+  <i *ngIf="isLoadingAllHandicaps" class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+</form>
+
