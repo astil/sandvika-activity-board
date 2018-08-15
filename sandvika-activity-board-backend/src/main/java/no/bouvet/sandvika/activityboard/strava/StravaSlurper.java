@@ -27,7 +27,7 @@ public class StravaSlurper {
     private static final String BASE_PATH = "https://www.strava.com/api/v3/";
     public static String STRAVA_CLIENT_TOKEN = "43cef4065b62813502a456d39508702f3d74ad61";
     private static Logger log = LoggerFactory.getLogger(StravaSlurper.class);
-    final RateLimiter rateLimiter = RateLimiter.create(2); // rate is "2 permits per second"
+    final RateLimiter rateLimiter = RateLimiter.create(0.5); // rate is 0.5 permits per second"
 
 
     @Autowired
@@ -130,14 +130,15 @@ public class StravaSlurper {
     private StravaActivityFull getActivityFromStrava(int activityId, String token) {
         String url = BASE_PATH
                 + "activities/" + activityId + "?access_token=" + token;
-        log.info(url);
         rateLimiter.acquire();
+        log.info(url);
         return restTemplate.getForObject(url, StravaActivityFull.class);
     }
 
     protected List<StravaActivity> getActivitiesFromStrava(Athlete athlete, int page, long after) {
         String url = BASE_PATH
                 + "athlete/activities?" + (after == 0 ? "" : "after=" + after + "&") + "page=" + page + "&per_page=200&access_token=" + athlete.getToken();
+        rateLimiter.acquire();
         log.info(url);
         StravaActivity[] activitiesFromStrava = restTemplate.getForObject(url, StravaActivity[].class);
         return Arrays.asList(activitiesFromStrava);
