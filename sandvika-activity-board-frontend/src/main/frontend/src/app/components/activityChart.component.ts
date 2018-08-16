@@ -72,11 +72,12 @@ export class ActivityChartComponent implements OnInit {
   ngOnInit(): void {
     this.disableActivitySelection =
       this.selectedActivityType && this.selectedActivityType !== 'all';
-    this.select(this.navOptions[0]);
 
     if (!this.activities) {
       this.activities = [];
     }
+
+    this.select(this.navOptions[0]);
   }
 
   public select(selected: any): void {
