@@ -33,6 +33,7 @@ export class NgbdModalComponent implements OnInit {
         };
         const modalRef = this.modalService.open(NgbdModalContent, options);
         modalRef.componentInstance.activities = this.activities;
+        modalRef.componentInstance.selectedActivityType = this.activityType.toLowerCase();
         modalRef.componentInstance.athlete = this.selectedAthlete;
     }
 
@@ -50,6 +51,7 @@ export class NgbdModalComponent implements OnInit {
 })
 export class NgbdModalContent implements OnInit {
     @Input() activities;
+    @Input() selectedActivityType;
     @Input() athlete;
 
     constructor(public activeModal: NgbActiveModal, private sortService: SortService) {}

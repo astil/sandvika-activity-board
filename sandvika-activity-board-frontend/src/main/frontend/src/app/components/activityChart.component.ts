@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Activity } from '../domain/activity';
 import { empty } from 'rxjs/Observer';
-import { ActivityType } from '../domain/ActivityType';
+import { ActivityType, ACTIVITY_TYPES } from '../domain/ActivityType';
 import { ChartsModule, BaseChartDirective } from 'ng2-charts';
 
 @Component({
@@ -10,21 +10,30 @@ import { ChartsModule, BaseChartDirective } from 'ng2-charts';
 })
 export class ActivityChartComponent implements OnInit {
   @Input() activities: Activity[];
-
+  @Input() selectedActivityType: string;
   @ViewChild('baseChart') chart: BaseChartDirective;
+
+  disableActivitySelection: boolean;
+  activityTypes = ACTIVITY_TYPES;
 
   navOptions = [
     {
-      id: 'handicap',
-      title: 'Handicap-utvikling'
+      id: 'velocity',
+      title: 'Gjennomsnittshastighet',
+      filterOnActivityType: true
     },
     {
-      id: 'velocity',
-      title: 'Gjennomsnittshastighet'
+      id: 'handicap',
+      title: 'Handicap-utvikling',
+      filterOnActivityType: false
     }
   ];
 
-  selectedNavOption: string;
+  selectedNavOption: {
+    id: string;
+    title: string;
+    filterOnActivityType: boolean;
+  };
 
   // bouvet colors (from styleguide)
   private orange = {
@@ -45,50 +54,25 @@ export class ActivityChartComponent implements OnInit {
     pointHoverBorderColor: '#FFDD8E'
   };
 
-  private blue = {
-    backgroundColor: '#A4D4EB',
-    borderColor: '#ABE1F9',
-    pointBackgroundColor: '#EBF9FF',
-    pointBorderColor: '#FFF',
-    pointHoverBackgroundColor: '#FFF',
-    pointHoverBorderColor: '#A4D4EB'
-  };
-
-  private teal = {
-    backgroundColor: '#7DC8C6',
-    borderColor: '#5AA4A2',
-    pointBackgroundColor: '#41747A',
-    pointBorderColor: '#FFF',
-    pointHoverBackgroundColor: '#FFF',
-    pointHoverBorderColor: '#7DC8C6'
-  };
-
   public labels = [];
   public datasets = [];
   public options = {};
-  public colors = [this.orange, this.yellow, this.blue, this.teal];
+  public colors = [this.orange, this.yellow];
   public legend = true;
   public type = 'line';
 
   constructor(private changeDetector: ChangeDetectorRef) {}
 
-  ngOnInit() {
-    this.select(this.navOptions[0].id);
+  ngOnInit(): void {
+    this.disableActivitySelection = this.selectedActivityType && this.selectedActivityType !== 'all';
+    this.select(this.navOptions[0]);
   }
 
-  refreshChart() {
-    // Workaround to fix faulty ng2-charts issue with updating labels, colors, options etc.
-    if (this.chart) {
-      this.changeDetector.detectChanges();
-      this.chart.ngOnDestroy();
-      this.chart.chart = this.chart.getChartBuilder(this.chart.ctx);
-    }
-  }
-
-  select(selected: string): void {
+  public select(selected: any): void {
     this.selectedNavOption = selected;
+    this.reset();
 
-    switch (selected) {
+    switch (selected.id) {
       case 'handicap':
         this.drawHandicap();
         break;
@@ -100,42 +84,79 @@ export class ActivityChartComponent implements OnInit {
     this.refreshChart();
   }
 
-  drawHandicap(): void {
-    const handicapData = [];
-
-    for (let i = 0; i < this.activities.length; i++) {
-      const j = this.activities.length - (1 + i);
-
-      const formattedDate = this.convertDate(this.activities[j].startDateLocal);
-      const handicap = this.activities[j].handicap;
-
-      this.labels[i] = formattedDate;
-      handicapData[i] = { t: formattedDate, y: handicap };
-    }
-
-    this.setOptions('Tid', 'Handicap');
-    this.datasets = [{ data: handicapData, label: 'Handicaputvikling' }];
+  private reset() {
+    this.labels = [];
+    this.datasets = [];
+    this.options = {};
   }
 
-  drawVelocity(): void {
-    const velocityData = [];
+  private refreshChart() {
+    // Workaround to fix faulty ng2-charts issue with updating labels, colors, options etc.
+    if (this.chart) {
+      this.changeDetector.detectChanges();
+      this.chart.ngOnDestroy();
+      this.chart.chart = this.chart.getChartBuilder(this.chart.ctx);
+    }
+  }
 
-    for (let i = 0; i < this.activities.length; i++) {
-      const j = this.activities.length - (1 + i);
-      const activity = this.activities[j];
+  private drawVelocity(): void {
+    const velocityData = [];
+    const filteredActivities = this.filterActivitiesOnType();
+
+    for (let i = 0; i < filteredActivities.length; i++) {
+      const j = filteredActivities.length - (1 + i);
+      const activity = filteredActivities[j];
 
       const formattedDate = this.convertDate(activity.startDateLocal);
-      const velocity = this.calculateVelocity(activity.distanceInMeters, activity.movingTimeInSeconds);
+      const velocity = this.calculateVelocity(
+        activity.distanceInMeters,
+        activity.movingTimeInSeconds
+      );
 
       this.labels[i] = formattedDate;
       velocityData[i] = { t: formattedDate, y: velocity };
     }
 
     this.setOptions('Tid', 'km / h');
+    this.colors = [this.orange];
     this.datasets = [{ data: velocityData, label: 'Gjennomsnittshastighet' }];
   }
 
-  setOptions(xAxisLabel: string, yAxisLabel: string) {
+  private drawHandicap(): void {
+    const handicapData = [];
+
+    for (let i = 0; i < this.activities.length; i++) {
+      const j = this.activities.length - (1 + i);
+
+      const formattedDate = this.convertDate(this.activities[j].startDateLocal);
+      const handicap = this.activities[j].handicap.toPrecision(2);
+
+      this.labels[i] = formattedDate;
+      handicapData[i] = { t: formattedDate, y: handicap };
+    }
+
+    this.setOptions('Tid', 'Handicap');
+    this.colors = [this.yellow];
+    this.datasets = [{ data: handicapData, label: 'Handicaputvikling' }];
+  }
+
+  private filterActivitiesOnType(): Activity[] {
+    let filteredActivities: Activity[];
+
+    if (
+      !this.selectedActivityType ||
+      (this.selectedActivityType && this.selectedActivityType === 'all')
+    ) {
+      filteredActivities = this.activities;
+    } else {
+      filteredActivities = this.activities.filter(
+        data => data.type === this.selectedActivityType
+      );
+    }
+    return filteredActivities;
+  }
+
+  private setOptions(xAxisLabel: string, yAxisLabel: string) {
     this.options = {
       scales: {
         xAxes: [
@@ -158,7 +179,7 @@ export class ActivityChartComponent implements OnInit {
     };
   }
 
-  convertDate(inputFormat): any {
+  private convertDate(inputFormat): any {
     function pad(s) {
       return s < 10 ? '0' + s : s;
     }
@@ -166,7 +187,7 @@ export class ActivityChartComponent implements OnInit {
     return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
   }
 
-  calculateVelocity(distanceInMetres, timeInSeconds): number {
+  private calculateVelocity(distanceInMetres, timeInSeconds): number {
     const distanceIsValid =
       distanceInMetres && !isNaN(distanceInMetres) && distanceInMetres !== 0;
     const timeIsValid =
@@ -180,7 +201,8 @@ export class ActivityChartComponent implements OnInit {
 
     return this.convertmetersPerSecToKmPerHour(velocity);
   }
-  convertmetersPerSecToKmPerHour(metersPerSecond: number): number {
+
+  private convertmetersPerSecToKmPerHour(metersPerSecond: number): number {
     const kmPerHour = metersPerSecond * 3.6;
 
     return +kmPerHour.toPrecision(3);

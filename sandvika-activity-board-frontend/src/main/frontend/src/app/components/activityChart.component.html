@@ -1,12 +1,23 @@
-<div *ngIf="datasets && datasets.length > 0" class="chart-container" style="position: relative; width:800px">
-  <canvas id="activityChart" baseChart #baseChart="base-chart" [labels]="labels" [datasets]="datasets" [colors]="colors" [options]="options" [legend]="legend" [chartType]="type">
-  </canvas>
-</div>
+<div *ngIf="datasets && datasets.length > 0" class="container">
 
-<ul *ngIf="activities" class="nav nav-pills">
-  <li class="nav-item" *ngFor="let navOption of navOptions">
-    <a class="nav-link" [ngClass]="{'active': selectedNavOption === navOption.id}" href="#" (click)="select(navOption.id)">
-      {{navOption.title}}
-    </a>
-  </li>
-</ul>
+  <div class="row">
+    <div class="chart-container .col-12 .col-md-8" style="position: relative; width:800px">
+      <canvas id="activityChart" baseChart #baseChart="base-chart" [labels]="labels" [datasets]="datasets" [colors]="colors" [options]="options"
+        [legend]="legend" [chartType]="type">
+      </canvas>
+    </div>
+    <div class=".col-6 .col-md-4" style="padding-left: 10px; padding-top: 35px">
+      <select *ngIf="selectedNavOption.filterOnActivityType" [disabled]="disableActivitySelection" class="form-control" [(ngModel)]="selectedActivityType" (ngModelChange)="select(selectedNavOption)" >
+        <option *ngFor="let activityType of activityTypes" [selected]="selectedActivityType === (activityType.code | lowercase)" [value]="activityType.code | lowercase" >{{activityType.decode}}</option>
+      </select>
+    </div>
+  </div>
+
+  <ul *ngIf="activities" class="nav nav-pills">
+    <li class="nav-item" *ngFor="let navOption of navOptions" >
+      <a class="nav-link" [ngClass]="{'active': selectedNavOption === navOption}" href="#" (click)="select(navOption)">
+        {{navOption.title}}
+      </a>
+    </li>
+  </ul>
+</div>

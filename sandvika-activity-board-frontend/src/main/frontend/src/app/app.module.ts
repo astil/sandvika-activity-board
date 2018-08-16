@@ -19,6 +19,7 @@ import {
   ConvertNumberToMonthMinimal,
   TimeConverterPipe
 } from './pipes/timeConverterPipe';
+import { DecodeActivityTypePipe } from './pipes/decodeActivityTypePipe';
 import { OrderBy } from './pipes/customOrderBy';
 import { NgbdTabsetPills } from './components/nav.tabset.pills';
 import { ActivityChartComponent } from './components/activityChart.component';
@@ -46,6 +47,7 @@ import { SortService } from './components/sort.service';
     TopActivities,
     MeterToKilometerPipe,
     TimeConverterPipe,
+    DecodeActivityTypePipe,
     ConvertNumberToMonth,
     ConvertNumberToMonthMinimal,
     OrderBy,

@@ -7,7 +7,7 @@
 
 <div class="modal-body">
   <div class="panel panel-default">
-    <app-activity-chart [activities]="activities" ></app-activity-chart>
+    <app-activity-chart [activities]="activities" [selectedActivityType]="selectedActivityType" ></app-activity-chart>
   </div>
 
   <div class="panel panel-default">
@@ -32,7 +32,7 @@
           <td class="d-md-table-cell">
             <a href="https://www.strava.com/activities/{{activity.id}}">{{activity.name}}</a>
           </td>
-          <td class="d-md-table-cell">{{activity.type}}</td>
+          <td class="d-md-table-cell">{{activity.type | decodeActivityType}}</td>
           <td class="d-md-table-cell">{{activity.points | number : '1.0-1'}}</td>
           <td class="d-none d-md-table-cell">{{activity.distanceInMeters | meterToKm}} km</td>
           <td class="d-none d-md-table-cell">{{activity.movingTimeInSeconds | convertToHours}}</td>
