@@ -151,17 +151,14 @@ export class ActivityChartComponent implements OnInit {
   }
 
   private filterActivitiesOnType(): Activity[] {
-    let filteredActivities: Activity[];
+    let filteredActivities = [];
 
-    if (
-      !this.selectedActivityType ||
-      (this.selectedActivityType && this.selectedActivityType === 'all')
-    ) {
-      filteredActivities = this.activities;
-    } else {
+    if (this.selectedActivityType && this.selectedActivityType !== 'all') {
       filteredActivities = this.activities.filter(
         data => data.type === this.selectedActivityType
       );
+    } else {
+      filteredActivities = this.activities;
     }
     return filteredActivities;
   }
