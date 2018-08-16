@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef
+} from '@angular/core';
 import { Activity } from '../domain/activity';
 import { empty } from 'rxjs/Observer';
 import { ActivityType, ACTIVITY_TYPES } from '../domain/ActivityType';
@@ -64,8 +70,13 @@ export class ActivityChartComponent implements OnInit {
   constructor(private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.disableActivitySelection = this.selectedActivityType && this.selectedActivityType !== 'all';
+    this.disableActivitySelection =
+      this.selectedActivityType && this.selectedActivityType !== 'all';
     this.select(this.navOptions[0]);
+
+    if (!this.activities) {
+      this.activities = [];
+    }
   }
 
   public select(selected: any): void {
@@ -80,7 +91,6 @@ export class ActivityChartComponent implements OnInit {
         this.drawVelocity();
         break;
     }
-
     this.refreshChart();
   }
 
