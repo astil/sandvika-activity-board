@@ -14,6 +14,7 @@ public class Athlete {
     private Map<String, List<Activity>> badges;
     private String token;
     private List<String> clubs;
+    private Set<String> roles;
 
     public int getId() {
         return id;
@@ -54,6 +55,14 @@ public class Athlete {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 
     @Override

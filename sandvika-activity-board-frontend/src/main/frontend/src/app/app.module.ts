@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,8 +28,15 @@ import { AuthCodeService } from './service/auth-code.service';
 import { RouterModule } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { PhotoCarouselComponent } from './photo-carousel/photo-carousel.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { RefreshActivitiesComponent } from './components/admin/refresh-activities/refresh-activities.component';
+import { AddAthleteToClubComponent } from './components/admin/add-athlete-to-club/add-athlete-to-club.component';
 import { TitleCasePipe } from '@angular/common';
 import { SortService } from './components/sort.service';
+import {DeleteActivityComponent} from './components/admin/delete-activity/delete-activity.component';
+import { UpdateHistoricHandicapComponent } from './components/admin/update-historic-handicap/update-historic-handicap.component';
+import { CreateNewClubComponent } from './components/admin/create-new-club/create-new-club.component';
+import { SetNewCompetitionStartDateComponent } from './components/admin/set-new-competition-start-date/set-new-competition-start-date.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +54,14 @@ import { SortService } from './components/sort.service';
     OrderBy,
     ConvertMinToHhMmSs,
     ConvertMinToHhT,
-    PhotoCarouselComponent
+    PhotoCarouselComponent,
+    AdminComponent,
+    RefreshActivitiesComponent,
+    AddAthleteToClubComponent,
+    DeleteActivityComponent,
+    UpdateHistoricHandicapComponent,
+    CreateNewClubComponent,
+    SetNewCompetitionStartDateComponent
   ],
   entryComponents: [NgbdModalContent],
   imports: [
@@ -55,6 +69,7 @@ import { SortService } from './components/sort.service';
     BrowserAnimationsModule,
     MatSortModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     OAuthModule.forRoot(),
     NgbModule.forRoot(),

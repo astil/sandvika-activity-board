@@ -1,0 +1,9 @@
+<form  #pages="ngForm" (ngSubmit)="refreshActivities(pages)" ng>
+  <div class="form-group">
+    <label for="pages">Sider: </label>
+    <input type="number"  class="form-control" id="pages"
+           name="pages" (ngModel)="pages" required>
+  </div>
+  <button *ngIf="!isLoading" [disabled]="!pages.form.valid" type="submit" class="btn btn-success">Submit</button>
+  <i *ngIf="isLoading" class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+</form>

@@ -13,6 +13,7 @@ import no.bouvet.sandvika.activityboard.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,12 +40,14 @@ public class AdminController {
 
     @RequestMapping(value = "/activities/refresh/{pages}", method = RequestMethod.GET)
     @ResponseBody
+    @Secured("ROLE_ADMIN")
     public UpdateSummary refreshActivities(@PathVariable("pages") int pages) {
         return stravaSlurper.updateActivities(pages, 0);
 
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT)
+    @Secured("ROLE_ADMIN")
     public void addActivity(@PathVariable("id") int id, @RequestBody Activity activity) {
         activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
         activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
@@ -53,6 +56,7 @@ public class AdminController {
 
     @Async
     @RequestMapping(value = "/athlete/all/updateHistoricHandicap/{days}", method = RequestMethod.GET)
+    @Secured("ROLE_ADMIN")
     public void updateHistoricHandicapForAllAthletes(@PathVariable("days") int days) {
         handicapCalculator.updateActivityHandicap(days);
     }
@@ -81,12 +85,14 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/athlete", method = RequestMethod.POST)
+    @Secured("ROLE_ADMIN")
     public void addAthlete(@RequestBody Athlete athlete) {
         athleteRepository.save(athlete);
     }
 
     @RequestMapping(value = "/athlete/{id}", method = RequestMethod.PUT)
     @ResponseBody
+    @Secured("ROLE_ADMIN")
     public String addToken(@PathVariable("id") int id, @RequestBody Token token) {
         Athlete athlete = athleteRepository.findById(id);
         if (athlete == null)
@@ -97,27 +103,32 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.DELETE)
+    @Secured("ROLE_ADMIN")
     public void deleteActivity(@PathVariable("id") int id) {
         activityRepository.delete(id);
     }
 
 
     @RequestMapping(value = "/badges", method = RequestMethod.DELETE)
+    @Secured("ROLE_ADMIN")
     public void deleteAllBadges() {
         badgeRepository.deleteAll();
     }
 
     @RequestMapping(value = "/badges", method = RequestMethod.POST)
+    @Secured("ROLE_ADMIN")
     public void addBadge(@RequestBody Badge badge) {
         badgeRepository.save(badge);
     }
 
     @RequestMapping(value = "/badges", method = RequestMethod.GET)
+    @Secured("ROLE_ADMIN")
     public List<Badge> listAllBadges() {
         return badgeRepository.findAll();
     }
 
     @RequestMapping(value = "/badges/appointHistoricalBadges/{days}", method = RequestMethod.GET)
+    @Secured("ROLE_ADMIN")
     public void listAllBadges(@PathVariable("days") int days) {
         log.info("Appointing badges for the last " + days + " days.");
         List<Activity> activities = activityRepository.findByStartDateLocalAfter(DateUtil.getDateDaysAgo(days));
@@ -130,6 +141,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/badges/deleteAllBadgesFromAthletes", method = RequestMethod.DELETE)
+    @Secured("ROLE_ADMIN")
     public void deleteAllBadgesFromAthletes() {
         List<Badge> badges = badgeRepository.findAll();
         badges.forEach(badge ->

@@ -1,18 +1,18 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Subject} from 'rxjs/Subject';
-import {StravaAthlete} from '../domain/StravaAthlete';
 import {Athlete} from '../domain/athlete';
 import {CookieService} from 'ngx-cookie-service';
 
 @Injectable()
 export class AuthCodeService {
-    token: string;
-    athlete: Athlete;
+    private _token: string;
+    private _athlete: Athlete;
     athleteChange: Subject<Athlete> = new Subject<Athlete>();
 
     isAuthenticated = false;
     isAuthenticatedChange: Subject<boolean> = new Subject<boolean>();
+    isAdmin = false;
 
     constructor(private http: HttpClient, private cookie: CookieService) {}
 
@@ -40,14 +40,40 @@ export class AuthCodeService {
     }
 
     private doLogin(data) {
-        this.athlete = data;
-        this.athleteChange.next(this.athlete);
+        this._athlete = data;
+        console.log(data);
+        this.athleteChange.next(this._athlete);
         this.isAuthenticated = true;
-        this.token = this.athlete.token;
+        this._token = this._athlete.token;
+        if (this.athlete.roles) {
+          this.athlete.roles.forEach(role => {
+            if (role === 'ROLE_ADMIN') {
+              this.isAdmin = true;
+            }
+          });
+        }
 
         this.isAuthenticatedChange.next(this.isAuthenticated);
-        console.log('Access token: ' + this.token);
-        this.cookie.set('strava-token', this.token);
+        console.log('Access token: ' + this._token);
+        this.cookie.set('strava-token', this._token);
     }
+
+
+  get token(): string {
+    return this._token;
+  }
+
+  set token(value: string) {
+    this._token = value;
+  }
+
+
+  get athlete(): Athlete {
+    return this._athlete;
+  }
+
+  set athlete(value: Athlete) {
+    this._athlete = value;
+  }
 }
 

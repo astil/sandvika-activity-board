@@ -54,8 +54,9 @@ export class NgbdTabsetPills implements OnInit {
     new ActivityType('EBikeRide', 'El-sykkel')
   ];
 
-  private thisWeekStats: Statistics;
-  private errorMessage: any;
+    private thisWeekStats: Statistics;
+    private errorMessage: any;
+    private isAdmin = false;
 
   constructor(
     private appRestService: AppRestService,
@@ -73,7 +74,8 @@ export class NgbdTabsetPills implements OnInit {
 
     this.pillTab[1].maxPage = this.pageMonth;
     this.pillTab[2].maxPage = this.pageWeek;
-  }
+    this.isAdmin = this.authCodeService.isAdmin;
+    }
 
   ngOnInit(): void {
     this.loggedInAthlete = this.authCodeService.athlete;
@@ -91,7 +93,7 @@ export class NgbdTabsetPills implements OnInit {
     this.appRestService.getLeaderBoardTotalPoints(this.pillTab[0].activityType.code, this.chosenClub).subscribe(
         athlete => this.athletes = athlete.slice(),
         error => (this.errorMessage = <any>error)
-      )
+      );
 
     this.appRestService.getLatestActivities(this.pillTab[0].activityType.code, 5, this.chosenClub).subscribe(
         activities => this.processLatestResult(activities),
