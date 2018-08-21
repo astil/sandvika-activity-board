@@ -4,6 +4,7 @@ import {Subject} from 'rxjs/Subject';
 import {StravaAthlete} from '../domain/StravaAthlete';
 import {Athlete} from '../domain/athlete';
 import {CookieService} from 'ngx-cookie-service';
+import { AppRestService } from './app.rest.service';
 
 @Injectable()
 export class AuthCodeService {
@@ -14,7 +15,7 @@ export class AuthCodeService {
     isAuthenticated = false;
     isAuthenticatedChange: Subject<boolean> = new Subject<boolean>();
 
-    constructor(private http: HttpClient, private cookie: CookieService) {}
+    constructor(private http: HttpClient, private cookie: CookieService, private appRestService: AppRestService) {}
 
     loginAttempt(code: string): void {
         console.log('Logging in');
@@ -24,13 +25,15 @@ export class AuthCodeService {
         params.set('code', code);
 
         if (this.cookie.check('strava-token')) {
-            this.http.get<Athlete>('/athlete/login?token=' + this.cookie.get('strava-token'), {params: params})
+            this.http.get<Athlete>(this.appRestService.restUrl
+              + 'athlete/login?token=' + this.cookie.get('strava-token'), {params: params})
                 .subscribe(data => {
                         this.doLogin(data);
                     },
                     err => console.log(err));
         } else if (code) {
-            this.http.get<Athlete>('/athlete/login/token-registration?code=' + code, {params: params})
+            this.http.get<Athlete>(this.appRestService.restUrl
+              + 'athlete/login/token-registration?code=' + code, {params: params})
                 .subscribe(data => {
                         this.doLogin(data);
                     },

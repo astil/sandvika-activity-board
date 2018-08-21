@@ -4,6 +4,8 @@ import no.bouvet.sandvika.activityboard.domain.*;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.utils.ActiveHoursUtil;
+import no.bouvet.sandvika.activityboard.utils.ActivityUtils;
+import no.bouvet.sandvika.activityboard.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -23,6 +25,9 @@ public class AthleteController {
     AthleteRepository athleteRepository;
 
     @Autowired
+    ActivityUtils activityUtils;
+
+    @Autowired
     ActiveHoursUtil activeHoursUtil;
 
     @Autowired
@@ -33,8 +38,13 @@ public class AthleteController {
 
     //@CrossOrigin("*")
     @RequestMapping(value = "/athlete/{id}/activities", method = RequestMethod.GET)
-    public List<Activity> getUserActivities(@PathVariable("id") int id) {
-        return activityRepository.findByAthleteId(id);
+    public List<Activity> getUserActivities(@PathVariable("id") int id,
+                                            @RequestParam("activityType") String activityType,
+                                            @RequestParam("periodType") String periodType,
+                                            @RequestParam("periodNumber") int periodNumber,
+                                            @RequestParam("year") int year) {
+
+        return activityUtils.getUserActivitiesForPeriodByActivityType(id, activityType, periodType, periodNumber, year);
     }
 
     @RequestMapping(value = "/athlete/login", method = RequestMethod.GET)

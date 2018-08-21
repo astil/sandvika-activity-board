@@ -7,7 +7,7 @@ import { TabContent } from '../domain/TabContent';
 import { DateUtilsServiceService } from '../service/date-utils-service.service';
 import { Statistics } from '../domain/Statistics';
 import { Activity } from '../domain/activity';
-import { ActivityType } from '../domain/ActivityType';
+import { ActivityType, ACTIVITY_TYPES } from '../domain/ActivityType';
 import { AuthCodeService } from '../service/auth-code.service';
 import { CookieService } from 'ngx-cookie-service';
 import { SortService } from './sort.service';
@@ -36,23 +36,7 @@ export class NgbdTabsetPills implements OnInit {
 
   private activities: Activity[];
   private latestActivities: Activity[];
-  private activityTypes: ActivityType[] = [
-    new ActivityType('All', 'Alle'),
-    new ActivityType('Run', 'Løping'),
-    new ActivityType('Ride', 'Sykling'),
-    new ActivityType('Swim', 'Svømming'),
-    new ActivityType('NordicSki', 'Langrenn'),
-    new ActivityType('Rowing', 'Roing'),
-    new ActivityType('Walk', 'Gåing'),
-    new ActivityType('Hike', 'Hike'),
-    new ActivityType('Workout', 'Workout'),
-    new ActivityType('WeightTraining', 'Styrke'),
-    new ActivityType('Kayaking', 'Kayaking'),
-    new ActivityType('RollerSki', 'Rulleski'),
-    new ActivityType('Yoga', 'Yoga'),
-    new ActivityType('IceSKATE', 'Skøyter'),
-    new ActivityType('EBikeRide', 'El-sykkel')
-  ];
+  activityTypes = ACTIVITY_TYPES;
 
   private thisWeekStats: Statistics;
   private errorMessage: any;

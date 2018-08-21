@@ -7,6 +7,10 @@ import { Activity } from '../domain/activity';
 export class SortService {
 
   sortAthletes(sort: Sort, athletes: any): ModalAthlete[] {
+    if (!athletes) {
+      return;
+    }
+
     if (!sort.active || sort.direction === '') {
       return this.sortAthletes({active: 'ranking', direction: 'asc'}, athletes);
     }
@@ -28,12 +32,16 @@ export class SortService {
     });
   }
 
-  sortActivities(sort: Sort, activties: any): Activity[] {
-    if (!sort.active || sort.direction === '') {
-      return this.sortActivities({active: 'startDateLocal', direction: 'asc'}, activties);
+  sortActivities(sort: Sort, activities: any): Activity[] {
+    if (!activities) {
+      return;
     }
 
-    return activties.sort((a, b) => {
+    if (!sort.active || sort.direction === '') {
+      return this.sortActivities({active: 'startDateLocal', direction: 'asc'}, activities);
+    }
+
+    return activities.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'startDateLocal': return this.compare(a.startDateLocal, b.startDateLocal, !isAsc);
