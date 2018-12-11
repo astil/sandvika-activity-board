@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {AppRestService} from "../service/app.rest.service";
-import {Photo} from "../domain/photo";
-import {Observable} from "rxjs/Observable";
-import {NgbCarouselConfig} from "@ng-bootstrap/ng-bootstrap";
+import {AppRestService} from '../service/app.rest.service';
+import {Photo} from '../domain/photo';
+import {Observable} from 'rxjs/Observable';
+import {NgbCarouselConfig} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-photo-carousel',

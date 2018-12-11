@@ -11,18 +11,20 @@ export class Athlete {
 }
 
 export class Handicap {
-    handicap: Number;
+    handicap: number;
     timestamp: Date;
 }
 
 export class ModalAthlete {
-    "athleteId": Number;
-    "athleteLastName": string;
-    "athleteFirstName": string;
-    "points": Number;
-    "lastActivityDate": string;
-    "numberOfActivities": Number;
-    "kilometers": Number;
-    "minutes": Number;
-    "handicap": Number;
+    'athleteId': number;
+    'athleteLastName': string;
+    'athleteFirstName': string;
+    'points': number;
+    'lastActivityDate': string;
+    'numberOfActivities': number;
+    'kilometers': number;
+    'minutes': number;
+    'handicap': number;
+    'ranking': number;
+    'change': number;
 }

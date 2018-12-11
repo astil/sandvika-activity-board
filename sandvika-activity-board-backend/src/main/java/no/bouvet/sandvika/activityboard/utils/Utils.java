@@ -19,4 +19,8 @@ public class Utils
     {
         return scaledDouble(aDouble, 2);
     }
+
+    public static boolean hasValue(String value) {
+        return (value != null) || (value.trim().length() > 0);
+    }
 }
