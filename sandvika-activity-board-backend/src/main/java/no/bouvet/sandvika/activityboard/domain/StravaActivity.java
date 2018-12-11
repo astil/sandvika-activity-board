@@ -74,7 +74,7 @@ public class StravaActivity
     @JsonProperty("external_id")
     private String externalId;
     @JsonProperty("upload_id")
-    private Integer uploadId;
+    private Long uploadId;
     @JsonProperty("athlete")
     private StravaAthlete athlete;
     @JsonProperty("name")
@@ -207,13 +207,13 @@ public class StravaActivity
     }
 
     @JsonProperty("upload_id")
-    public Integer getUploadId()
+    public Long getUploadId()
     {
         return uploadId;
     }
 
     @JsonProperty("upload_id")
-    public void setUploadId(Integer uploadId)
+    public void setUploadId(Long uploadId)
     {
         this.uploadId = uploadId;
     }
