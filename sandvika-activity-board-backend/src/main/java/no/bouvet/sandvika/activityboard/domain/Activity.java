@@ -1,9 +1,6 @@
 package no.bouvet.sandvika.activityboard.domain;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
@@ -11,7 +8,7 @@ import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 public class Activity
 {
     @Id
-    private int id;
+    private long id;
     private double points;
     private String name;
     private String athleteLastName;
@@ -52,7 +49,7 @@ public class Activity
     {
     }
 
-    public Activity(int id, int points, String athleteLastName, String athleteFirstName)
+    public Activity(long id, int points, String athleteLastName, String athleteFirstName)
     {
         this.id = id;
         this.points = points;
@@ -60,7 +57,7 @@ public class Activity
         this.athleteLastName = athleteLastName;
     }
 
-    public Activity(int id, int points, String athleteLastName, String athleteFirstName, Date startDateLocal)
+    public Activity(long id, int points, String athleteLastName, String athleteFirstName, Date startDateLocal)
     {
         this.id = id;
         this.points = points;
@@ -89,12 +86,12 @@ public class Activity
         this.badges = badges;
     }
 
-    public int getId()
+    public long getId()
     {
         return id;
     }
 
-    public void setId(int id)
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -402,9 +399,8 @@ public class Activity
     }
 
     @Override
-    public int hashCode()
-    {
-        return id;
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override

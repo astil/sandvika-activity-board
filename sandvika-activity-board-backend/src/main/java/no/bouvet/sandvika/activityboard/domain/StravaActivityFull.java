@@ -76,13 +76,13 @@ import java.util.List;
 
 public class StravaActivityFull {
     @JsonProperty("id")
-    private Integer id;
+    private Long id;
     @JsonProperty("resource_state")
     private Integer resourceState;
     @JsonProperty("external_id")
     private String externalId;
     @JsonProperty("upload_id")
-    private Integer uploadId;
+    private Long uploadId;
     @JsonProperty("athlete")
     private Athlete athlete;
     @JsonProperty("name")
@@ -207,12 +207,12 @@ public class StravaActivityFull {
     private java.util.Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("id")
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     @JsonProperty("id")
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -237,12 +237,12 @@ public class StravaActivityFull {
     }
 
     @JsonProperty("upload_id")
-    public Integer getUploadId() {
+    public Long getUploadId() {
         return uploadId;
     }
 
     @JsonProperty("upload_id")
-    public void setUploadId(Integer uploadId) {
+    public void setUploadId(Long uploadId) {
         this.uploadId = uploadId;
     }
 

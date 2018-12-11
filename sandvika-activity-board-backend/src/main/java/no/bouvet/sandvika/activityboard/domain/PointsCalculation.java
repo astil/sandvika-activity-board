@@ -9,7 +9,7 @@ public class PointsCalculation {
     private int achievements;
     private double hc;
     private String activityType;
-    private int activityId;
+    private long activityId;
     private double kmCoeffisient;
     private double minCoeffisient;
     private double elevationCoeffisient;
@@ -63,11 +63,11 @@ public class PointsCalculation {
         this.activityType = activityType;
     }
 
-    public int getActivityId() {
+    public long getActivityId() {
         return activityId;
     }
 
-    public void setActivityId(int activityId) {
+    public void setActivityId(long activityId) {
         this.activityId = activityId;
     }
 

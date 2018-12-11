@@ -127,7 +127,7 @@ public class StravaSlurper {
 
     }
 
-    private StravaActivityFull getActivityFromStrava(int activityId, String token) {
+    private StravaActivityFull getActivityFromStrava(long activityId, String token) {
         String url = BASE_PATH
                 + "activities/" + activityId + "?access_token=" + token;
         log.info(url);

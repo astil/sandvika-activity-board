@@ -3,7 +3,7 @@ package no.bouvet.sandvika.activityboard.domain;
 import java.util.Date;
 
 public class ActivitySummary {
-    private int id;
+    private long id;
     private double points;
     private String name;
     private String athleteLastName;
@@ -16,11 +16,11 @@ public class ActivitySummary {
     private String type;
     private Date startDateLocal;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
