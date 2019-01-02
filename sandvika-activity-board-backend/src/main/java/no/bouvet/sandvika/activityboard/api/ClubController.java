@@ -48,7 +48,7 @@ public class ClubController {
     @RequestMapping(value = "/club/{id}/{athleteId}", method = RequestMethod.PUT)
     public void addMember(@PathVariable("id") String id, @PathVariable("athleteId") int athleteId) {
         if (!clubRepository.exists(id)) {
-            throw new IllegalArgumentException("Club does not exist");
+            throw new IllegalArgumentException("Club does not exist!");
         }
         Club club = clubRepository.findById(id);
 
