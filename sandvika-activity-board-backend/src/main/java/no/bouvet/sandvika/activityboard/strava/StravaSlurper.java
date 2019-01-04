@@ -129,7 +129,7 @@ public class StravaSlurper {
         Activity storedActivity = activityRepository.findOne(activity.getId());
         if (storedActivity == null || storedActivity.getWeather() == null) {
             activity.setWeather(weatherUtil.getWeatherForActivity(activity));
-        } else if (storedActivity != null && storedActivity.getWeather() != null) {
+        } else if (storedActivity.getWeather() != null) {
             activity.setWeather(storedActivity.getWeather());
         }
     }
