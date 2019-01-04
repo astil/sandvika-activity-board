@@ -3,6 +3,7 @@ package no.bouvet.sandvika.activityboard.domain;
 import java.util.*;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 public class Badge
 {
@@ -15,6 +16,7 @@ public class Badge
     private String timeCriteria;
     private String beforeOrAfter;
     private int points;
+    @DBRef
     private Set<Activity> activities;
 
     public String getUri()

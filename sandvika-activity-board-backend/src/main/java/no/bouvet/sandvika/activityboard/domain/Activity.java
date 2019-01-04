@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 public class Activity
 {
@@ -41,6 +42,7 @@ public class Activity
     private int sufferScore;
     private double handicap;
     private Integer athleteId;
+    @DBRef
     private Set<Badge> badges;
     private List<Photo> photos;
 

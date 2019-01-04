@@ -1,6 +1,7 @@
 package no.bouvet.sandvika.activityboard.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.*;
 
@@ -11,6 +12,7 @@ public class Athlete {
     private List<Handicap> handicapList;
     private String firstName;
     private String profile;
+    @DBRef
     private Map<String, List<Activity>> badges;
     private String token;
     private List<String> clubs;
