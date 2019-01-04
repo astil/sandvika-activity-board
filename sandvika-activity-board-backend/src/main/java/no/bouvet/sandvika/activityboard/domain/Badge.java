@@ -16,7 +16,6 @@ public class Badge
     private String timeCriteria;
     private String beforeOrAfter;
     private int points;
-    @DBRef
     private Set<Activity> activities;
 
     public String getUri()
