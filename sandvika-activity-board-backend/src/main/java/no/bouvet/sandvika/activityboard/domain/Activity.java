@@ -42,7 +42,6 @@ public class Activity
     private int sufferScore;
     private double handicap;
     private Integer athleteId;
-    @DBRef
     private Set<Badge> badges;
     private List<Photo> photos;
 
