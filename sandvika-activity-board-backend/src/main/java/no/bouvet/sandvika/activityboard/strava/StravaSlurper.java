@@ -119,6 +119,7 @@ public class StravaSlurper {
         }
         if (stravaActivity.getStartLatlng() != null) {
             activity.setStartLatLng(new double[]{stravaActivity.getStartLatlng().get(0), stravaActivity.getStartLatlng().get(1)});
+            System.out.println("Preparing to set weather");
             setWeather(activity, stravaActivity);
         }
         log.debug("Created activity: " + activity.toString());
@@ -127,9 +128,15 @@ public class StravaSlurper {
 
     private void setWeather(Activity activity, StravaActivity stravaActivity) {
         Activity storedActivity = activityRepository.findOne(activity.getId());
-        if (storedActivity == null || storedActivity.getWeather() == null) {
+        System.out.println("Setting Weather");
+        if (storedActivity == null) {
+            System.out.println("No stored activity found");
             activity.setWeather(weatherUtil.getWeatherForActivity(activity));
-        } else if (storedActivity.getWeather() != null) {
+        } else if (storedActivity.getWeather() == null) {
+            System.out.println("Stored activity does not have weather");
+            activity.setWeather(weatherUtil.getWeatherForActivity(activity));
+        } else {
+            System.out.println("Using stored weather");
             activity.setWeather(storedActivity.getWeather());
         }
     }
