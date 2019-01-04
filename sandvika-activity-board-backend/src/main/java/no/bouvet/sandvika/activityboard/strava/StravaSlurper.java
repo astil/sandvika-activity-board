@@ -113,6 +113,7 @@ public class StravaSlurper {
         if (stravaActivity.getTotalPhotoCount() > 0) {
             activity.setPhotos(getPhotosFromActivity(activity, athlete.getToken()));
         }
+        activity.setStartLatLng(new double[]{stravaActivity.getStartLatlng().get(0), stravaActivity.getStartLatlng().get(1)});
         log.debug("Created activity: " + activity.toString());
         return activity;
     }
