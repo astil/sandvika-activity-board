@@ -172,7 +172,7 @@ public class ActivityUtils {
         return photos;
     }
 
-    public PointsCalculation getPointsCalculationForActivity(int activityId) {
+    public PointsCalculation getPointsCalculationForActivity(long activityId) {
         Activity activity = activityRepository.findOne(activityId);
         PointsCalculation pointsCalculation = new PointsCalculation();
         pointsCalculation.setAchievements(activity.getAchievementCount());

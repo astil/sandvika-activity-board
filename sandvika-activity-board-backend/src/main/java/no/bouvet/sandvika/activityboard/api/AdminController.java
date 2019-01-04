@@ -97,7 +97,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.DELETE)
-    public void deleteActivity(@PathVariable("id") int id) {
+    public void deleteActivity(@PathVariable("id") long id) {
         activityRepository.delete(id);
     }
 
