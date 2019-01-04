@@ -12,7 +12,6 @@ public class Athlete {
     private List<Handicap> handicapList;
     private String firstName;
     private String profile;
-    @DBRef
     private Map<String, List<Activity>> badges;
     private String token;
     private List<String> clubs;
