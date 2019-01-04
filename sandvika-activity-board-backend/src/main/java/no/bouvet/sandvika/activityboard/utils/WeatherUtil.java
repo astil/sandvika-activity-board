@@ -16,7 +16,7 @@ public class WeatherUtil {
 
     public Weather getWeatherForActivity(Activity activity) {
         double[] startLatLong = activity.getStartLatLng();
-        String url = BASE_URL + startLatLong[0] + "," + startLatLong[1] + "," + activity.getStartDateLocal().getTime() + OPTIONS;
+        String url = BASE_URL + startLatLong[0] + "," + startLatLong[1] + "," + activity.getStartDateLocal().getTime()/1000L + OPTIONS;
         System.out.println("Getting weather with: " + url);
         Weather weather = restTemplate.getForObject(url, Weather.class);
         System.out.println(weather.getCurrently().getTemperature());
