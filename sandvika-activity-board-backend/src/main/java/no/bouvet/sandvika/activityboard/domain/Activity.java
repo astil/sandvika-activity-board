@@ -1,5 +1,6 @@
 package no.bouvet.sandvika.activityboard.domain;
 
+import no.bouvet.sandvika.activityboard.domain.weather.Weather;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 
@@ -42,6 +43,7 @@ public class Activity {
     private Integer athleteId;
     private Set<Badge> badges;
     private List<Photo> photos;
+    private Weather weather;
 
     public Activity() {
     }
@@ -314,6 +316,14 @@ public class Activity {
             photos = new ArrayList<>();
         }
         photos.add(photo);
+    }
+
+    public Weather getWeather() {
+        return weather;
+    }
+
+    public void setWeather(Weather weather) {
+        this.weather = weather;
     }
 
     @Override

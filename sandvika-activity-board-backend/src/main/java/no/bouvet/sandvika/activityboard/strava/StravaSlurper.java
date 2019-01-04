@@ -9,6 +9,7 @@ import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.repository.ClubRepository;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
+import no.bouvet.sandvika.activityboard.utils.WeatherUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,9 @@ public class StravaSlurper {
 
     @Autowired
     HandicapCalculator handicapCalculator;
+
+    @Autowired
+    WeatherUtil weatherUtil;
 
     @Autowired
     BadgeAppointer badgeAppointer;
@@ -115,9 +119,19 @@ public class StravaSlurper {
         }
         if (stravaActivity.getStartLatlng() != null) {
             activity.setStartLatLng(new double[]{stravaActivity.getStartLatlng().get(0), stravaActivity.getStartLatlng().get(1)});
+            setWeather(activity, stravaActivity);
         }
         log.debug("Created activity: " + activity.toString());
         return activity;
+    }
+
+    private void setWeather(Activity activity, StravaActivity stravaActivity) {
+        Activity storedActivity = activityRepository.findOne(activity.getId());
+        if (storedActivity == null || storedActivity.getWeather() == null) {
+            activity.setWeather(weatherUtil.getWeatherForActivity(activity));
+        } else if (storedActivity != null && storedActivity.getWeather() != null) {
+            activity.setWeather(storedActivity.getWeather());
+        }
     }
 
     private List<Photo> getPhotosFromActivity(Activity activity, String athleteToken) {
