@@ -16,7 +16,7 @@ public class Badge {
     private String timeCriteria;
     private String beforeOrAfter;
     private int points;
-    private Set<Activity> activities;
+    //private Set<Activity> activities;
 
     public String getUri() {
         return uri;
@@ -82,7 +82,7 @@ public class Badge {
         this.beforeOrAfter = beforeOrAfter;
     }
 
-    public Set<Activity> getActivities() {
+    /*public Set<Activity> getActivities() {
         if (activities == null) {
             activities = new HashSet<>();
         }
@@ -92,7 +92,7 @@ public class Badge {
     public void setActivities(Set<Activity> activities) {
         this.activities = activities;
     }
-
+*/
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -118,7 +118,6 @@ public class Badge {
                 ", timeCriteria='" + timeCriteria + '\'' +
                 ", beforeOrAfter='" + beforeOrAfter + '\'' +
                 ", points=" + points +
-                ", activities=" + activities +
                 '}';
     }
 }

@@ -134,7 +134,7 @@ public class AdminController {
         List<Badge> badges = badgeRepository.findAll();
         badges.forEach(badge ->
         {
-            badge.setActivities(null);
+            //badge.setActivities(null);
             badgeRepository.save(badge);
         });
 

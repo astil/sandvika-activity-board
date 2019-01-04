@@ -40,7 +40,7 @@ public class BadgeAppointer {
 
     private void appointBadge(Activity activity, Set<Badge> awardedBadges, Badge badge) {
         awardedBadges.add(badge);
-        badge.getActivities().add(activity);
+       // badge.getActivities().add(activity);
         log.info("Saving Badge " + badge.toString());
         badgeRepository.save(badge);
         Athlete athlete = athleteRepository.findById(activity.getAthleteId());
