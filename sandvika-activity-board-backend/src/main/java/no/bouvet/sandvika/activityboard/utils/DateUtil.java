@@ -21,6 +21,11 @@ public class DateUtil {
         return (int) Math.round((new Date().getTime() - date.getTime()) / (double) 86400000);
     }
 
+    public static int getDayOfCurrentYear() {
+        Calendar cal = Calendar.getInstance();
+        return cal.get(Calendar.DAY_OF_YEAR);
+    }
+
     public static Date firstDayOfCurrentWeek() {
         Calendar cal = Calendar.getInstance();
         clearCalendar(cal);

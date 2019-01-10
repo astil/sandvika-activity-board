@@ -8,7 +8,7 @@ public class AthleteStats {
     private double hc;
     private double activeHoursThisWeek;
     private double activeHoursThisMonth;
-    private double activeHoursThisCompetition;
+    private double activeHoursThisYear;
     private double activeHoursHcPeriod;
     private List<PeriodStats> weeklyStats;
     private List<PeriodStats> monthlyStats;
@@ -54,12 +54,12 @@ public class AthleteStats {
         this.activeHoursThisMonth = activeHoursThisMonth;
     }
 
-    public double getActiveHoursThisCompetition() {
-        return activeHoursThisCompetition;
+    public double getActiveHoursThisYear() {
+        return activeHoursThisYear;
     }
 
-    public void setActiveHoursThisCompetition(double activeHoursThisCompetition) {
-        this.activeHoursThisCompetition = activeHoursThisCompetition;
+    public void setActiveHoursThisYear(double activeHoursThisYear) {
+        this.activeHoursThisYear = activeHoursThisYear;
     }
 
     public double getActiveHoursHcPeriod() {
