@@ -121,6 +121,7 @@ public class AthleteController {
         athleteStats.setActiveHoursThisWeek(activeHoursUtil.getActiveHoursByDaysAndAthlete(DateUtil.getDaysSinceDate(DateUtil.firstDayOfCurrentWeek()), athlete));
         athleteStats.setActiveHoursHcPeriod(activeHoursUtil.getActiveHoursByDaysAndAthlete(30, athlete));
         athleteStats.setWeeklyStats(statsUtils.getWeeklyStatsForYear(id));
+        athleteStats.setMonthlyStats(statsUtils.getMonthlyStatsForYear(id));
         return athleteStats;
     }
 

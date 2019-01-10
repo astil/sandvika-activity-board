@@ -96,4 +96,13 @@ public class StatsUtils {
         }
         return periodStats;
     }
+
+    public List<PeriodStats> getMonthlyStatsForYear(int athleteId) {
+        Period currentPeriod = DateUtil.getCurrentPeriod(PeriodType.MONTH, null);
+        List<PeriodStats> periodStats = new ArrayList<>();
+        for (int i = 1 ; i <= currentPeriod.getPeriodNumber() ; i++) {
+            periodStats.add(getAthleteStatsForPeriod(PeriodType.MONTH, i, currentPeriod.getYear(), athleteId));
+        }
+        return periodStats;
+    }
 }
