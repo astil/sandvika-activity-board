@@ -201,7 +201,7 @@ public class DateUtil {
 
     private static int currentMonthNumber() {
         Calendar cal = Calendar.getInstance();
-        return cal.get(Calendar.MONTH);
+        return cal.get(Calendar.MONTH) + 1;
     }
 
     private static int currentWeekNumber() {
