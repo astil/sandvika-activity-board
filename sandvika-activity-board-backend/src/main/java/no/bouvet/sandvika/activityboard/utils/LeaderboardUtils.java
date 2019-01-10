@@ -121,7 +121,7 @@ public class LeaderboardUtils {
                 .stream()
                 .filter(e -> e.getAthleteId() == athleteId)
                 .collect(Collectors.toList());
-        if (leaderboardEntry != null) {
+        if (leaderboardEntry != null || leaderboardEntry.size() == 0) {
             return leaderboardEntry.get(0).getRanking();
         } else {
             return 0;
