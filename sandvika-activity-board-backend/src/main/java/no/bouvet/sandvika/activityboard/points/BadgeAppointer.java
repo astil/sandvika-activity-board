@@ -54,9 +54,9 @@ public class BadgeAppointer {
         if (badgeTypeIsTime(badge)) {
             LocalTime timeCriteria = LocalTime.parse(badge.getTimeCriteria(), formatter);
 
-            if (badge.getBeforeOrAfter().equalsIgnoreCase("before") && timeCriteria.isAfter(getStartDateAsLocalDateTime(activity))) {
+            if (badge.getLessOrMore().equalsIgnoreCase("less") && timeCriteria.isAfter(getStartDateAsLocalDateTime(activity))) {
                 return true;
-            } else if (badge.getBeforeOrAfter().equalsIgnoreCase("after") && timeCriteria.isBefore(getStartDateAsLocalDateTime(activity))) {
+            } else if (badge.getLessOrMore().equalsIgnoreCase("more") && timeCriteria.isBefore(getStartDateAsLocalDateTime(activity))) {
                 return true;
             }
         }
@@ -68,11 +68,11 @@ public class BadgeAppointer {
     }
 
     private boolean eligibleForClimbBadge(Activity activity, Badge badge) {
-        return badgeTypeIsClimb(badge) && activity.getTotalElevationGaininMeters() >= badge.getDistanceCriteria();
+        return badgeTypeIsClimb(badge) && activity.getTotalElevationGaininMeters() >= badge.getValueCriteria();
     }
 
     private boolean eligibleForDistanceBadge(Activity activity, Badge badge) {
-        return badgeTypeIsDistance(badge) && activity.getDistanceInMeters() >= badge.getDistanceCriteria();
+        return badgeTypeIsDistance(badge) && activity.getDistanceInMeters() >= badge.getValueCriteria();
     }
 
     private boolean badgeTypeIsTime(Badge badge) {

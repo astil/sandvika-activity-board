@@ -9,6 +9,10 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Component
@@ -20,6 +24,10 @@ public class ActivityUtils {
     @Autowired
     ClubRepository clubRepository;
 
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
 
     public List<Activity> getActivitiesForCurrentPeriodByActivityType(String clubName, String activityType, String periodType) {
         Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()), clubRepository.findById(clubName).getCompetitionStartDate());
@@ -168,7 +176,7 @@ public class ActivityUtils {
                 .collect(Collectors.toList());
 
         List<Photo> photos = new ArrayList<>();
-                activityList.forEach(a -> photos.addAll(a.getPhotos()));
+        activityList.forEach(a -> photos.addAll(a.getPhotos()));
         return photos;
     }
 
@@ -178,8 +186,8 @@ public class ActivityUtils {
         pointsCalculation.setAchievements(activity.getAchievementCount());
         pointsCalculation.setElevationGain(activity.getTotalElevationGaininMeters());
         pointsCalculation.setHc(activity.getHandicap());
-        pointsCalculation.setKm(activity.getDistanceInMeters()/1000);
-        pointsCalculation.setMinutes(activity.getMovingTimeInSeconds()/60);
+        pointsCalculation.setKm(activity.getDistanceInMeters() / 1000);
+        pointsCalculation.setMinutes(activity.getMovingTimeInSeconds() / 60);
         pointsCalculation.setActivityType(activity.getType());
         pointsCalculation.setActivityId(activity.getId());
 
@@ -190,5 +198,14 @@ public class ActivityUtils {
         pointsCalculation.createCalculation();
 
         return pointsCalculation;
+    }
+
+    public List<String> getUserActivityTypesForPeriod(int athleteId, String periodType, int periodNumber, int year) {
+        List<Activity> activityList = getUserActivitiesForPeriod(athleteId, periodType, periodNumber, year).stream()
+                .filter(distinctByKey(Activity::getType))
+                .collect(Collectors.toList());
+        List<String> activityTypes = new ArrayList<>();
+        activityList.forEach(a -> activityTypes.add(a.getType()));
+        return activityTypes;
     }
 }

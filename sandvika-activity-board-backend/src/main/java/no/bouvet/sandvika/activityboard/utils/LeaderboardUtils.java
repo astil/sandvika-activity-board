@@ -116,4 +116,16 @@ public class LeaderboardUtils {
         return addChangeToLeaderboard(currentLeaderboard, comparingLeaderboard);
     }
 
+    public int getLeaderboardStanding(String clubName, Date date, int athleteId) {
+        List<LeaderboardEntry> leaderboardEntry = getLeaderboardEntries(clubName, date)
+                .stream()
+                .filter(e -> e.getAthleteId() == athleteId)
+                .collect(Collectors.toList());
+        if (leaderboardEntry != null) {
+            return leaderboardEntry.get(0).getRanking();
+        } else {
+            return 0;
+        }
+    }
+
 }

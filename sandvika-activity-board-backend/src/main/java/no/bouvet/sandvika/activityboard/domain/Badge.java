@@ -2,9 +2,7 @@ package no.bouvet.sandvika.activityboard.domain;
 
 import org.springframework.data.annotation.Id;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 public class Badge {
     @Id
@@ -12,9 +10,9 @@ public class Badge {
     private String type;
     private String uri;
     private String activityType;
-    private int distanceCriteria;
+    private float valueCriteria;
     private String timeCriteria;
-    private String beforeOrAfter;
+    private String lessOrMore;
     private int points;
     //private Set<Activity> activities;
 
@@ -58,12 +56,12 @@ public class Badge {
         this.activityType = activityType;
     }
 
-    public int getDistanceCriteria() {
-        return distanceCriteria;
+    public float getValueCriteria() {
+        return valueCriteria;
     }
 
-    public void setDistanceCriteria(int distanceCriteria) {
-        this.distanceCriteria = distanceCriteria;
+    public void setValueCriteria(float valueCriteria) {
+        this.valueCriteria = valueCriteria;
     }
 
     public String getTimeCriteria() {
@@ -74,12 +72,12 @@ public class Badge {
         this.timeCriteria = timeCriteria;
     }
 
-    public String getBeforeOrAfter() {
-        return beforeOrAfter;
+    public String getLessOrMore() {
+        return lessOrMore;
     }
 
-    public void setBeforeOrAfter(String beforeOrAfter) {
-        this.beforeOrAfter = beforeOrAfter;
+    public void setLessOrMore(String lessOrMore) {
+        this.lessOrMore = lessOrMore;
     }
 
     /*public Set<Activity> getActivities() {
@@ -114,9 +112,9 @@ public class Badge {
                 ", type='" + type + '\'' +
                 ", uri='" + uri + '\'' +
                 ", activityType='" + activityType + '\'' +
-                ", distanceCriteria=" + distanceCriteria +
+                ", valueCriteria=" + valueCriteria +
                 ", timeCriteria='" + timeCriteria + '\'' +
-                ", beforeOrAfter='" + beforeOrAfter + '\'' +
+                ", lessOrMore='" + lessOrMore + '\'' +
                 ", points=" + points +
                 '}';
     }

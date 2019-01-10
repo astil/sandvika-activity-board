@@ -113,6 +113,8 @@ public class DateUtil {
         Period period = new Period();
         period.setStart(firstDayOfWeek(week, year));
         period.setEnd(setEndOfDay(lastDayOfWeek(week, year)));
+        period.setPeriodNumber(week);
+        period.setYear(year);
         return period;
     }
 
@@ -137,6 +139,8 @@ public class DateUtil {
         Period period = new Period();
         period.setStart(firstDayOfMonth(month - 1, year));
         period.setEnd(setEndOfDay(lastDayOfMonth(month - 1, year)));
+        period.setPeriodNumber(month);
+        period.setYear(year);
         return period;
     }
 
@@ -171,14 +175,33 @@ public class DateUtil {
         Period period = new Period();
         period.setStart(firstDayOfCurrentWeek());
         period.setEnd(setEndOfDay(lastDayOfCurrentWeek()));
+        period.setPeriodNumber(currentWeekNumber());
+        period.setYear(currentYear());
         return period;
+    }
+
+    private static int currentYear() {
+        Calendar cal = Calendar.getInstance();
+        return cal.get(Calendar.YEAR);
     }
 
     private static Period getPeriodForCurrentMonth() {
         Period period = new Period();
         period.setStart(firstDayOfCurrentMonth());
         period.setEnd(setEndOfDay(lastDayOfCurrentMonth()));
+        period.setPeriodNumber(currentMonthNumber());
+        period.setYear(currentYear());
         return period;
+    }
+
+    private static int currentMonthNumber() {
+        Calendar cal = Calendar.getInstance();
+        return cal.get(Calendar.MONTH);
+    }
+
+    private static int currentWeekNumber() {
+        Calendar cal = Calendar.getInstance();
+        return cal.get(Calendar.WEEK_OF_YEAR);
     }
 
     private static Date lastDayOfCurrentMonth() {

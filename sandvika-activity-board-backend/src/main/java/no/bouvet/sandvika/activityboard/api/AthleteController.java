@@ -5,6 +5,7 @@ import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.utils.ActiveHoursUtil;
 import no.bouvet.sandvika.activityboard.utils.ActivityUtils;
+import no.bouvet.sandvika.activityboard.utils.StatsUtils;
 import no.bouvet.sandvika.activityboard.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,9 @@ public class AthleteController {
 
     @Autowired
     RestTemplate restTemplate;
+
+    @Autowired
+    StatsUtils statsUtils;
 
     //@CrossOrigin("*")
     @RequestMapping(value = "/athlete/{id}/activities", method = RequestMethod.GET)
@@ -116,6 +120,7 @@ public class AthleteController {
         athleteStats.setName(athlete.getFirstName() + " " + athlete.getLastName());
         athleteStats.setHc(athlete.getCurrentHandicap());
         athleteStats.setActiveHoursHcPeriod(activeHoursUtil.getActiveHoursByDaysAndAthlete(30, athlete));
+        athleteStats.setWeeklyStats(statsUtils.getWeeklyStatsForYear(id));
         return athleteStats;
     }
 

@@ -1,5 +1,7 @@
 package no.bouvet.sandvika.activityboard.domain;
 
+import java.util.List;
+
 public class AthleteStats {
     private String name;
     private int id;
@@ -8,6 +10,9 @@ public class AthleteStats {
     private double activeHoursThisMonth;
     private double activeHoursThisCompetition;
     private double activeHoursHcPeriod;
+    private List<PeriodStats> weeklyStats;
+    private List<PeriodStats> monthlyStats;
+
 
     public String getName() {
         return name;
@@ -63,5 +68,21 @@ public class AthleteStats {
 
     public void setActiveHoursHcPeriod(double activeHoursHcPeriod) {
         this.activeHoursHcPeriod = activeHoursHcPeriod;
+    }
+
+    public List<PeriodStats> getWeeklyStats() {
+        return weeklyStats;
+    }
+
+    public void setWeeklyStats(List<PeriodStats> weeklyStats) {
+        this.weeklyStats = weeklyStats;
+    }
+
+    public List<PeriodStats> getMonthlyStats() {
+        return monthlyStats;
+    }
+
+    public void setMonthlyStats(List<PeriodStats> monthlyStats) {
+        this.monthlyStats = monthlyStats;
     }
 }
