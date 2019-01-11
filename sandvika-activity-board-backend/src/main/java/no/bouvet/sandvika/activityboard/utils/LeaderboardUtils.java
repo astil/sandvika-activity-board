@@ -117,15 +117,10 @@ public class LeaderboardUtils {
     }
 
     public int getLeaderboardStanding(String clubName, Date date, int athleteId) {
-        List<LeaderboardEntry> leaderboardEntry = getLeaderboardEntries(clubName, date)
+        return getLeaderboardEntries(clubName, date)
                 .stream()
-                .filter(e -> e.getAthleteId() == athleteId)
-                .collect(Collectors.toList());
-        if (leaderboardEntry != null && leaderboardEntry.size() > 0) {
-            return leaderboardEntry.get(0).getRanking();
-        } else {
-            return 0;
-        }
+                .filter(l -> l.getAthleteId() == athleteId)
+                .mapToInt(LeaderboardEntry::getRanking)
+                .sum();
     }
-
 }

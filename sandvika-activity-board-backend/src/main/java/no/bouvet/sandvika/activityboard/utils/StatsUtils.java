@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class StatsUtils {
         HashMap<String, Integer> leaderboardAtEnd = new HashMap<>();
         for (String club : athlete.getClubs()) {
             leaderboardAtEnd.put(club, leaderboardUtils.getLeaderboardStanding(club, period.getEnd(), athleteId));
-            leaderboardAtEnd.put(club, leaderboardUtils.getLeaderboardStanding(club, period.getStart(), athleteId));
+            leaderboardAtStart.put(club, leaderboardUtils.getLeaderboardStanding(club, period.getStart(), athleteId));
         }
         periodStats.setBoardStandingEndPeriod(leaderboardAtEnd);
         periodStats.setBoardStandingStartPeriod(leaderboardAtStart);
@@ -98,10 +99,11 @@ public class StatsUtils {
     }
 
     public List<PeriodStats> getWeeklyStats(int athleteId, int weeksBack) {
-        Period currentPeriod = DateUtil.getCurrentPeriod(PeriodType.WEEK, null);
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.WEEK_OF_YEAR, -weeksBack);
         List<PeriodStats> periodStats = new ArrayList<>();
-        for (int i = currentPeriod.getPeriodNumber() - weeksBack ; i <= currentPeriod.getPeriodNumber() ; i++) {
-            periodStats.add(getAthleteStatsForPeriod(PeriodType.WEEK, i, currentPeriod.getYear(), athleteId));
+        for (int i = 0; i <= weeksBack; i++) {
+            periodStats.add(getAthleteStatsForPeriod(PeriodType.WEEK, cal.get(Calendar.WEEK_OF_YEAR), cal.get(Calendar.YEAR), athleteId));
         }
         return periodStats;
     }
@@ -116,11 +118,13 @@ public class StatsUtils {
     }
 
     public List<PeriodStats> getMonthlyStats(int athleteId, int weeksBack) {
-        Period currentPeriod = DateUtil.getCurrentPeriod(PeriodType.MONTH, null);
-        int startMonth = DateUtil.getMonthWeeksBack(weeksBack);
+        Calendar runningDate = Calendar.getInstance();
+        runningDate.add(Calendar.WEEK_OF_YEAR, -weeksBack);
+        Calendar currentDate = Calendar.getInstance();
         List<PeriodStats> periodStats = new ArrayList<>();
-        for (int i = startMonth ; i <= currentPeriod.getPeriodNumber() ; i++) {
-            periodStats.add(getAthleteStatsForPeriod(PeriodType.MONTH, i, currentPeriod.getYear(), athleteId));
+        while (runningDate.before(currentDate)) {
+            periodStats.add(getAthleteStatsForPeriod(PeriodType.MONTH, runningDate.get(Calendar.MONTH + 1), runningDate.get(Calendar.YEAR), athleteId));
+            runningDate.add(Calendar.MONTH, 1);
         }
         return periodStats;
     }
