@@ -98,12 +98,12 @@ public class AthleteController {
         return athleteRepository.findById(id);
     }
 
-    @RequestMapping(value = "/athlete/stats/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/athlete/{id}/stats/", method = RequestMethod.GET)
     public AthleteStats getAthleteStatistics(@PathVariable("id") int id) {
         return createAthleteStats(athleteRepository.findById(id), 0);
     }
 
-    @RequestMapping(value = "/athlete/stats/{id}/{weeksBack}", method = RequestMethod.GET)
+    @RequestMapping(value = "/athlete/{id}/stats/{weeksBack}", method = RequestMethod.GET)
     public AthleteStats getAthleteStatisticsForWeeks(@PathVariable("id") int id, @PathVariable("weeksBack") int weeksBack) {
         return createAthleteStats(athleteRepository.findById(id), weeksBack);
     }
