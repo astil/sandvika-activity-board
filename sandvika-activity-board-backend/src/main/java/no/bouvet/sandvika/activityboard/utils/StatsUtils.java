@@ -104,6 +104,7 @@ public class StatsUtils {
         List<PeriodStats> periodStats = new ArrayList<>();
         for (int i = 0; i <= weeksBack; i++) {
             periodStats.add(getAthleteStatsForPeriod(PeriodType.WEEK, cal.get(Calendar.WEEK_OF_YEAR), cal.get(Calendar.YEAR), athleteId));
+            cal.add(Calendar.WEEK_OF_YEAR, 1);
         }
         return periodStats;
     }
@@ -123,7 +124,7 @@ public class StatsUtils {
         Calendar currentDate = Calendar.getInstance();
         List<PeriodStats> periodStats = new ArrayList<>();
         while (runningDate.before(currentDate)) {
-            periodStats.add(getAthleteStatsForPeriod(PeriodType.MONTH, runningDate.get(Calendar.MONTH + 1), runningDate.get(Calendar.YEAR), athleteId));
+            periodStats.add(getAthleteStatsForPeriod(PeriodType.MONTH, runningDate.get(Calendar.MONTH ) + 1 , runningDate.get(Calendar.YEAR), athleteId));
             runningDate.add(Calendar.MONTH, 1);
         }
         return periodStats;
