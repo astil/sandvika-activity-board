@@ -30,7 +30,7 @@ public class BadgeAppointer {
         Set<Badge> awardedBadges = new HashSet<>();
 
         for (Badge badge : allBadges) {
-            if (eligibleForDistanceBadge(activity, badge) || eligibleForClimbBadge(activity, badge) || eligibleForTimeBadge(activity, badge)) {
+            if (eligibleForDistanceBadge(activity, badge) || eligibleForClimbBadge(activity, badge) || eligibleForTimeBadge(activity, badge) || eligibleForWeatherBadge(activity, badge)) {
                 log.info("Appointing badge " + badge.getName() + " to " + activity.getName());
                 appointBadge(activity, awardedBadges, badge);
             }
@@ -63,6 +63,19 @@ public class BadgeAppointer {
         return false;
     }
 
+    private boolean eligibleForWeatherBadge(Activity activity, Badge badge) {
+        if (badgeTypeIsTempBadge(badge)) {
+            if (badge.getLessOrMore().equalsIgnoreCase("less")) {
+                return activity.getWeather().getCurrently().getTemperature() < badge.getValueCriteria();
+            } else {
+                return activity.getWeather().getCurrently().getTemperature() > badge.getValueCriteria();
+            }
+        } else if (badgeTypeIsPrecipitationBadge(badge) && activity.getWeather().getCurrently().getPrecipIntensity() > 1 ) {
+            return true;
+        }
+        return false;
+    }
+
     private LocalTime getStartDateAsLocalDateTime(Activity activity) {
         return LocalDateTime.ofInstant(activity.getStartDateLocal().toInstant(), ZoneId.systemDefault()).toLocalTime();
     }
@@ -81,6 +94,14 @@ public class BadgeAppointer {
 
     private boolean badgeTypeIsClimb(Badge badge) {
         return badge.getType().equalsIgnoreCase("climb");
+    }
+
+    private boolean badgeTypeIsTempBadge(Badge badge) {
+        return badge.getType().equalsIgnoreCase("temp");
+    }
+
+    private boolean badgeTypeIsPrecipitationBadge(Badge badge) {
+        return badge.getType().equalsIgnoreCase("precipitation");
     }
 
     private boolean badgeTypeIsDistance(Badge badge) {
