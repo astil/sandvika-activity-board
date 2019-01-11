@@ -3,7 +3,10 @@ package no.bouvet.sandvika.activityboard.api;
 import no.bouvet.sandvika.activityboard.domain.*;
 import no.bouvet.sandvika.activityboard.repository.ActivityRepository;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
-import no.bouvet.sandvika.activityboard.utils.*;
+import no.bouvet.sandvika.activityboard.utils.ActiveHoursUtil;
+import no.bouvet.sandvika.activityboard.utils.ActivityUtils;
+import no.bouvet.sandvika.activityboard.utils.DateUtil;
+import no.bouvet.sandvika.activityboard.utils.StatsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -97,33 +100,57 @@ public class AthleteController {
 
     @RequestMapping(value = "/athlete/stats/{id}", method = RequestMethod.GET)
     public AthleteStats getAthleteStatistics(@PathVariable("id") int id) {
-        return createAthleteStats(id);
+        return createAthleteStats(athleteRepository.findById(id), 0);
+    }
+
+    @RequestMapping(value = "/athlete/stats/{id}/{weeksBack}", method = RequestMethod.GET)
+    public AthleteStats getAthleteStatisticsForWeeks(@PathVariable("id") int id, @PathVariable("weeksBack") int weeksBack) {
+        return createAthleteStats(athleteRepository.findById(id), weeksBack);
     }
 
     @RequestMapping(value = "/athlete/stats/", method = RequestMethod.GET)
     public List<AthleteStats> getAllAthleteStatistics() {
+        return getAthleteStats(0);
+    }
+
+    @RequestMapping(value = "/athlete/stats/{weeksBack}", method = RequestMethod.GET)
+    public List<AthleteStats> getAllAthleteStatisticsForWeeks(@PathVariable("weeksBack") int weeksBack) {
+        return getAthleteStats(weeksBack);
+    }
+
+    private List<AthleteStats> getAthleteStats(int weeksBack) {
         List<Athlete> athletes = athleteRepository.findAll();
         List<AthleteStats> athleteStats = new ArrayList<>();
         for (Athlete athlete : athletes) {
-            athleteStats.add(createAthleteStats(athlete.getId()));
+            athleteStats.add(createAthleteStats(athlete, weeksBack));
         }
         return athleteStats;
     }
 
-    private AthleteStats createAthleteStats(int id) {
-        Athlete athlete = athleteRepository.findById(id);
+    /**
+     * Henter statistikk for en utøver de siste ukene.
+     *
+     * @param athlete   utøveren man skal finne statistikk for.
+     * @param weeksBack hvor mange uker man skal gå tilbake. Dersom 0 tar man for inneværende år
+     * @return AthleteStats
+     */
+
+    private AthleteStats createAthleteStats(Athlete athlete, int weeksBack) {
         AthleteStats athleteStats = new AthleteStats();
-        athleteStats.setId(id);
+        athleteStats.setId(athlete.getId());
         athleteStats.setName(athlete.getFirstName() + " " + athlete.getLastName());
         athleteStats.setHc(athlete.getCurrentHandicap());
         athleteStats.setActiveHoursThisYear(activeHoursUtil.getActiveHoursByDaysAndAthlete(DateUtil.getDayOfCurrentYear(), athlete));
         athleteStats.setActiveHoursThisMonth(activeHoursUtil.getActiveHoursByDaysAndAthlete(DateUtil.getDaysSinceDate(DateUtil.firstDayOfCurrentMonth()), athlete));
         athleteStats.setActiveHoursThisWeek(activeHoursUtil.getActiveHoursByDaysAndAthlete(DateUtil.getDaysSinceDate(DateUtil.firstDayOfCurrentWeek()), athlete));
         athleteStats.setActiveHoursHcPeriod(activeHoursUtil.getActiveHoursByDaysAndAthlete(30, athlete));
-        athleteStats.setWeeklyStats(statsUtils.getWeeklyStatsForYear(id));
-        athleteStats.setMonthlyStats(statsUtils.getMonthlyStatsForYear(id));
+        if (weeksBack == 0) {
+            athleteStats.setWeeklyStats(statsUtils.getWeeklyStatsForYear(athlete.getId()));
+            athleteStats.setMonthlyStats(statsUtils.getMonthlyStatsForYear(athlete.getId()));
+        } else {
+            athleteStats.setWeeklyStats(statsUtils.getWeeklyStats(athlete.getId(), weeksBack));
+            athleteStats.setMonthlyStats(statsUtils.getMonthlyStats(athlete.getId(), weeksBack));
+        }
         return athleteStats;
     }
-
-
 }

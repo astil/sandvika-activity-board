@@ -260,4 +260,10 @@ public class DateUtil {
         Date date = getDateDaysAgo(daysAgo);
         return date.toInstant().getEpochSecond();
     }
+
+    public static int getMonthWeeksBack(int weeksBack) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.WEEK_OF_YEAR, -weeksBack);
+        return cal.get(Calendar.MONTH) + 1;
+    }
 }

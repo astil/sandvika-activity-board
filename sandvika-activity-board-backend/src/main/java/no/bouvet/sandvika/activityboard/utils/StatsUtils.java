@@ -97,10 +97,29 @@ public class StatsUtils {
         return periodStats;
     }
 
+    public List<PeriodStats> getWeeklyStats(int athleteId, int weeksBack) {
+        Period currentPeriod = DateUtil.getCurrentPeriod(PeriodType.WEEK, null);
+        List<PeriodStats> periodStats = new ArrayList<>();
+        for (int i = currentPeriod.getPeriodNumber() - weeksBack ; i <= currentPeriod.getPeriodNumber() ; i++) {
+            periodStats.add(getAthleteStatsForPeriod(PeriodType.WEEK, i, currentPeriod.getYear(), athleteId));
+        }
+        return periodStats;
+    }
+
     public List<PeriodStats> getMonthlyStatsForYear(int athleteId) {
         Period currentPeriod = DateUtil.getCurrentPeriod(PeriodType.MONTH, null);
         List<PeriodStats> periodStats = new ArrayList<>();
         for (int i = 1 ; i <= currentPeriod.getPeriodNumber() ; i++) {
+            periodStats.add(getAthleteStatsForPeriod(PeriodType.MONTH, i, currentPeriod.getYear(), athleteId));
+        }
+        return periodStats;
+    }
+
+    public List<PeriodStats> getMonthlyStats(int athleteId, int weeksBack) {
+        Period currentPeriod = DateUtil.getCurrentPeriod(PeriodType.MONTH, null);
+        int startMonth = DateUtil.getMonthWeeksBack(weeksBack);
+        List<PeriodStats> periodStats = new ArrayList<>();
+        for (int i = startMonth ; i <= currentPeriod.getPeriodNumber() ; i++) {
             periodStats.add(getAthleteStatsForPeriod(PeriodType.MONTH, i, currentPeriod.getYear(), athleteId));
         }
         return periodStats;
