@@ -26,7 +26,7 @@ public class StatsUtils {
     LeaderboardUtils leaderboardUtils;
 
     public Statistics createStatsForCurrentPeriod(String clubName, String activityType, String periodType) {
-        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()), clubRepository.findById(clubName).getCompetitionStartDate());
+        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()), clubRepository.findById(clubName).getCompetitionStartDate(), clubRepository.findById(clubName).getCompetitionEndDate());
 
         return getStatistics(clubName, activityType, periodType, period);
     }
@@ -90,7 +90,7 @@ public class StatsUtils {
     }
 
     public List<PeriodStats> getWeeklyStatsForYear(int athleteId) {
-        Period currentPeriod = DateUtil.getCurrentPeriod(PeriodType.WEEK, null);
+        Period currentPeriod = DateUtil.getCurrentPeriod(PeriodType.WEEK, null, null);
         List<PeriodStats> periodStats = new ArrayList<>();
         for (int i = 1 ; i <= currentPeriod.getPeriodNumber() ; i++) {
             periodStats.add(getAthleteStatsForPeriod(PeriodType.WEEK, i, currentPeriod.getYear(), athleteId));
@@ -110,7 +110,7 @@ public class StatsUtils {
     }
 
     public List<PeriodStats> getMonthlyStatsForYear(int athleteId) {
-        Period currentPeriod = DateUtil.getCurrentPeriod(PeriodType.MONTH, null);
+        Period currentPeriod = DateUtil.getCurrentPeriod(PeriodType.MONTH, null, null);
         List<PeriodStats> periodStats = new ArrayList<>();
         for (int i = 1 ; i <= currentPeriod.getPeriodNumber() ; i++) {
             periodStats.add(getAthleteStatsForPeriod(PeriodType.MONTH, i, currentPeriod.getYear(), athleteId));

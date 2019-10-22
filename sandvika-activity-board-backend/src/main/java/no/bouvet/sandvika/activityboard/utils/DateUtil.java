@@ -159,21 +159,21 @@ public class DateUtil {
         return cal.getTime();
     }
 
-    public static Period getCurrentPeriod(PeriodType periodType, Date competitionStartDate) {
+    public static Period getCurrentPeriod(PeriodType periodType, Date competitionStartDate, Date competitionEndDate) {
         switch (periodType) {
             case MONTH:
                 return getPeriodForCurrentMonth();
             case WEEK:
                 return getPeriodForCurrentWeek();
             case COMPETITION:
-                return getPeriodForCompetition(competitionStartDate);
+                return getPeriodForCompetition(competitionStartDate, competitionEndDate);
             default:
                 return null;
         }
     }
 
-    private static Period getPeriodForCompetition(Date competitionStartDate) {
-        return getPeriodBetweenDates(competitionStartDate, new Date());
+    private static Period getPeriodForCompetition(Date competitionStartDate, Date competitionEndDate) {
+        return getPeriodBetweenDates(competitionStartDate, competitionEndDate);
     }
 
     private static Period getPeriodForCurrentWeek() {

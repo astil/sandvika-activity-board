@@ -30,7 +30,7 @@ public class ActivityUtils {
     }
 
     public List<Activity> getActivitiesForCurrentPeriodByActivityType(String clubName, String activityType, String periodType) {
-        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()), clubRepository.findById(clubName).getCompetitionStartDate());
+        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()), clubRepository.findById(clubName).getCompetitionStartDate(),clubRepository.findById(clubName).getCompetitionEndDate());
         return getActivitiesForPeriodByActivityType(clubName, activityType, period);
     }
 

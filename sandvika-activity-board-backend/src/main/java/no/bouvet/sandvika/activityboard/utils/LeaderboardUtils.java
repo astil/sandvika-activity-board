@@ -2,6 +2,7 @@ package no.bouvet.sandvika.activityboard.utils;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
+import no.bouvet.sandvika.activityboard.domain.Club;
 import no.bouvet.sandvika.activityboard.domain.LeaderboardEntry;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.repository.ClubRepository;
@@ -108,6 +109,10 @@ public class LeaderboardUtils {
     }
 
     public List<LeaderboardEntry> getLeaderboardEntries(String clubName, Date date) {
+        Club club = clubRepository.findById(clubName);
+        if (date.after(club.getCompetitionEndDate())) {
+            date = club.getCompetitionEndDate();
+        }
         Period period = DateUtil.getPeriodBetweenDates(clubRepository.findById(clubName).getCompetitionStartDate(), date);
         List<LeaderboardEntry> currentLeaderboard = getLeaderboardEntries(activityUtils.getActivitiesForPeriodByActivityType(clubName, "all", period));
         Period comparingPeriod = DateUtil.getPeriodBetweenDates(clubRepository.findById(clubName).getCompetitionStartDate(), DateUtil.firstDayOfCurrentMonth());
