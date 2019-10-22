@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -160,8 +161,17 @@ public class StravaSlurper {
                 + "athlete/activities?" + (after == 0 ? "" : "after=" + after + "&") + "page=" + page + "&per_page=200&access_token=" + athlete.getToken();
         rateLimiter.acquire();
         log.info(url);
-        StravaActivity[] activitiesFromStrava = restTemplate.getForObject(url, StravaActivity[].class);
-        return Arrays.asList(activitiesFromStrava);
+        StravaActivity[] activitiesFromStrava = null;
+        try {
+            activitiesFromStrava = restTemplate.getForObject(url, StravaActivity[].class);
+        } catch (RestClientException rce) {
+            log.error("Could not get activities for " + athlete.getFirstName() + " " + athlete.getLastName() + " from Strava. Response from Strava: " + rce.getMessage());
+        }
+        if (activitiesFromStrava == null) {
+            return new ArrayList<StravaActivity>();
+        } else {
+            return Arrays.asList(activitiesFromStrava);
+        }
     }
 
 
