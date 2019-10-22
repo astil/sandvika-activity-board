@@ -1,32 +1,31 @@
 language: java
-jdk:
-- oraclejdk8
 dist: trusty
+jdk:
+  - oraclejdk8
 cache:
   directories:
-  - "$HOME/.m2"
+    - $HOME/.m2
 deploy:
-- provider: cloudfoundry
-  api: https://api.run.pivotal.io
-  username: sondre.engell@bouvet.no
-  password:
-    secure: FodJ/eFy0KpC6qO598B5+wSYtnIOaQ2dfHidL1J1zMgImX1Y772tIYTyWfnV1Ke6q61bhqwGVqxXsLcfVlNbzbI39E5r94+okeTg/UC7nIWORkIAvxoTu0PUCJtWsyIHXwmuPxs47622/oAhjqNRwWBZ4pSCVG5xJuBaYE9Z22EdJKlrnBTXTnMGoA7z1Ai+u08DWTNb+ldEtI0fPXejqcC03bgdZWgZ3PWQqxXFFK9Csc9aXcLjc329nPtJ7t7XZWFrw3QB6I/nzbh7nEH7z1NSl02Wx2l+39wouW3k+GB9Dw2IC7K2m7w7UJsmCauhIQIjQmFCWmNOWy/99uVNw+cO94JO7Zmu/YxDZp3Pr+eV4TZL+AU4Jk7zsqP+OhXidVJcH46Jh9zbYww2wwqPX1zNSpp8PxfF3LyoN714vfZ2RP8YLKIynfgO1gGD4VuM/pKx++3b1ZPR1hGUyYzDD6mHPtbNQsg/faE5ntZ0s4Hr0al5oQcnLxIfDmUl+CsCTNlwyBZYuJfwSrWDtY73uKr4HaSEXUbScEC4o2WvNzUAZib25O1UCYPNJIZ8SvH06sDaJmmVcqvn7AW1CEe1WYx0TCM+nW/vCQKoJY1Luw7dc4+lvGRcJAVVWuuDSq/8RUV+D5IlNUvm0dwybBpCQ54cHuDBjHpoJ8W4vBDEbMM=
-  organization: sandvika-strava-board
-  space: production
-  manifest: manifest.yml
-  on:
-    branch: master
-- provider: cloudfoundry
-  api: https://api.run.pivotal.io
-  username: sondre.engell@bouvet.no
-  password:
-  secure: FodJ/eFy0KpC6qO598B5+wSYtnIOaQ2dfHidL1J1zMgImX1Y772tIYTyWfnV1Ke6q61bhqwGVqxXsLcfVlNbzbI39E5r94+okeTg/UC7nIWORkIAvxoTu0PUCJtWsyIHXwmuPxs47622/oAhjqNRwWBZ4pSCVG5xJuBaYE9Z22EdJKlrnBTXTnMGoA7z1Ai+u08DWTNb+ldEtI0fPXejqcC03bgdZWgZ3PWQqxXFFK9Csc9aXcLjc329nPtJ7t7XZWFrw3QB6I/nzbh7nEH7z1NSl02Wx2l+39wouW3k+GB9Dw2IC7K2m7w7UJsmCauhIQIjQmFCWmNOWy/99uVNw+cO94JO7Zmu/YxDZp3Pr+eV4TZL+AU4Jk7zsqP+OhXidVJcH46Jh9zbYww2wwqPX1zNSpp8PxfF3LyoN714vfZ2RP8YLKIynfgO1gGD4VuM/pKx++3b1ZPR1hGUyYzDD6mHPtbNQsg/faE5ntZ0s4Hr0al5oQcnLxIfDmUl+CsCTNlwyBZYuJfwSrWDtY73uKr4HaSEXUbScEC4o2WvNzUAZib25O1UCYPNJIZ8SvH06sDaJmmVcqvn7AW1CEe1WYx0TCM+nW/vCQKoJY1Luw7dc4+lvGRcJAVVWuuDSq/8RUV+D5IlNUvm0dwybBpCQ54cHuDBjHpoJ8W4vBDEbMM=
-  organization: sandvika-strava-board
-  space: development
-  manifest: dev-manifest.yml
-  on:
-    all_branches: true
+  - provider: cloudfoundry
+    api: https://api.run.pivotal.io
+    username: sondre.engell@bouvet.no
+    password:
+      secure: FodJ/eFy0KpC6qO598B5+wSYtnIOaQ2dfHidL1J1zMgImX1Y772tIYTyWfnV1Ke6q61bhqwGVqxXsLcfVlNbzbI39E5r94+okeTg/UC7nIWORkIAvxoTu0PUCJtWsyIHXwmuPxs47622/oAhjqNRwWBZ4pSCVG5xJuBaYE9Z22EdJKlrnBTXTnMGoA7z1Ai+u08DWTNb+ldEtI0fPXejqcC03bgdZWgZ3PWQqxXFFK9Csc9aXcLjc329nPtJ7t7XZWFrw3QB6I/nzbh7nEH7z1NSl02Wx2l+39wouW3k+GB9Dw2IC7K2m7w7UJsmCauhIQIjQmFCWmNOWy/99uVNw+cO94JO7Zmu/YxDZp3Pr+eV4TZL+AU4Jk7zsqP+OhXidVJcH46Jh9zbYww2wwqPX1zNSpp8PxfF3LyoN714vfZ2RP8YLKIynfgO1gGD4VuM/pKx++3b1ZPR1hGUyYzDD6mHPtbNQsg/faE5ntZ0s4Hr0al5oQcnLxIfDmUl+CsCTNlwyBZYuJfwSrWDtY73uKr4HaSEXUbScEC4o2WvNzUAZib25O1UCYPNJIZ8SvH06sDaJmmVcqvn7AW1CEe1WYx0TCM+nW/vCQKoJY1Luw7dc4+lvGRcJAVVWuuDSq/8RUV+D5IlNUvm0dwybBpCQ54cHuDBjHpoJ8W4vBDEbMM=
+    organization: sandvika-strava-board
+    space: production
+    manifest: manifest.yml
+    on:
+      branch: master
+  - provider: cloudfoundry
+    api: https://api.run.pivotal.io
+    username: sondre.engell@bouvet.no
+    password:
+      secure: FodJ/eFy0KpC6qO598B5+wSYtnIOaQ2dfHidL1J1zMgImX1Y772tIYTyWfnV1Ke6q61bhqwGVqxXsLcfVlNbzbI39E5r94+okeTg/UC7nIWORkIAvxoTu0PUCJtWsyIHXwmuPxs47622/oAhjqNRwWBZ4pSCVG5xJuBaYE9Z22EdJKlrnBTXTnMGoA7z1Ai+u08DWTNb+ldEtI0fPXejqcC03bgdZWgZ3PWQqxXFFK9Csc9aXcLjc329nPtJ7t7XZWFrw3QB6I/nzbh7nEH7z1NSl02Wx2l+39wouW3k+GB9Dw2IC7K2m7w7UJsmCauhIQIjQmFCWmNOWy/99uVNw+cO94JO7Zmu/YxDZp3Pr+eV4TZL+AU4Jk7zsqP+OhXidVJcH46Jh9zbYww2wwqPX1zNSpp8PxfF3LyoN714vfZ2RP8YLKIynfgO1gGD4VuM/pKx++3b1ZPR1hGUyYzDD6mHPtbNQsg/faE5ntZ0s4Hr0al5oQcnLxIfDmUl+CsCTNlwyBZYuJfwSrWDtY73uKr4HaSEXUbScEC4o2WvNzUAZib25O1UCYPNJIZ8SvH06sDaJmmVcqvn7AW1CEe1WYx0TCM+nW/vCQKoJY1Luw7dc4+lvGRcJAVVWuuDSq/8RUV+D5IlNUvm0dwybBpCQ54cHuDBjHpoJ8W4vBDEbMM=
+    organization: sandvika-strava-board
+    space: development
+    manifest: dev-manifest.yml
+    on:
+      all_branches: true
 notifications:
   slack:
     secure: GXXRWILZgCDmaSoGQd7fHwm9O7AXThCMHfHxhJI0d8pe6LmS1+oLMhhv2bZQ+3QFMmwnBv0CuxxgWdEPfg5h54RMLVaNZkUp15w6SzoAONvyuosh5NZJLQF29IdN0/kdPeZ9i8h6y3wCIiWnITiC1C9MwXy0Am37rxrXi1QIRzh++mczQXjKlDwocbXIanPzgxTLTbxjLGiMwCFX9QzGBg1myJoPNwIw/V4IOQH+/mj35egIo6Nz+8r5UWkDOisSYser/WY87UtOuSXjn61ITUsgxNLRanuZvuovPLsSTW7JrVkjRsHbB/O4UIlymaSxrGXTZoCs6XF83fjZzxxI4bD03xPWl+ZxUHOy5ACjRgh1AiKIGauFVv10/TIzW14eNSyG9+vOBAY24YjSpAh/wVC8g1DhQimR1X8nUV+AUa57ZbupZgZkdZyadebeexUe+sbom7MSmhXjGQIc79y06uXGKIfeSn6rBmyGrD4ADj0GPLoZKkXhe6eFSADvn5eQde/Z5Eha6Dkxn84CbF4TwtYDMaDgNfg/7qiAPOO6LopnxCboVr8gesSyJbjDB/cN+Sqpduxf1CdiC2Phu/qU4b26u/zWNTE/8tOnEX6odXvb8pWYKGc62Y0Q/WBC5XxcK2s1bvyJN+/c45mQbUtCV2ilap1nyL1tM2sq4mKL3l4=
-
