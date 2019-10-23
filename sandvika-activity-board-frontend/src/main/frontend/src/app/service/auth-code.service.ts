@@ -21,7 +21,7 @@ export class AuthCodeService {
         console.log('Logging in');
 
         const params = new HttpParams();
-        params.set('scope', 'activity:read')
+        params.set('scope', activity:read)
         params.set('state', '');
         params.set('code', code);
 
