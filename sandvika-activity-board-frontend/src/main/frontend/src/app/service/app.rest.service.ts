@@ -49,8 +49,8 @@ export class AppRestService {
         }
     }
 
-    getAthleteById(id: number): Observable<Activity[]> {
-      return this.http.get<Activity[]>(this.restUrl + 'athlete/' + id + '/activities')
+    getAthleteById(id: number): Observable<Athlete> {
+      return this.http.get<Athlete>(this.restUrl + 'athlete/' + id)
             .catch(AppRestService.handleError);
     }
 
