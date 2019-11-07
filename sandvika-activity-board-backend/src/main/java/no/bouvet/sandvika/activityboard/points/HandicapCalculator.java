@@ -63,7 +63,7 @@ public class HandicapCalculator {
     }
 
     public double getHandicapForActivity(Activity activity) {
-        Athlete athlete = athleteRepository.findById(activity.getAthleteId());
+        Athlete athlete = athleteRepository.findById(activity.getAthleteId()).orElse(null);
         if (athlete == null || athlete.getHandicapList().isEmpty()) {
             return 1;
         } else {
@@ -81,7 +81,7 @@ public class HandicapCalculator {
                     .filter(h -> h.getTimestamp().before(calendar.getTime()))
                     .collect(Collectors.toList()));
         }
-        athleteRepository.save(athletes);
+        athleteRepository.saveAll(athletes);
     }
 
     private void updateHandicapForAllAthletesForDate(Date date) {
@@ -91,7 +91,7 @@ public class HandicapCalculator {
             Handicap hc = new Handicap(calculateHandicapForAthleteOnDate(athlete, date), date);
             athlete.getHandicapList().add(hc);
         }
-        athleteRepository.save(athletes);
+        athleteRepository.saveAll(athletes);
 
     }
 

@@ -54,6 +54,11 @@ export class AppRestService {
             .catch(AppRestService.handleError);
     }
 
+    getUserInfo(): Observable<Athlete> {
+      return this.http.get<Athlete>(this.restUrl + 'user-info')
+        .catch(AppRestService.handleError);
+    }
+
     getAthleteByActivitiyTypeOrPeriod(
       id: number, activityType: string, periodType: string, periodNumber: number, year: number): Observable<Activity[]> {
       const params = new HttpParams()

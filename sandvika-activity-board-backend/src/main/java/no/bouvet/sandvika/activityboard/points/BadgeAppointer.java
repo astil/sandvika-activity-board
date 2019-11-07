@@ -1,20 +1,21 @@
 package no.bouvet.sandvika.activityboard.points;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import no.bouvet.sandvika.activityboard.domain.Activity;
 import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.domain.Badge;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.repository.BadgeRepository;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class BadgeAppointer {
@@ -40,13 +41,15 @@ public class BadgeAppointer {
 
     private void appointBadge(Activity activity, Set<Badge> awardedBadges, Badge badge) {
         awardedBadges.add(badge);
-       // badge.getActivities().add(activity);
+        // badge.getActivities().add(activity);
         log.info("Saving Badge " + badge.toString());
         badgeRepository.save(badge);
-        Athlete athlete = athleteRepository.findById(activity.getAthleteId());
-        athlete.addBadge(badge, activity);
-        log.info("Saving Athlete " + athlete.toString());
-        athleteRepository.save(athlete);
+
+        athleteRepository.findById(activity.getAthleteId()).ifPresent(athlete -> {
+            athlete.addBadge(badge, activity);
+            log.info("Saving Athlete " + athlete.toString());
+            athleteRepository.save(athlete);
+        });
     }
 
     private boolean eligibleForTimeBadge(Activity activity, Badge badge) {
@@ -71,7 +74,7 @@ public class BadgeAppointer {
             } else {
                 return activity.getWeather().getCurrently().getTemperature() > badge.getValueCriteria();
             }
-        } else if (badgeTypeIsPrecipitationBadge(badge) && activity.getWeather().getCurrently().getPrecipIntensity() > 1 ) {
+        } else if (badgeTypeIsPrecipitationBadge(badge) && activity.getWeather().getCurrently().getPrecipIntensity() > 1) {
             return true;
         }
         return false;

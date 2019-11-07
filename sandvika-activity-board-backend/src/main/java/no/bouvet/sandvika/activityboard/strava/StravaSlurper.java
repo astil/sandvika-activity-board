@@ -33,7 +33,7 @@ public class StravaSlurper {
 
 
     @Autowired
-    RestTemplate restTemplate;
+    RestTemplate restTemplateService;
 
     @Autowired
     ActivityRepository activityRepository;
@@ -80,7 +80,7 @@ public class StravaSlurper {
         List<Activity> activities = new ArrayList<>();
         stravaActivities.forEach(stravaActivity ->
                 activities.add(createActivity(stravaActivity, athlete)));
-        activityRepository.save(activities
+        activityRepository.saveAll(activities
                 .stream()
                 .filter(activity -> activity.getPoints() > 0)
                 .collect(Collectors.toList()));
@@ -128,7 +128,7 @@ public class StravaSlurper {
     }
 
     private void setWeather(Activity activity, StravaActivity stravaActivity) {
-        Activity storedActivity = activityRepository.findOne(activity.getId());
+        Activity storedActivity = activityRepository.findById(activity.getId()).orElse(null);
         if (storedActivity == null) {
             activity.setWeather(weatherUtil.getWeatherForActivity(activity));
         } else if (storedActivity.getWeather() == null) {
@@ -153,7 +153,7 @@ public class StravaSlurper {
                 + "activities/" + activityId + "?access_token=" + token;
         rateLimiter.acquire();
         log.info(url);
-        return restTemplate.getForObject(url, StravaActivityFull.class);
+        return restTemplateService.getForObject(url, StravaActivityFull.class);
     }
 
     protected List<StravaActivity> getActivitiesFromStrava(Athlete athlete, int page, long after) {
@@ -163,7 +163,7 @@ public class StravaSlurper {
         log.info(url);
         StravaActivity[] activitiesFromStrava = null;
         try {
-            activitiesFromStrava = restTemplate.getForObject(url, StravaActivity[].class);
+            activitiesFromStrava = restTemplateService.getForObject(url, StravaActivity[].class);
         } catch (RestClientException rce) {
             log.error("Could not get activities for " + athlete.getFirstName() + " " + athlete.getLastName() + " from Strava. Response from Strava: " + rce.getMessage());
         }

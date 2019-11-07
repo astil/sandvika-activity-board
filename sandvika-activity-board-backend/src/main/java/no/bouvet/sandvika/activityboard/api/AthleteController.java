@@ -9,7 +9,6 @@ import no.bouvet.sandvika.activityboard.utils.ActiveHoursUtil;
 import no.bouvet.sandvika.activityboard.utils.ActivityUtils;
 import no.bouvet.sandvika.activityboard.utils.DateUtil;
 import no.bouvet.sandvika.activityboard.utils.StatsUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -68,8 +67,8 @@ public class AthleteController {
 //                    athlete = new Athlete();
 //                }
 //                athlete.setId(stravaAthlete.getId());
-//                athlete.setFirstName(stravaAthlete.getFirstname());
-//                athlete.setLastName(stravaAthlete.getLastname());
+//                athlete.setFirstName(stravaAthlete.getFirstName());
+//                athlete.setLastName(stravaAthlete.getLastName());
 //                athlete.setProfile(stravaAthlete.getProfile());
 //            }
 //            athlete.setToken(stravaToken.getAccessToken());

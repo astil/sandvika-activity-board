@@ -12,7 +12,6 @@ import {CookieService} from 'ngx-cookie-service';
   providers: [AppRestService]
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private authSubscription: Subscriber<boolean>;
   private athlete: Athlete;
   private errorMessage: any;
 
@@ -20,7 +19,13 @@ export class AppComponent implements OnInit, OnDestroy {
   private defaultClub: string;
 
   constructor(private appRestService: AppRestService, private activatedRoute: ActivatedRoute, private cookie: CookieService) {
-
+    this.appRestService.getUserInfo().subscribe(
+      athlete => {
+        this.athlete = athlete;
+      },
+      error => {
+        (this.errorMessage = <any>error)
+      })
   }
 
   ngOnInit() {
@@ -33,19 +38,9 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.cookie.check('default-club')) {
       this.defaultClub = this.cookie.get('default-club');
     }
-
-    this.appRestService.getAthleteById(950307).subscribe(
-      athlete => {
-        this.athlete = athlete;
-      },
-      error => {
-        (this.errorMessage = <any>error)
-      })
   }
 
   ngOnDestroy() {
-    // prevent memory leak when component destroyed
-    this.authSubscription.unsubscribe();
   }
 
   registerClub(club: string) {

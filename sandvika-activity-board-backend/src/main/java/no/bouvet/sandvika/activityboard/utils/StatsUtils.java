@@ -26,11 +26,11 @@ public class StatsUtils {
     LeaderboardUtils leaderboardUtils;
 
     public Statistics createStatsForCurrentPeriod(String clubName, String activityType, String periodType) {
-        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()), clubRepository.findById(clubName).getCompetitionStartDate(), clubRepository.findById(clubName).getCompetitionEndDate());
-
-        return getStatistics(clubName, activityType, periodType, period);
+        return clubRepository.findById(clubName).map(club -> {
+            Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()), club.getCompetitionStartDate(), club.getCompetitionEndDate());
+            return getStatistics(clubName, activityType, periodType, period);
+        }).orElse(new Statistics());
     }
-
 
     public Statistics createStatsForHistoricPeriod(String clubName, String activityType, String periodType, int periodNumber, int year) {
         Period period = DateUtil.getPeriod(PeriodType.valueOf(periodType.toUpperCase()), periodNumber, year);

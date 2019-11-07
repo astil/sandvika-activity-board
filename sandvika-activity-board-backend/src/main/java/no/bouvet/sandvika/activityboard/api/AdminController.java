@@ -60,7 +60,7 @@ public class AdminController {
     @RequestMapping(value = "/athlete/{id}/activities/load/{pages}", method = RequestMethod.GET)
     @ResponseBody
     public Integer refreshActivitiesForAthlete(@PathVariable("id") int athleteId, @PathVariable("pages") int pages) {
-        if (!athleteRepository.exists(athleteId)) {
+        if (!athleteRepository.existsById(athleteId)) {
             throw new IllegalArgumentException("Athlete does not exist");
         }
         Athlete athlete = athleteRepository.findById(athleteId);
@@ -98,7 +98,7 @@ public class AdminController {
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.DELETE)
     public void deleteActivity(@PathVariable("id") long id) {
-        activityRepository.delete(id);
+        activityRepository.deleteById(id);
     }
 
 
