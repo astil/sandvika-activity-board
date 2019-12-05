@@ -30,8 +30,10 @@ public class ActivityUtils {
     }
 
     public List<Activity> getActivitiesForCurrentPeriodByActivityType(String clubName, String activityType, String periodType) {
-        Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()), clubRepository.findById(clubName).getCompetitionStartDate(),clubRepository.findById(clubName).getCompetitionEndDate());
-        return getActivitiesForPeriodByActivityType(clubName, activityType, period);
+        return clubRepository.findById(clubName).map(club -> {
+            Period period = DateUtil.getCurrentPeriod(PeriodType.valueOf(periodType.toUpperCase()), club.getCompetitionStartDate(), club.getCompetitionEndDate());
+            return getActivitiesForPeriodByActivityType(clubName, activityType, period);
+        }).orElse(new ArrayList<>());
     }
 
     public List<Activity> getActivitiesForPeriodByActivityType(String clubName, String activityType, String periodType, int periodNumber, int year) {
@@ -47,9 +49,9 @@ public class ActivityUtils {
             activityList = activityRepository.findByStartDateLocalBetweenAndType(period.getStart(), period.getEnd(), activityType);
         }
 
-        Club club = clubRepository.findById(clubName);
-        List<Activity> filteredActivities = activityList.stream().filter(activity -> club.getMemberIds().contains(activity.getAthleteId())).collect(Collectors.toList());
-        return filteredActivities;
+        Club club = clubRepository.findById(clubName).orElse(null);
+
+        return activityList.stream().filter(activity -> club != null && club.getMemberIds().contains(activity.getAthleteId())).collect(Collectors.toList());
     }
 
     public List<Activity> getUserActivitiesForPeriodByActivityType(int userId, String activityType, String periodType, int periodNumber, int year) {
@@ -97,19 +99,21 @@ public class ActivityUtils {
     }
 
     public List<Activity> getActivitiesByActivityType(String activityType, int numberOfActivities, String clubName) {
-        Club club = clubRepository.findById(clubName);
-        return activityRepository.findByTypeOrderByStartDateLocalDesc(activityType).
-                filter(activity -> club.getMemberIds().contains(activity.getAthleteId()))
-                .limit(numberOfActivities)
-                .collect(Collectors.toList());
+        return clubRepository.findById(clubName).map(club -> {
+            return activityRepository.findByTypeOrderByStartDateLocalDesc(activityType).
+                    filter(activity -> club.getMemberIds().contains(activity.getAthleteId()))
+                    .limit(numberOfActivities)
+                    .collect(Collectors.toList());
+        }).orElse(new ArrayList<>());
     }
 
     public List<Activity> getActivities(int numberOfActivities, String clubName) {
-        Club club = clubRepository.findById(clubName);
-        return activityRepository.findAllByOrderByStartDateLocalDesc()
-                .filter(activity -> club.getMemberIds().contains(activity.getAthleteId()))
-                .limit(numberOfActivities)
-                .collect(Collectors.toList());
+        return clubRepository.findById(clubName).map(club -> {
+            return activityRepository.findAllByOrderByStartDateLocalDesc()
+                    .filter(activity -> club.getMemberIds().contains(activity.getAthleteId()))
+                    .limit(numberOfActivities)
+                    .collect(Collectors.toList());
+        }).orElse(new ArrayList<>());
     }
 
     public List<Activity> getTopActivities(String clubName, int limit, String activityType, String periodType, int periodNumber, int year) {
@@ -157,47 +161,49 @@ public class ActivityUtils {
     }
 
     private List<Photo> getPhotosByActivityType(String clubName, int numberOfPhotos, String activityType) {
-        Club club = clubRepository.findById(clubName);
-        List<Activity> activityList = activityRepository.findByTypeAndPhotosIsNotNullOrderByStartDateLocalDesc(activityType)
-                .filter(activity -> club.getMemberIds().contains(activity.getAthleteId()))
-                .limit(numberOfPhotos)
-                .collect(Collectors.toList());
-        List<Photo> photos = new ArrayList<>();
-        activityList.forEach(a -> photos.addAll(a.getPhotos()));
-        return photos;
+        return clubRepository.findById(clubName).map(club -> {
+            List<Activity> activityList = activityRepository.findByTypeAndPhotosIsNotNullOrderByStartDateLocalDesc(activityType)
+                    .filter(activity -> club.getMemberIds().contains(activity.getAthleteId()))
+                    .limit(numberOfPhotos)
+                    .collect(Collectors.toList());
+            List<Photo> photos = new ArrayList<>();
+            activityList.forEach(a -> photos.addAll(a.getPhotos()));
 
+            return photos;
+        }).orElse(new ArrayList<>());
     }
 
     private List<Photo> getPhotos(int numberOfPhotos, String clubName) {
-        Club club = clubRepository.findById(clubName);
-        List<Activity> activityList = activityRepository.findAllByPhotosIsNotNullOrderByStartDateLocalDesc()
-                .filter(activity -> club.getMemberIds().contains(activity.getAthleteId()))
-                .limit(numberOfPhotos)
-                .collect(Collectors.toList());
+        return clubRepository.findById(clubName).map(club -> {
+            List<Activity> activityList = activityRepository.findAllByPhotosIsNotNullOrderByStartDateLocalDesc()
+                    .filter(activity -> club.getMemberIds().contains(activity.getAthleteId()))
+                    .limit(numberOfPhotos)
+                    .collect(Collectors.toList());
+            List<Photo> photos = new ArrayList<>();
+            activityList.forEach(a -> photos.addAll(a.getPhotos()));
 
-        List<Photo> photos = new ArrayList<>();
-        activityList.forEach(a -> photos.addAll(a.getPhotos()));
-        return photos;
+            return photos;
+        }).orElse(new ArrayList<>());
     }
 
     public PointsCalculation getPointsCalculationForActivity(long activityId) {
-        Activity activity = activityRepository.findOne(activityId);
-        PointsCalculation pointsCalculation = new PointsCalculation();
-        pointsCalculation.setAchievements(activity.getAchievementCount());
-        pointsCalculation.setElevationGain(activity.getTotalElevationGaininMeters());
-        pointsCalculation.setHc(activity.getHandicap());
-        pointsCalculation.setKm(activity.getDistanceInMeters() / 1000);
-        pointsCalculation.setMinutes(activity.getMovingTimeInSeconds() / 60);
-        pointsCalculation.setActivityType(activity.getType());
-        pointsCalculation.setActivityId(activity.getId());
+        return activityRepository.findById(activityId).map(activity -> {
+            PointsCalculation pointsCalculation = new PointsCalculation();
+            pointsCalculation.setAchievements(activity.getAchievementCount());
+            pointsCalculation.setElevationGain(activity.getTotalElevationGaininMeters());
+            pointsCalculation.setHc(activity.getHandicap());
+            pointsCalculation.setKm(activity.getDistanceInMeters() / 1000);
+            pointsCalculation.setMinutes(activity.getMovingTimeInSeconds() / 60);
+            pointsCalculation.setActivityType(activity.getType());
+            pointsCalculation.setActivityId(activity.getId());
 
-        ActivityType activityType = ActivityType.toActivityType(activity.getType());
-        pointsCalculation.setElevationCoeffisient(activityType.elevationCoefficient());
-        pointsCalculation.setKmCoeffisient(activityType.distanceCoefficient());
-        pointsCalculation.setMinCoeffisient(activityType.durationCoefficient());
-        pointsCalculation.createCalculation();
-
-        return pointsCalculation;
+            ActivityType activityType = ActivityType.toActivityType(activity.getType());
+            pointsCalculation.setElevationCoeffisient(activityType.elevationCoefficient());
+            pointsCalculation.setKmCoeffisient(activityType.distanceCoefficient());
+            pointsCalculation.setMinCoeffisient(activityType.durationCoefficient());
+            pointsCalculation.createCalculation();
+            return pointsCalculation;
+        }).orElse(null);
     }
 
     public List<String> getUserActivityTypesForPeriod(int athleteId, String periodType, int periodNumber, int year) {

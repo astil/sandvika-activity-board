@@ -94,31 +94,35 @@ public class LeaderboardUtils {
     }
 
     public List<LeaderboardEntry> getLeaderboardEntries(String clubName, String activityType, String periodType) {
-        List<LeaderboardEntry> currentLeaderboard = getLeaderboardEntries(activityUtils.getActivitiesForCurrentPeriodByActivityType(clubName, activityType.toLowerCase(), periodType));
-        Period comparingPeriod;
-        if (periodType.equalsIgnoreCase("week")) {
-            comparingPeriod = DateUtil.getPeriodFromWeekStartToDate(DateUtil.getDateDaysAgo(1));
-        } else if (periodType.equalsIgnoreCase("month")) {
-            comparingPeriod = DateUtil.getPeriodFromMonthStartToDate(DateUtil.getDateDaysAgo(7));
-        } else {
-            comparingPeriod = DateUtil.getPeriodBetweenDates(clubRepository.findById(clubName).getCompetitionStartDate(), DateUtil.getDateDaysAgo(7));
-        }
-        List<LeaderboardEntry> comparingLeaderboard = getLeaderboardEntries(activityUtils.getActivitiesForPeriodByActivityType(clubName, "all", comparingPeriod));
+        return clubRepository.findById(clubName).map(club -> {
+            List<LeaderboardEntry> currentLeaderboard = getLeaderboardEntries(activityUtils.getActivitiesForCurrentPeriodByActivityType(clubName, activityType.toLowerCase(), periodType));
+            Period comparingPeriod;
+            if (periodType.equalsIgnoreCase("week")) {
+                comparingPeriod = DateUtil.getPeriodFromWeekStartToDate(DateUtil.getDateDaysAgo(1));
+            } else if (periodType.equalsIgnoreCase("month")) {
+                comparingPeriod = DateUtil.getPeriodFromMonthStartToDate(DateUtil.getDateDaysAgo(7));
+            } else {
+                comparingPeriod = DateUtil.getPeriodBetweenDates(club.getCompetitionStartDate(), DateUtil.getDateDaysAgo(7));
+            }
+            List<LeaderboardEntry> comparingLeaderboard = getLeaderboardEntries(activityUtils.getActivitiesForPeriodByActivityType(clubName, "all", comparingPeriod));
 
-        return addChangeToLeaderboard(currentLeaderboard, comparingLeaderboard);
+            return addChangeToLeaderboard(currentLeaderboard, comparingLeaderboard);
+        }).orElse(new ArrayList<>());
     }
 
-    public List<LeaderboardEntry> getLeaderboardEntries(String clubName, Date date) {
-        Club club = clubRepository.findById(clubName);
-        if (date.after(club.getCompetitionEndDate())) {
-            date = club.getCompetitionEndDate();
-        }
-        Period period = DateUtil.getPeriodBetweenDates(clubRepository.findById(clubName).getCompetitionStartDate(), date);
-        List<LeaderboardEntry> currentLeaderboard = getLeaderboardEntries(activityUtils.getActivitiesForPeriodByActivityType(clubName, "all", period));
-        Period comparingPeriod = DateUtil.getPeriodBetweenDates(clubRepository.findById(clubName).getCompetitionStartDate(), DateUtil.firstDayOfCurrentMonth());
-        List<LeaderboardEntry> comparingLeaderboard = getLeaderboardEntries(activityUtils.getActivitiesForPeriodByActivityType(clubName, "all", comparingPeriod));
+    public List<LeaderboardEntry> getLeaderboardEntries(String clubName, Date inputDate) {
+        return clubRepository.findById(clubName).map(club -> {
+            Date calcEndDate = inputDate;
+            if (calcEndDate.after(club.getCompetitionEndDate())) {
+                calcEndDate = club.getCompetitionEndDate();
+            }
+            Period period = DateUtil.getPeriodBetweenDates(club.getCompetitionStartDate(), calcEndDate);
+            List<LeaderboardEntry> currentLeaderboard = getLeaderboardEntries(activityUtils.getActivitiesForPeriodByActivityType(clubName, "all", period));
+            Period comparingPeriod = DateUtil.getPeriodBetweenDates(club.getCompetitionStartDate(), DateUtil.firstDayOfCurrentMonth());
+            List<LeaderboardEntry> comparingLeaderboard = getLeaderboardEntries(activityUtils.getActivitiesForPeriodByActivityType(clubName, "all", comparingPeriod));
 
-        return addChangeToLeaderboard(currentLeaderboard, comparingLeaderboard);
+            return addChangeToLeaderboard(currentLeaderboard, comparingLeaderboard);
+        }).orElse(new ArrayList<>());
     }
 
     public int getLeaderboardStanding(String clubName, Date date, int athleteId) {
