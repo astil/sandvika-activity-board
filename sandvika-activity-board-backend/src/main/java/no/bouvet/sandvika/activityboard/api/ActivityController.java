@@ -122,7 +122,7 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "/activities/{activityId}/pointcalculation", method = RequestMethod.GET)
-    public PointsCalculation getPointsCalculationForActivity(@PathVariable("activityId") int activityId) {
+    public PointsCalculation getPointsCalculationForActivity(@PathVariable("activityId") long activityId) {
         return activityUtils.getPointsCalculationForActivity(activityId);
     }
 }

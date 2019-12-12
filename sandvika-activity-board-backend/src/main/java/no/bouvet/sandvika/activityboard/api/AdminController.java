@@ -44,7 +44,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT)
-    public void addActivity(@PathVariable("id") int id, @RequestBody Activity activity) {
+    public void addActivity(@PathVariable("id") long id, @RequestBody Activity activity) {
         activity.setHandicap(handicapCalculator.getHandicapForActivity(activity));
         activity.setPoints(PointsCalculator.getPointsForActivity(activity, activity.getHandicap()));
         activityRepository.save(activity);
