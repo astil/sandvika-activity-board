@@ -196,6 +196,7 @@ public class ActivityUtils {
             pointsCalculation.setMinutes(activity.getMovingTimeInSeconds() / 60);
             pointsCalculation.setActivityType(activity.getType());
             pointsCalculation.setActivityId(activity.getId());
+            pointsCalculation.setBadges(activity.getBadges());
 
             ActivityType activityType = ActivityType.toActivityType(activity.getType());
             pointsCalculation.setElevationCoeffisient(activityType.elevationCoefficient());
