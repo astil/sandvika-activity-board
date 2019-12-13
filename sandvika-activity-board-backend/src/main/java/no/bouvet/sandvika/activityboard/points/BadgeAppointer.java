@@ -67,7 +67,7 @@ public class BadgeAppointer {
     }
 
     private boolean eligibleForWeatherBadge(Activity activity, Badge badge) {
-        if (activity.getWeather() == null) return false;
+        if (activity.getWeather() == null || activity.getWeather().getCurrently() == null) return false;
         if (badgeTypeIsTempBadge(badge)) {
             if (badge.getLessOrMore().equalsIgnoreCase("less")) {
                 return activity.getWeather().getCurrently().getTemperature() < badge.getValueCriteria();
