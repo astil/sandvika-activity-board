@@ -67,7 +67,7 @@ public class BadgeAppointer {
     }
 
     private boolean eligibleForWeatherBadge(Activity activity, Badge badge) {
-        if (activity.getWeather() == null || activity.getWeather().getCurrently() == null) return false;
+        if (hasWeatherData(activity) && isOverMinimumValues(activity, badge)) return false;
         if (badgeTypeIsTempBadge(badge)) {
             if (badge.getLessOrMore().equalsIgnoreCase("less")) {
                 return activity.getWeather().getCurrently().getTemperature() < badge.getValueCriteria();
@@ -78,6 +78,14 @@ public class BadgeAppointer {
             return true;
         }
         return false;
+    }
+
+    private boolean isOverMinimumValues(Activity activity, Badge badge) {
+        return (badge.getMinimumMeters() >= activity.getDistanceInMeters() && badge.getMinimumMinutes() >= activity.getMovingTimeInSeconds() * 60);
+    }
+
+    private boolean hasWeatherData(Activity activity) {
+        return (activity.getWeather() != null && activity.getWeather().getCurrently() != null);
     }
 
     private LocalTime getStartDateAsLocalDateTime(Activity activity) {
