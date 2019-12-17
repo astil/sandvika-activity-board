@@ -1,7 +1,6 @@
 package no.bouvet.sandvika.activityboard.points;
 
 import no.bouvet.sandvika.activityboard.domain.Activity;
-import no.bouvet.sandvika.activityboard.domain.Athlete;
 import no.bouvet.sandvika.activityboard.domain.Badge;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.repository.BadgeRepository;
@@ -40,7 +39,7 @@ public class BadgeAppointer {
     }
 
     private void appointBadge(Activity activity, Set<Badge> awardedBadges, Badge badge) {
-            awardedBadges.add(badge);
+        awardedBadges.add(badge);
         // badge.getActivities().add(activity);
         log.info("Saving Badge " + badge.toString());
         badgeRepository.save(badge);
@@ -85,7 +84,7 @@ public class BadgeAppointer {
     }
 
     private boolean hasWeatherData(Activity activity) {
-        return (activity.getWeather() != null && activity.getWeather().getCurrently() != null);
+        return (activity.getWeather() != null && activity.getWeather().getCurrently() != null && activity.getWeather().getCurrently().getPrecipIntensity() != null);
     }
 
     private LocalTime getStartDateAsLocalDateTime(Activity activity) {
