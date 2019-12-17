@@ -81,7 +81,7 @@ public class BadgeAppointer {
     }
 
     private boolean isOverMinimumValues(Activity activity, Badge badge) {
-        return (badge.getMinimumMeters() >= activity.getDistanceInMeters() && badge.getMinimumMinutes() >= activity.getMovingTimeInSeconds() * 60);
+        return (badge.getMinimumMeters() <= activity.getDistanceInMeters() && badge.getMinimumMinutes() <= activity.getMovingTimeInSeconds() * 60);
     }
 
     private boolean hasWeatherData(Activity activity) {
