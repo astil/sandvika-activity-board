@@ -66,15 +66,16 @@ public class BadgeAppointer {
     }
 
     private boolean eligibleForWeatherBadge(Activity activity, Badge badge) {
-        if (hasWeatherData(activity) && isOverMinimumValues(activity, badge)) return false;
-        if (badgeTypeIsTempBadge(badge)) {
-            if (badge.getLessOrMore().equalsIgnoreCase("less")) {
-                return activity.getWeather().getCurrently().getTemperature() < badge.getValueCriteria();
-            } else {
-                return activity.getWeather().getCurrently().getTemperature() > badge.getValueCriteria();
+        if (hasWeatherData(activity) && isOverMinimumValues(activity, badge)) {
+            if (badgeTypeIsTempBadge(badge)) {
+                if (badge.getLessOrMore().equalsIgnoreCase("less")) {
+                    return activity.getWeather().getCurrently().getTemperature() < badge.getValueCriteria();
+                } else {
+                    return activity.getWeather().getCurrently().getTemperature() > badge.getValueCriteria();
+                }
+            } else if (badgeTypeIsPrecipitationBadge(badge) && activity.getWeather().getCurrently().getPrecipIntensity() > 1) {
+                return true;
             }
-        } else if (badgeTypeIsPrecipitationBadge(badge) && activity.getWeather().getCurrently().getPrecipIntensity() > 1) {
-            return true;
         }
         return false;
     }
