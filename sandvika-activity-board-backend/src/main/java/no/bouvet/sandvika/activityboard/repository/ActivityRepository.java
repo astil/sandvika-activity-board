@@ -25,6 +25,8 @@ public interface ActivityRepository extends MongoRepository<Activity, Long>
 
     Stream<Activity> findByTypeOrderByStartDateLocalDesc(String type);
 
+    Stream<Activity> findByTypeAndStartDateLocalBetweenOrderByStartDateLocalDesc(Date startDate, Date endDate, String type);
+
     List<Activity> findByStartDateLocalBetweenAndType(Date startDate, Date endDate, String type);
 
     List<Activity> findByStartDateLocalBetweenAndAthleteId(Date startDate, Date endDate, int athleteId);
