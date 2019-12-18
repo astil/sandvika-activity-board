@@ -109,7 +109,7 @@ public class ActivityUtils {
 
     public List<Activity> getActivities(int numberOfActivities, String clubName) {
         return clubRepository.findById(clubName).map(club -> {
-            return activityRepository.findAllByOrderByStartDateLocalDesc()
+            return activityRepository.findByStartDateLocalBetweenOrderByStartDateLocalDesc(club.getCompetitionStartDate(), club.getCompetitionEndDate())
                     .filter(activity -> club.getMemberIds().contains(activity.getAthleteId()))
                     .limit(numberOfActivities)
                     .collect(Collectors.toList());
