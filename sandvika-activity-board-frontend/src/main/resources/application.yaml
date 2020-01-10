@@ -46,7 +46,7 @@ spring:
 
 logging:
   level:
-    org.springframework.security: DEBUG
+    org.springframework.security: INFO
 
     #      username: admin
     #      password: 1o2XZgY1fPbJ
