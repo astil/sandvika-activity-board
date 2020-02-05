@@ -16,6 +16,7 @@ public enum ActivityType {
     WALK(Constants.WALK_NAME),
     WORKOUT(Constants.WORKOUT_NAME),
     WEIGHT_TRAINING(Constants.WEIGHT_TRAINING_NAME),
+    CROSSFIT(Constants.CROSSFIT_NAME),
     KAYAKING(Constants.KAYAKING_NAME),
     ROLLER_SKI(Constants.ROLLER_SKI_NAME),
     YOGA(Constants.YOGA_NAME),
@@ -59,6 +60,8 @@ public enum ActivityType {
             return ActivityType.WORKOUT;
         } else if (activityName.equalsIgnoreCase(Constants.WEIGHT_TRAINING_NAME)) {
             return ActivityType.WEIGHT_TRAINING;
+        } else if (activityName.equalsIgnoreCase(Constants.CROSSFIT_NAME)) {
+            return ActivityType.CROSSFIT;
         } else if (activityName.equalsIgnoreCase(Constants.KAYAKING_NAME)) {
             return ActivityType.KAYAKING;
         } else if (activityName.equalsIgnoreCase(Constants.ROLLER_SKI_NAME)) {
@@ -102,6 +105,8 @@ public enum ActivityType {
                 return Constants.WORKOUT_COEFFISIENT_KM;
             case WEIGHT_TRAINING:
                 return Constants.WEIGHT_TRAINING_COEFFISIENT_KM;
+            case CROSSFIT:
+                return Constants.CROSSFIT_COEFFISIENT_KM;
             case KAYAKING:
                 return Constants.KAYAKING_COEFFISIENT_KM;
             case ROLLER_SKI:
@@ -141,6 +146,8 @@ public enum ActivityType {
                 return Constants.WORKOUT_COEFFISIENT_MIN;
             case WEIGHT_TRAINING:
                 return Constants.WEIGHT_TRAINING_COEFFISIENT_MIN;
+            case CROSSFIT:
+                return Constants.CROSSFIT_COEFFISIENT_MIN;
             case KAYAKING:
                 return Constants.KAYAKING_COEFFISIENT_MIN;
             case ROLLER_SKI:
@@ -180,6 +187,8 @@ public enum ActivityType {
                 return Constants.WORKOUT_COEFFISIENT_ELE;
             case WEIGHT_TRAINING:
                 return Constants.WEIGHT_TRAINING_COEFFISIENT_ELE;
+            case CROSSFIT:
+                return Constants.CROSSFIT_COEFFISIENT_ELE;
             case KAYAKING:
                 return Constants.KAYAKING_COEFFISIENT_ELE;
             case ROLLER_SKI:
@@ -207,6 +216,7 @@ public enum ActivityType {
         public static final String VIRTUAL_RIDE_NAME = "virtualride";
         public static final String WORKOUT_NAME = "workout";
         public static final String WEIGHT_TRAINING_NAME = "weighttraining";
+        public static final String CROSSFIT_NAME = "crossfit";
         public static final String KAYAKING_NAME = "kayaking";
         public static final String ROLLER_SKI_NAME = "rollerski";
         public static final String YOGA_NAME = "yoga";
@@ -225,6 +235,7 @@ public enum ActivityType {
         public static final double WALK_COEFFISIENT_KM = 1;
         public static final double WORKOUT_COEFFISIENT_KM = 0;
         public static final double WEIGHT_TRAINING_COEFFISIENT_KM = 0;
+        public static final double CROSSFIT_COEFFISIENT_KM = 0;
         public static final double ROLLER_SKI_COEFFISIENT_KM = 0.5;
         public static final double YOGA_COEFFISIENT_KM = 0;
         public static final double E_BIKE_RIDE_COEFFISIENT_KM = 0.1;
@@ -241,7 +252,8 @@ public enum ActivityType {
         public static final double HIKE_COEFFISIENT_MIN = 0.2;
         public static final double WALK_COEFFISIENT_MIN = 0.2;
         public static final double WORKOUT_COEFFISIENT_MIN = 1;
-        public static final double WEIGHT_TRAINING_COEFFISIENT_MIN = 1;
+        public static final double WEIGHT_TRAINING_COEFFISIENT_MIN = 1.3;
+        public static final double CROSSFIT_COEFFISIENT_MIN = 1.3;
         public static final double ROLLER_SKI_COEFFISIENT_MIN = 1;
         public static final double YOGA_COEFFISIENT_MIN = 1;
         public static final double E_BIKE_RIDE_COEFFISIENT_MIN = 0.3;
@@ -258,7 +270,8 @@ public enum ActivityType {
         public static final double HIKE_COEFFISIENT_ELE = 0.2;
         public static final double WALK_COEFFISIENT_ELE = 0.2;
         public static final double WORKOUT_COEFFISIENT_ELE = 1;
-        public static final double WEIGHT_TRAINING_COEFFISIENT_ELE = 1;
+        public static final double WEIGHT_TRAINING_COEFFISIENT_ELE = 0;
+        public static final double CROSSFIT_COEFFISIENT_ELE = 0;
         public static final double ROLLER_SKI_COEFFISIENT_ELE = 1;
         public static final double YOGA_COEFFISIENT_ELE = 1;
         public static final double E_BIKE_RIDE_COEFFISIENT_ELE = 0.3;
