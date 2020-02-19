@@ -8,6 +8,8 @@ services:
     restart: always
     ports:
       - 27017:27017
+    volumes:
+      - ~/data/bouvet/mongodb-persistence:/bitnami
     environment:
       ALLOW_EMPTY_PASSWORD: 'yes'
 #      MONGO_INITDB_ROOT_USERNAME: admin
