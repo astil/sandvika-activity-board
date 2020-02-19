@@ -74,11 +74,11 @@ public class OAuth2Config extends WebSecurityConfigurerAdapter {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .redirectUriTemplate("{baseUrl}/login/oauth2/code/{registrationId}")
                 .scope("activity:read")
-                .authorizationUri("https://www.strava.com/oauth/authorize")
+                .authorizationUri("https://www.strava.com/oauth/authorize?approval_prompt=auto")
                 .tokenUri("https://www.strava.com/oauth/token")
                 .userInfoUri("https://www.strava.com/api/v3/athlete")
                 .clientName("Strava")
-                .userNameAttributeName("username")
+                .userNameAttributeName("id")
                 .build();
     }
 
