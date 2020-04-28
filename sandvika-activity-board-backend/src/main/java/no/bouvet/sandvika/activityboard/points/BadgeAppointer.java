@@ -73,7 +73,7 @@ public class BadgeAppointer {
                 } else {
                     return activity.getWeather().getCurrently().getTemperature() > badge.getValueCriteria();
                 }
-            } else if (badgeTypeIsPrecipitationBadge(badge) && activity.getWeather().getCurrently().getPrecipIntensity() > 1) {
+            } else if (badgeTypeIsPrecipitationBadge(badge) && activity.getWeather().getCurrently().getPrecipIntensity() >= 1) {
                 return true;
             }
         }
