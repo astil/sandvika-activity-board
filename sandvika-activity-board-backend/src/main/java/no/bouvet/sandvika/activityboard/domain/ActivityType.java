@@ -21,8 +21,8 @@ public enum ActivityType {
     ROLLER_SKI(Constants.ROLLER_SKI_NAME),
     YOGA(Constants.YOGA_NAME),
     E_BIKE_RIDE(Constants.E_BIKE_RIDE_NAME),
-    ICE_SKATE(Constants.ICE_SKATE_NAME);
-    WINDSURF(Constants.WINDSURF);
+    ICE_SKATE(Constants.ICE_SKATE_NAME),
+    WINDSURF(Constants.WINDSURF_NAME);
     private String type;
 
     ActivityType(String type) {
@@ -73,7 +73,7 @@ public enum ActivityType {
             return ActivityType.E_BIKE_RIDE;
         } else if (activityName.equalsIgnoreCase(Constants.ICE_SKATE_NAME)) {
             return ActivityType.ICE_SKATE;
-        } else if (activityName.equalsIgnoreCase(Constants.WINDSURF)) {
+        } else if (activityName.equalsIgnoreCase(Constants.WINDSURF_NAME)) {
             return ActivityType.WINDSURF;
         } else {
             return null;
@@ -288,7 +288,7 @@ public enum ActivityType {
         public static final double YOGA_COEFFISIENT_ELE = 1;
         public static final double E_BIKE_RIDE_COEFFISIENT_ELE = 0.3;
         public static final double ICE_SKATE_COEFFISIENT_ELE = 0.3;
-        public static final double ICE_SKATE_COEFFISIENT_ELE = 0;
+        public static final double WINDSURF_COEFFISIENT_ELE = 0;
 
     }
 }
