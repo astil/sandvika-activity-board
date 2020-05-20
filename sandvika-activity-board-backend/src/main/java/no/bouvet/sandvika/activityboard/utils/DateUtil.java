@@ -79,6 +79,13 @@ public class DateUtil {
         return cal.getTime();
     }
 
+    public static Date addDays(Date date, int days) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, days);
+        return cal.getTime();
+    }
+
     public static Date getDateFromLocalDateTime(LocalDateTime input) {
         Instant instant = input.toInstant(ZoneOffset.ofHours(0));
         return Date.from(instant);

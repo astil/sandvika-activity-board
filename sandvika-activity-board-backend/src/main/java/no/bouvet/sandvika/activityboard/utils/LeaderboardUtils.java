@@ -1,9 +1,6 @@
 package no.bouvet.sandvika.activityboard.utils;
 
-import no.bouvet.sandvika.activityboard.domain.Activity;
-import no.bouvet.sandvika.activityboard.domain.Athlete;
-import no.bouvet.sandvika.activityboard.domain.Club;
-import no.bouvet.sandvika.activityboard.domain.LeaderboardEntry;
+import no.bouvet.sandvika.activityboard.domain.*;
 import no.bouvet.sandvika.activityboard.repository.AthleteRepository;
 import no.bouvet.sandvika.activityboard.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,4 +129,23 @@ public class LeaderboardUtils {
                 .mapToInt(LeaderboardEntry::getRanking)
                 .sum();
     }
+
+    public List<AthleteLeaderboardHistroy> getLeaderboardHistory(String clubName) {
+        Club club = clubRepository.findById(clubName).get();
+        Date computationDate = club.getCompetitionStartDate();
+        Date endDate = club.getCompetitionEndDate().after(new Date()) ? club.getCompetitionEndDate() : new Date();
+        Map<Integer, AthleteLeaderboardHistroy> athleteLeaderboardHistroy = new HashMap<>();
+        while (computationDate.before(endDate)) {
+            List<LeaderboardEntry> leaderboard = getLeaderboardEntries(clubName, computationDate);
+            for (LeaderboardEntry le : leaderboard) {
+                if (!athleteLeaderboardHistroy.containsKey(le.getAthleteId())) {
+                    athleteLeaderboardHistroy.put(le.getAthleteId(), new AthleteLeaderboardHistroy(le.getAthleteId(), le.getAthleteFirstName(), le.getAthleteLastName()));
+                }
+                athleteLeaderboardHistroy.get(le.getAthleteId()).getHistory().put(computationDate, le.getRanking());
+            }
+            computationDate = DateUtil.addDays(computationDate, 1);
+        }
+        return (List<AthleteLeaderboardHistroy>) athleteLeaderboardHistroy.values();
+    }
 }
+
