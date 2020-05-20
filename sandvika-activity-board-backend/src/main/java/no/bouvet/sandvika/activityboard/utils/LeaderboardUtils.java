@@ -146,7 +146,7 @@ public class LeaderboardUtils {
             }
             computationDate = DateUtil.addDays(computationDate, 1);
         }
-        return (List<AthleteLeaderboardHistroy>) athleteLeaderboardHistroy.values();
+        return new ArrayList(athleteLeaderboardHistroy.values());
     }
 }
 
