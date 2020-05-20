@@ -134,19 +134,17 @@ public class LeaderboardUtils {
         Club club = clubRepository.findById(clubName).get();
         Date computationDate = club.getCompetitionStartDate();
         Date endDate = club.getCompetitionEndDate().after(new Date()) ? club.getCompetitionEndDate() : new Date();
-        Map<Integer, AthleteLeaderboardHistroy> athleteLeaderboardHistroy = new HashMap<>();
+        List<AthleteLeaderboardHistroy> athleteLeaderboardHistroy = new ArrayList<>();
         while (computationDate.before(endDate)) {
             List<LeaderboardEntry> leaderboard = getLeaderboardEntries(clubName, computationDate);
+            AthleteLeaderboardHistroy alh = new AthleteLeaderboardHistroy(computationDate);
             for (LeaderboardEntry le : leaderboard) {
-                if (!athleteLeaderboardHistroy.containsKey(le.getAthleteId())) {
-                    athleteLeaderboardHistroy.put(le.getAthleteId(), new AthleteLeaderboardHistroy(le.getAthleteId(), le.getAthleteFirstName(), le.getAthleteLastName()));
-
-                }
-                athleteLeaderboardHistroy.get(le.getAthleteId()).getHistory().put(computationDate, le.getRanking());
+                alh.getRank().put(le.getAthleteFirstName() + " " + le.getAthleteLastName(), le.getRanking());
             }
+            athleteLeaderboardHistroy.add(alh);
             computationDate = DateUtil.addDays(computationDate, 1);
         }
-        return new ArrayList(athleteLeaderboardHistroy.values());
+        return athleteLeaderboardHistroy;
     }
 }
 

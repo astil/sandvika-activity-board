@@ -6,48 +6,28 @@ import java.util.Map;
 import java.util.Objects;
 
 public class AthleteLeaderboardHistroy {
-    private long athleteId;
-    private String firstName;
-    private String lastName;
-    private Map<Date, Integer> history;
+   private Date date;
+   private Map<String, Integer> rank;
 
-    public AthleteLeaderboardHistroy(int athleteId, String athleteFirstName, String athleteLastName) {
-        this.athleteId = athleteId;
-        this.firstName = athleteFirstName;
-        this.lastName = athleteLastName;
-        this.history = new HashMap<>();
+    public AthleteLeaderboardHistroy(Date computationDate) {
+        this.date = computationDate;
+        this.rank = new HashMap<>();
     }
 
-    public long getAthleteId() {
-        return athleteId;
+    public Date getDate() {
+        return date;
     }
 
-    public void setAthleteId(long athleteId) {
-        this.athleteId = athleteId;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public Map<String, Integer> getRank() {
+        return rank;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Map<Date, Integer> getHistory() {
-        return history;
-    }
-
-    public void setHistory(HashMap<Date, Integer> history) {
-        this.history = history;
+    public void setRank(Map<String, Integer> rank) {
+        this.rank = rank;
     }
 
     @Override
@@ -55,11 +35,11 @@ public class AthleteLeaderboardHistroy {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AthleteLeaderboardHistroy that = (AthleteLeaderboardHistroy) o;
-        return athleteId == that.athleteId;
+        return Objects.equals(date, that.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(athleteId);
+        return Objects.hash(date);
     }
 }
