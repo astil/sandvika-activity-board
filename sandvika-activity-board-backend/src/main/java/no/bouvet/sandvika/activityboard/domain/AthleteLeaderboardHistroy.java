@@ -2,18 +2,20 @@ package no.bouvet.sandvika.activityboard.domain;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class AthleteLeaderboardHistroy {
     private long athleteId;
     private String firstName;
     private String lastName;
-    private HashMap<Date, Integer> history;
+    private Map<Date, Integer> history;
 
     public AthleteLeaderboardHistroy(int athleteId, String athleteFirstName, String athleteLastName) {
         this.athleteId = athleteId;
         this.firstName = athleteFirstName;
         this.lastName = athleteLastName;
+        this.history = new HashMap<>();
     }
 
     public long getAthleteId() {
@@ -40,7 +42,7 @@ public class AthleteLeaderboardHistroy {
         this.lastName = lastName;
     }
 
-    public HashMap<Date, Integer> getHistory() {
+    public Map<Date, Integer> getHistory() {
         return history;
     }
 

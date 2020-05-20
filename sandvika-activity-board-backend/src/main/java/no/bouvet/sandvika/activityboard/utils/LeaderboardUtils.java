@@ -140,6 +140,7 @@ public class LeaderboardUtils {
             for (LeaderboardEntry le : leaderboard) {
                 if (!athleteLeaderboardHistroy.containsKey(le.getAthleteId())) {
                     athleteLeaderboardHistroy.put(le.getAthleteId(), new AthleteLeaderboardHistroy(le.getAthleteId(), le.getAthleteFirstName(), le.getAthleteLastName()));
+
                 }
                 athleteLeaderboardHistroy.get(le.getAthleteId()).getHistory().put(computationDate, le.getRanking());
             }
